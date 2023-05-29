@@ -21,7 +21,7 @@ const plugin=({widgets, simulator, vehicle}) =>{
         <!-- Radio Form -->
         <h3>Rain Level:</h3>
         <form id="radio-form">
-            <label class="form-check form-check-inline" for="empty-radio">Empty</label>
+            <label class="form-check form-check-inline" for="empty-radio">Empty~</label>
             <input type="radio" id="empty-radio" name="radio-option" value="empty" required>
 
             <label class="form-check form-check-inline" for="medium-radio">Medium</label>
