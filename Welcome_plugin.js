@@ -103,7 +103,15 @@ const plugin=({widgets, simulator, vehicle}) =>{
     const displayModule1 =document.createElement("div")
     displayModule1.setAttribute("style", `height: 100%; width: 100%;`)
     displayModule1.innerHTML=(`
-        <div style="height:100px;padding: 20px; text-align:center;">
+        <div id="switch1" style="height:100px;padding: 20px; text-align:center;background-color:red">
+            <div style="font-size: 18px;">
+                Webpage1
+            </div>
+            <form id="switch-form">
+                <button class="btn btn-outline-primary w-30" type="submit">Switch</button>
+            </form>
+        </div>
+        <div id="switch2" style="height:100px;padding: 20px; text-align:center;background-color:blue;display:none">
             <div style="font-size: 18px;">
                 HeadLight: <span id="headlight">OFF</span>
             </div>
@@ -113,6 +121,17 @@ const plugin=({widgets, simulator, vehicle}) =>{
             </div>
         </div>
     `)
+    var switchForm = displayModule1.querySelector('#switch-form');
+    switchForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevents the form from submitting
+        var switch1 = displayModule1.querySelector('#switch1');
+        var switch2 = displayModule1.querySelector('#switch2');
+        switch1.style.display = "none";
+        switch2.style.display = "block";
+        
+
+
+    });
     widgets.register("Display1",
         (box) =>{
         box.injectNode(displayModule1)
