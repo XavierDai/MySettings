@@ -1,0 +1,17 @@
+# Extend kuksa-val model   
+- Vehicle:
+  type: branch
+
+- Vehicle.Speed:
+  max: 9001
+  type: sensor
+
+- Vehicle.Private:
+  type: branch
+
+- Vehicle.Private.ThrustersActive:
+  datatype: boolean
+  type: sensor
+
+- Vehicle.Cabin.Infotainment.HMI.Style:
+  datatype: string

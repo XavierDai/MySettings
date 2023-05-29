@@ -1,0 +1,2 @@
+name:Yilong_Dai#height:175cm#weight:75kg#language:Chinese#style:pink_style_UI#welcome:"Welcome! Yilong Dai"#seatHeight:0#seatPosition:100#seatAngle:10d#music:Ghost Town#leftMirrorTilt:5#leftMirrorPan:10#rightMirrorTilt:7#rightMirrorPan:10#driveMode:ECONOMY#powerMode:8#
+name:Kyrie_Irving#height:190cm#weight:90kg#language:united_states#style:black_style_UI#welcome:"Welcome! Kyrie Irving"#seatHeight:0#seatPosition:0#seatAngle:15d#music:Ridiculous#mirrorTilt:10#mirrorPan:14#rightMirrorTilt:12#rightMirrorPan:14#driveMode:SPORT#powerMode:0#

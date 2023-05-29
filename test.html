@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Temperature Form</title>
+  <script>
+    // JavaScript code
+    document.addEventListener('DOMContentLoaded', function() {
+      // Accessing the temperature form
+      var temperatureForm = document.getElementById('temperature-form');
+
+      // Accessing the radio form
+      var radioForm = document.getElementById('radio-form');
+
+      // Accessing the on/off button
+      var onOffButton = document.getElementById('on-off-button');
+
+      // Event listener for the temperature form submission
+      temperatureForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevents the form from submitting
+
+        // Accessing the temperature input value
+        var temperatureInput = document.getElementById('temperature-input').value;
+        console.log('Temperature:', temperatureInput);
+      });
+
+      // Event listener for the radio form selection
+      radioForm.addEventListener('change', function(event) {
+        // Accessing the selected radio option value
+        var selectedOption = event.target.value;
+        console.log('Selected option:', selectedOption);
+      });
+
+      // Event listener for the on/off button click
+      onOffButton.addEventListener('click', function(event) {
+        var isOn = event.target.checked;
+        console.log('On/Off:', isOn);
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1>Temperature Form</h1>
+
+  <!-- Temperature Form -->
+  <form id="temperature-form">
+    <label for="temperature-input">Temperature:</label>
+    <input type="number" id="temperature-input" required>
+    <button type="submit">Submit</button>
+  </form>
+
+  <!-- Radio Form -->
+  <form id="radio-form">
+    <label for="empty-radio">Empty</label>
+    <input type="radio" id="empty-radio" name="radio-option" value="empty" required>
+    <br>
+    <label for="medium-radio">Medium</label>
+    <input type="radio" id="medium-radio" name="radio-option" value="medium">
+    <br>
+    <label for="strong-radio">Strong</label>
+    <input type="radio" id="strong-radio" name="radio-option" value="strong">
+  </form>
+
+  <!-- On/Off Button -->
+  <label for="on-off-button">On/Off:</label>
+  <input type="checkbox" id="on-off-button">
+
+</body>
+</html>
