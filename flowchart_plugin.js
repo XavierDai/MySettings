@@ -5,8 +5,8 @@ const plugin=({widgets, simulator, vehicle}) =>{
     <title>Tree Diagram</title>
     <style>
       .topNode{
-          height:10%;
-          width:20%;
+          height:13%;
+          width:23%;
           position:absolute;
           left: 40%;
           top:10%;
@@ -14,11 +14,11 @@ const plugin=({widgets, simulator, vehicle}) =>{
           text-align:center;
           border-radius: 5px;
           border: 1px solid gray;
-          font-size:100% ;
+          font-size:80% ;
       }
       .middleNode {
-        height:10%;
-        width:20%;
+        height:13%;
+        width:23%;
           position:absolute;
           left: 40%;
           top:40%;
@@ -26,11 +26,11 @@ const plugin=({widgets, simulator, vehicle}) =>{
           text-align:center;
           border-radius: 5px;
           border: 1px solid gray;
-          font-size:100% ;
+          font-size:80% ;
       }
       .bottomNode {
-        height:10%;
-        width:20%;
+        height:13%;
+        width:23%;
           position:absolute;
           left: 40%;
           top:75%;
@@ -38,11 +38,11 @@ const plugin=({widgets, simulator, vehicle}) =>{
           text-align:center;
           border-radius: 5px;
           border: 1px solid gray;
-          font-size:100% ;
+          font-size:80% ;
       }
       .bottomLeftNode {
-        height:10%;
-        width:20%;
+        height:13%;
+        width:23%;
           position:absolute;
           left: 10%;
           top:75%;
@@ -50,11 +50,11 @@ const plugin=({widgets, simulator, vehicle}) =>{
           text-align:center;
           border-radius: 5px;
           border: 1px solid gray;
-          font-size:100% ;
+          font-size:80% ;
       }
       .bottomRightNode {
-        height:10%;
-        width:20%;
+        height:13%;
+        width:23%;
           position:absolute;
           left: 70%;
           top:75%;
@@ -62,7 +62,7 @@ const plugin=({widgets, simulator, vehicle}) =>{
           text-align:center;
           border-radius: 5px;
           border: 1px solid gray;
-          font-size:100% ;
+          font-size:80% ;
       }
     </style>
   </head>

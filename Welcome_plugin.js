@@ -5,7 +5,7 @@ const plugin=({widgets, simulator, vehicle}) =>{
 
     // widget for setting1
     const personalSettingModule =document.createElement("div")
-    personalSettingModule.setAttribute("style", `height: 100%; width: 100%;margin-left:10px`)
+    personalSettingModule.setAttribute("style", `height: 100%; width: 100%;margin-left:0px`)
     personalSettingModule.innerHTML=(`
         <head>
             <meta charset="utf-8">
@@ -14,56 +14,89 @@ const plugin=({widgets, simulator, vehicle}) =>{
         </head>
 
         <body>
-            <!-- Temperature Form -->
-            <h3>Outside Temperature:</h3>
-            <form id="temperature-form">
-                <input type="number" class="form-control form-control-rounded mb-2 w-25" id="temperature-input" placeholder="°C" required>
-                <button class="btn btn-outline-primary w-30" type="submit">Submit</button>
-            </form>
+        <div style="background-color:#F1F1F1;">
+            <h3>Settings:</h3>
 
-            <!-- Radio Form -->
-            <h3>Rain Level:</h3>
-            <form id="radio-form">
-                <label class="form-check form-check-inline" for="empty-radio">Empty~</label>
-                <input type="radio" id="empty-radio" name="radio-option" value="empty" required>
 
-                <label class="form-check form-check-inline" for="medium-radio">Medium</label>
-                <input  type="radio" id="medium-radio" name="radio-option" value="medium">
-
-                <label class="form-check form-check-inline" for="strong-radio">Strong</label>
-                <input type="radio" id="strong-radio" name="radio-option" value="strong">
-            </form>
 
             <!-- On/Off Button -->
-            <h3>Personalize:</h3>
             <label for="on-off-button">Use personal setting or not:</label>
             <input type="checkbox" id="on-off-button">
 
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="welcomeWordCheck" >
-                <label class="form-check-label" for="welcomeWordCheck">
-                    Welcome Word
-                </label>
+
+            <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
+            
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="welcomeWordCheck" >
+                    <label class="form-check-label" for="welcomeWordCheck">
+                        Welcome Word
+                    </label>
+                </div>
+
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="LanguageCheck" >
+                    <label class="form-check-label" for="LanguageCheck">
+                    Language
+                    </label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="UIInterfaceCheck" >
+                    <label class="form-check-label" for="UIInterfaceCheck">
+                    UI Interface
+                    </label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="USMetricUnitsCheck" >
+                    <label class="form-check-label" for="USMetricUnitsCheck">
+                        US/Metric Units
+                    </label>
+                </div>
+
             </div>
 
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="LanguageCheck" >
-                <label class="form-check-label" for="LanguageCheck">
-                Language
-                </label>
+            <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
+            <table class = "table">
+                <tbody>
+                    <tr>
+      
+                        <td>
+                                <div class="form-check form-switch clearfix" >
+                                
+                                <span>
+                                    Interior Light
+                                </span>
+                                <input class="form-check-input float-end" type="checkbox" role="switch" id="InteriorLightCheck" style="font-size:25px;">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+              
+                        <td>
+                                            <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="ParkingWarningBeepLevelCheck">
+                                    <label class="form-check-label" for="ParkingWarningBeepLevelCheck">
+                                        Parking Warning Beep Level
+                                    </label>
+                                </div>
+                        </td>
+                    </tr>
+                    <tr>
+             
+                        <td>
+                                            <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="PreferredMusicCheck" >
+                                    <label class="form-check-label" for="PreferredMusicCheck">
+                                        Preferred Music
+                                    </label>
+                                </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
             </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="UIInterfaceCheck" >
-                <label class="form-check-label" for="UIInterfaceCheck">
-                UI Interface
-                </label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="USMetricUnitsCheck" >
-                <label class="form-check-label" for="USMetricUnitsCheck">
-                    US/Metric Units
-                </label>
-            </div>
+
+
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="InteriorLightCheck" >
                 <label class="form-check-label" for="InteriorLightCheck">
@@ -155,7 +188,7 @@ const plugin=({widgets, simulator, vehicle}) =>{
                 </label>
             </div>
 
-
+        </div>
 
 
             <script src=https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -164,11 +197,7 @@ const plugin=({widgets, simulator, vehicle}) =>{
         </body>    
         `)
 
-    // Accessing the temperature form
-    var temperatureForm = personalSettingModule.querySelector('#temperature-form');
-
-    // Accessing the radio form
-    var radioForm =  personalSettingModule.querySelector('#radio-form');
+ 
 
     // Accessing the on/off button
     var onOffButton = personalSettingModule.querySelector('#on-off-button');
@@ -194,21 +223,6 @@ const plugin=({widgets, simulator, vehicle}) =>{
     var ADASWarningBeepLevelCheck = personalSettingModule.querySelector('#ADASWarningBeepLevelCheck');
 
 
-    // Event listener for the temperature form submission
-    temperatureForm.addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevents the form from submitting
-
-        // Accessing the temperature input value
-        var temperatureInput = personalSettingModule.querySelector('#temperature-input').value;
-        console.log('Temperature:', temperatureInput);
-    });
-
-    // Event listener for the radio form selection
-    radioForm.addEventListener('change', function(event) {
-        // Accessing the selected radio option value
-        var selectedOption = event.target.value;
-        console.log('Selected option:', selectedOption);
-    });
 
     // Event listener for the on/off button click
     onOffButton.addEventListener('click', function(event) {
