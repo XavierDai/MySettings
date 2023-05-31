@@ -5,21 +5,63 @@ const plugin=({widgets, simulator, vehicle}) =>{
 
     // widget for setting1
     const personalSettingModule =document.createElement("div")
-    personalSettingModule.setAttribute("style", `height: 100%; width: 100%;margin-left:0px`)
+    personalSettingModule.setAttribute("style", `height: 100%; width: calc(100% - 10px);margin-left:10px;`)
     personalSettingModule.innerHTML=(`
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
+            <style>
+                .phone-container::-webkit-scrollbar{
+                    width:8px;
+                    height:40px;
+                }
             
+                .phone-container::-webkit-scrollbar-thumb{
+                    -webkit-box-shadow:inset 0 0 5px rgba(0,0,0,0.1);
+                    border-radius:15px;
+                    background:rgba(0,0,0,0.1);
+                }
+                .phone-container::-webkit-scrollbar-thumb:hover{
+                    background:rgba(0,0,0,0.2);
+                }
+                .phone-container::-webkit-scrollbar-track{
+                    -webkit-box-shadow:inset 0 0 0px rgba(0,0,0,0.0);
+                    border-radius:5px;
+                    background:rgba(0,0,0,0.0);
+                }
+                .phone-container::-webkit-scrollbar-track:hover{
+
+                    background:rgba(0,0,0,0.1);
+                }
+                .form-check-input:hover{
+                    cursor:pointer;
+                }
+                .top-phone-box:after{
+                    content: "";
+                    display: block;
+                    clear:both;
+
+                }
+                .setting-table{
+                    font-size:5vw;
+                }
+                .setting-h1{
+                    font-size:8vw
+                }
+                .setting-h3{
+                    font-size:6vw
+                }
+            </style>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         </head>
 
         <body>
-        <div style="background-color:#F1F1F1;">
-            <h1>Settings:</h1>
-
-
-            <div class="alert alert-light" role="alert" style="margin-left:10px;margin-right:10px;">
+        <div style="background-color:#F1F1F1;border:8px solid black;border-radius:35px;height:100%;">
+        <div id="top-phone-box"style="height：15%">
+            <h1 class="setting-h1" style="margin-left:20px;margin-top:5px;">
+                Settings:
+            </h1>
+            <div class="alert alert-light setting-table" role="alert" style="margin-left:10px;margin-right:10px;">
                 <!-- On/Off Button -->
                 <span class="float-start" >
                     Use personal setting or not:
@@ -30,14 +72,17 @@ const plugin=({widgets, simulator, vehicle}) =>{
                 </div>
                 
             </div>
+
+        </div>
+        
+
+        <div class="phone-container" style="height:calc(85% - 25px);overflow-y:auto;margin-top:5px;margin-bottom:15px;">
             
 
 
-
-
-            <h3 style="margin-left:20px;">Screen</h3>
+            <h3 class="setting-h3" style="margin-left:20px;">Screen</h3>
             <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
-            <table class = "table" style="font-size:17px;">
+            <table class = "table setting-table">
                 <tbody>
                     <tr>
       
@@ -92,9 +137,9 @@ const plugin=({widgets, simulator, vehicle}) =>{
 
 
 
-            <h3 style="margin-left:20px;">Environment</h3>
+            <h3 class="setting-h3"  style="margin-left:20px;">Environment</h3>
             <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
-            <table class = "table" style="font-size:17px;">
+            <table class = "table setting-table">
                 <tbody>
                     <tr>
       
@@ -149,9 +194,9 @@ const plugin=({widgets, simulator, vehicle}) =>{
 
 
 
-            <h3 style="margin-left:20px;">Comfort</h3>
+            <h3 class="setting-h3" style="margin-left:20px;">Comfort</h3>
             <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
-            <table class = "table" style="font-size:17px;">
+            <table class = "table setting-table">
                 <tbody>
                     <tr>
       
@@ -230,9 +275,9 @@ const plugin=({widgets, simulator, vehicle}) =>{
 
 
 
-            <h3 style="margin-left:20px;">Driving</h3>
+            <h3 class="setting-h3" style="margin-left:20px;">Driving</h3>
             <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
-            <table class = "table" style="font-size:17px;">
+            <table class = "table setting-table">
                 <tbody>
                     <tr>
       
@@ -301,7 +346,7 @@ const plugin=({widgets, simulator, vehicle}) =>{
 
 
 
-
+        </div>
         </div>
 
 
@@ -565,13 +610,30 @@ const plugin=({widgets, simulator, vehicle}) =>{
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
+
+            <style>
+                .driver-name{
+                    font-size:4.5vw;
+                }
+                .driver-description{
+                    font-size:4.5vw;
+                }
+                .driver-card-h5{
+                    font-size:6vw;
+                }
+            </style>
+
+
+
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         </head>
 
         <body>
-            <div>
-            <div id="multipleUsersDiv"></div>
-            
+            <div class="card" style="margin-left:10px;margin-right:10px;margin:top:10px;">
+                <h5 class="card-header driver-card-h5">Pick a driver</h5>
+                <div class="card-body">
+                    <div id="multipleUsersDiv"></div>
+                </div>
             </div>
             <script src=https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
@@ -584,16 +646,16 @@ const plugin=({widgets, simulator, vehicle}) =>{
 
     var html = '';
     html+=`<div class="row">
-                <div class="col-4">
-                    <div class="list-group" id="list-tab" role="tablist">`
+                <div class="col-5">
+                    <div class="list-group driver-name" id="list-tab" role="tablist">`
     for(var key in personDic){
         html+='<a class="list-group-item list-group-item-action " id="'+key+'" data-bs-toggle="list" role="tab" aria-controls="'+personDic[key][1]+'Content">'+personDic[key][0]+'</a>'
     }
     html+=`
         </div>
                 </div>
-            <div class="col-8">
-                <div class="tab-content" id="nav-tabContent">
+            <div class="col-7">
+                <div class="tab-content driver-description" id="nav-tabContent">
     `
     for(var key in personDic){
         html+='<div class="tab-pane fade " id="'+key+'Content" role="tabpanel" aria-labelledby="'+key+'">'+personDic[key][1]+'</div>'
@@ -632,25 +694,289 @@ const plugin=({widgets, simulator, vehicle}) =>{
         box.injectNode(personModule)
     })
 
-// widget for car flow chart
-    const flowChartModule =document.createElement("div")
-    flowChartModule.setAttribute("style", `height: 100%; width: 100%;`)
-    flowChartModule.innerHTML=(`
+
+
+
+
+    const subscribeHighBeamLight=document.createElement("div")
+    subscribeHighBeamLight.setAttribute("style", `height: 100%; width: 100%;color:red`)
+    subscribeHighBeamLight.innerHTML=(`
         <div style="height:100px;padding: 20px; text-align:center;">
-            <div style="font-size: 18px;">
-                HeadLight: <span id="headlight">OFF</span>
-            </div>
-            <div style="margin-top: 10px;font-size: 16px;">
-                <button id="btn_head_light_on" style="padding: 8px; margin-left: 8px;background-color:blue;color:white;">ON</button>
-                <button id="btn_head_light_off" style="padding: 8px; margin-left: 8px;background-color:red;color:white;">OFF</button>
-            </div>
+        <div style="font-size: 18px;">HeadLight: <span id="headlight">OFF</span></div>
+        <div style="margin-top: 10px;font-size: 16px;">
+        <button id="btn_head_light_on" style="padding: 8px; margin-left: 8px;background-color:blue;color:white;">ON</button>
+        <button id="btn_head_light_off" style="padding: 8px; margin-left: 8px;background-color:red;color:white;">OFF</button>
+        </div>
         </div>
     `)
+    widgets.register("Headlight",
+        (box) =>{
+        box.injectNode(subscribeHighBeamLight)
+    })
+     
+    
+    const lightState= subscribeHighBeamLight.querySelector("#headlight")
+    let btnLightOn=subscribeHighBeamLight.querySelector("#btn_head_light_on")
+    let btnLightOff=subscribeHighBeamLight.querySelector("#btn_head_light_off")
+    const listeners = [];
+     
+    if(btnLightOn) {
+        btnLightOn.addEventListener("click", () =>{
+            for(const listener of listeners){
+                //'Body.Lights.IsHighBeamOn'
+                listener("True")
+            }
+        })
+    }
+     
+    if(btnLightOff) {
+        btnLightOff.addEventListener("click", () =>{
+            for(const listener of listeners){
+                //'Body.Lights.IsHighBeamOn'
+                listener("False")
+            }
+        })
+    }
+     
+    setInterval(async() =>{
+        let value =await vehicle['Body.Lights.IsHighBeamOn'].get()
+        lightState.innerHTML=value?'ON':'OFF'
+    }, 1000)
+     
+    
+
+
+
+
+    const flowChartModule=document.createElement("div")
+    flowChartModule.innerHTML=(`
+    <head>
+    <title>Tree Diagram</title>
+    <style>
+      .topNode{
+          height:13%;
+          width:23%;
+          position:absolute;
+          left: 40%;
+          top:10%;
+          background-color:aquamarine;
+          text-align:center;
+          border-radius: 5px;
+          border: 1px solid gray;
+          font-size:80% ;
+      }
+      .middleNode {
+        height:13%;
+        width:23%;
+          position:absolute;
+          left: 40%;
+          top:40%;
+          background-color:aquamarine;
+          text-align:center;
+          border-radius: 5px;
+          border: 1px solid gray;
+          font-size:80% ;
+      }
+      .bottomNode {
+        height:13%;
+        width:23%;
+          position:absolute;
+          left: 40%;
+          top:75%;
+          background-color:aquamarine;
+          text-align:center;
+          border-radius: 5px;
+          border: 1px solid gray;
+          font-size:80% ;
+      }
+      .bottomLeftNode {
+        height:13%;
+        width:23%;
+          position:absolute;
+          left: 10%;
+          top:75%;
+          background-color:aquamarine;
+          text-align:center;
+          border-radius: 5px;
+          border: 1px solid gray;
+          font-size:80% ;
+      }
+      .bottomRightNode {
+        height:13%;
+        width:23%;
+          position:absolute;
+          left: 70%;
+          top:75%;
+          background-color:aquamarine;
+          text-align:center;
+          border-radius: 5px;
+          border: 1px solid gray;
+          font-size:80% ;
+      }
+    </style>
+  </head>
+  <body>
+  
+      <div id="flowChart" style="position: block;">
+      </div>
+      <button id="drawTree" type="submit">test</button>
+
+    </body> 
+    `)
+
+
+    const tt ={
+        val:"Vehicle Key Detection",
+        left:null,
+        right:null,
+        middle:{
+            val:"Driver Identification",
+            left:null,
+            right:null,
+            middle:{
+                val:"Check Memory Data",
+                left:null,
+                right:null,
+                middle:{
+                    val:"Judge",
+                    left:{
+                        val:"Pull Driver 1",
+                        left:null,
+                        right:null,
+                        middle:{}
+                    },
+                    right:{
+                        val:"Pull Driver 2",
+                        left:null,
+                        right:null,
+                        middle:{}
+                    },
+                    middle:{
+                        val:"Pull Driver 3",
+                        left:null,
+                        right:null,
+                        middle:{}
+                    }
+                }
+            }
+        }
+    }   
+
+    flowChartModule.querySelector('#drawTree').addEventListener('click',function(){
+        drawTree(tt);
+    })
+
+    var previousVal = null;
+    function drawTree(tree) {
+        var space = flowChartModule.querySelector('#flowChart');
+        var html = "";
+        var option = 0;
+        if(tree.left==null){
+            if(tree.right==null){
+                option = 4;
+            }else{
+                option = 2;
+            }
+        }else{
+            if(tree.right==null){
+                option = 3;
+            }else{
+                option = 1;
+            }
+        }
+        html += `
+        <div style="height: 200px;width:200px;background-image:url(./`+ option +`.png);background-size: 100%;background-repeat:no-repeat;border-width:1px;border-color:#000">
+        `;
+        html += `
+        <div class="middleNode">
+        `+tree.val +`
+        </div>
+        `;
+        if(previousVal!=null){
+            html += `
+            <div class="topNode">
+            `+previousVal +`
+            </div>
+            `;
+        }else{
+
+        }
+        if(tree.left!=null){
+            html += `
+            <div class="bottomLeftNode">
+            `+tree.left.val +`
+            </div>
+            `;
+        }
+        if(tree.right!=null){
+            html += `
+            <div class="bottomRightNode">
+            `+tree.right.val +`
+            </div>
+            `;
+        }
+        if(tree.middle!=null){
+            html += `
+            <div class="bottomNode">
+            `+tree.middle.val +`
+            </div>
+            `;
+        }
+        html += `          </div>`
+        space.innerHTML = html;
+        previousVal = tree.val;
+        setTimeout(function(){
+            drawTree(tree.middle)
+        },2000)
+    }
+
+
+
+
+
+
+
+
     widgets.register("FlowChart",
         (box) =>{
         box.injectNode(flowChartModule)
     })
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    simulator(
+        "Vehicle.Body.Lights.IsHighBeamOn",
+        "subscribe",
+        async({args}) =>{
+            listeners[0] = args[0];
+        }
+    );
+
+
+
+
+
+
 
 }
 
