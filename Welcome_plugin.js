@@ -10,85 +10,79 @@ const plugin=({widgets, simulator, vehicle}) =>{
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
+            
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         </head>
 
         <body>
         <div style="background-color:#F1F1F1;">
-            <h3>Settings:</h3>
+            <h1>Settings:</h1>
 
 
-
-            <!-- On/Off Button -->
-            <label for="on-off-button">Use personal setting or not:</label>
-            <input type="checkbox" id="on-off-button">
-
-
-            <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
-            
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="welcomeWordCheck" >
-                    <label class="form-check-label" for="welcomeWordCheck">
-                        Welcome Word
-                    </label>
+            <div class="alert alert-light" role="alert" style="margin-left:10px;margin-right:10px;">
+                <!-- On/Off Button -->
+                <span class="float-start" >
+                    Use personal setting or not:
+                </span>
+                
+                <div class="clearfix">
+                    <input class="form-check-input float-end" type="checkbox" id="on-off-button" checked>
                 </div>
-
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="LanguageCheck" >
-                    <label class="form-check-label" for="LanguageCheck">
-                    Language
-                    </label>
-                </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="UIInterfaceCheck" >
-                    <label class="form-check-label" for="UIInterfaceCheck">
-                    UI Interface
-                    </label>
-                </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="USMetricUnitsCheck" >
-                    <label class="form-check-label" for="USMetricUnitsCheck">
-                        US/Metric Units
-                    </label>
-                </div>
-
+                
             </div>
+            
 
+
+
+
+            <h3 style="margin-left:20px;">Screen</h3>
             <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
-            <table class = "table">
+            <table class = "table" style="font-size:17px;">
                 <tbody>
                     <tr>
       
                         <td>
-                                <div class="form-check form-switch clearfix" >
-                                
-                                <span>
-                                    Interior Light
+                                <span class="float-start" style="margin-left:8px">
+                                Welcome Word
                                 </span>
-                                <input class="form-check-input float-end" type="checkbox" role="switch" id="InteriorLightCheck" style="font-size:25px;">
-                            </div>
+                                <div class="form-switch clearfix">
+                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="welcomeWordCheck">
+                                </div>
                         </td>
                     </tr>
                     <tr>
               
                         <td>
-                                            <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="ParkingWarningBeepLevelCheck">
-                                    <label class="form-check-label" for="ParkingWarningBeepLevelCheck">
-                                        Parking Warning Beep Level
-                                    </label>
+                                <span class="float-start" style="margin-left:8px">
+                                Language
+                                </span>
+                                <div class="form-switch clearfix">
+                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="LanguageCheck">
                                 </div>
                         </td>
                     </tr>
                     <tr>
              
                         <td>
-                                            <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="PreferredMusicCheck" >
-                                    <label class="form-check-label" for="PreferredMusicCheck">
-                                        Preferred Music
-                                    </label>
-                                </div>
+
+                                <span class="float-start" style="margin-left:8px">
+                                UI Interface
+                                    </span>
+                                    <div class="form-switch clearfix">
+                                        <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="UIInterfaceCheck">
+                                    </div>
+                        </td>
+                    </tr>
+                    <tr>
+             
+                        <td>
+
+                                <span class="float-start" style="margin-left:8px">
+                                    US/Metric Units
+                                    </span>
+                                    <div class="form-switch clearfix">
+                                        <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="USMetricUnitsCheck">
+                                    </div>
                         </td>
                     </tr>
 
@@ -97,96 +91,216 @@ const plugin=({widgets, simulator, vehicle}) =>{
             </div>
 
 
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="InteriorLightCheck" >
-                <label class="form-check-label" for="InteriorLightCheck">
-                    Interior Light
-                </label>
+
+            <h3 style="margin-left:20px;">Environment</h3>
+            <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
+            <table class = "table" style="font-size:17px;">
+                <tbody>
+                    <tr>
+      
+                        <td>
+                                <span class="float-start" style="margin-left:8px">
+                                    Interior Light
+                                </span>
+                                <div class="form-switch clearfix">
+                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="InteriorLightCheck">
+                                </div>
+                        </td>
+                    </tr>
+                    <tr>
+              
+                        <td>
+                                <span class="float-start" style="margin-left:8px">
+                                    Parking Warning Beep Level
+                                </span>
+                                <div class="form-switch clearfix">
+                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="ParkingWarningBeepLevelCheck">
+                                </div>
+                        </td>
+                    </tr>
+                    <tr>
+             
+                        <td>
+
+                                <span class="float-start" style="margin-left:8px">
+                                Preferred Music
+                                    </span>
+                                    <div class="form-switch clearfix">
+                                        <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="PreferredMusicCheck">
+                                    </div>
+                        </td>
+                    </tr>
+                    <tr>
+             
+                    <td>
+
+                            <span class="float-start" style="margin-left:8px">
+                            ADAS Warning beep level
+                                </span>
+                                <div class="form-switch clearfix">
+                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="ADASWarningBeepLevelCheck">
+                                </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
             </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="ParkingWarningBeepLevelCheck">
-                <label class="form-check-label" for="ParkingWarningBeepLevelCheck">
-                    Parking Warning Beep Level
-                </label>
+
+
+
+
+            <h3 style="margin-left:20px;">Comfort</h3>
+            <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
+            <table class = "table" style="font-size:17px;">
+                <tbody>
+                    <tr>
+      
+                        <td>
+                                <span class="float-start" style="margin-left:8px">
+                                Seat Position
+                                </span>
+                                <div class="form-switch clearfix">
+                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="SeatPositionCheck">
+                                </div>
+                        </td>
+                    </tr>
+                    <tr>
+              
+                        <td>
+                                <span class="float-start" style="margin-left:8px">
+                                AC temperature
+                                </span>
+                                <div class="form-switch clearfix">
+                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="ACTemperatureCheck">
+                                </div>
+                        </td>
+                    </tr>
+                    <tr>
+             
+                        <td>
+
+                                <span class="float-start" style="margin-left:8px">
+                                AC Air Flow Level 
+                                    </span>
+                                    <div class="form-switch clearfix">
+                                        <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="ACAirFlowLevelCheck">
+                                    </div>
+                        </td>
+                    </tr>
+                    <tr>
+             
+                    <td>
+
+                            <span class="float-start" style="margin-left:8px">
+                            Steering Wheel Warm
+                                </span>
+                                <div class="form-switch clearfix">
+                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="SteeringWheelWarmCheck">
+                                </div>
+                    </td>
+                     </tr>
+                     <tr>
+             
+                    <td>
+
+                            <span class="float-start" style="margin-left:8px">
+                            Seat Heat Level
+                                </span>
+                                <div class="form-switch clearfix">
+                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="SeatHeatLevelCheck">
+                                </div>
+                    </td>
+                     </tr>
+                     <tr>
+             
+                    <td>
+
+                            <span class="float-start" style="margin-left:8px">
+                            Seat Ventilation
+                                </span>
+                                <div class="form-switch clearfix">
+                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="SeatVentilationCheck">
+                                </div>
+                    </td>
+                     </tr>
+                </tbody>
+            </table>
             </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="PreferredMusicCheck" >
-                <label class="form-check-label" for="PreferredMusicCheck">
-                    Preferred Music
-                </label>
+
+
+
+
+            <h3 style="margin-left:20px;">Driving</h3>
+            <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
+            <table class = "table" style="font-size:17px;">
+                <tbody>
+                    <tr>
+      
+                        <td>
+                                <span class="float-start" style="margin-left:8px">
+                                    AutoHold
+                                </span>
+                                <div class="form-switch clearfix">
+                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="AutoHoldCheck">
+                                </div>
+                        </td>
+                    </tr>
+                    <tr>
+              
+                        <td>
+                                <span class="float-start" style="margin-left:8px">
+                                    Mirror Status
+                                </span>
+                                <div class="form-switch clearfix">
+                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="MirrorStatusCheck">
+                                </div>
+                        </td>
+                    </tr>
+                    <tr>
+             
+                        <td>
+
+                                <span class="float-start" style="margin-left:8px">
+                                    Steering Mode
+                                    </span>
+                                    <div class="form-switch clearfix">
+                                        <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="SteeringModeCheck">
+                                    </div>
+                        </td>
+                    </tr>
+                    <tr>
+             
+                    <td>
+
+                            <span class="float-start" style="margin-left:8px">
+                            Braking Mode
+                                </span>
+                                <div class="form-switch clearfix">
+                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="BrakingModeCheck">
+                                </div>
+                    </td>
+                     </tr>
+                     <tr>
+             
+                    <td>
+
+                            <span class="float-start" style="margin-left:8px">
+                            Power Mode
+                                </span>
+                                <div class="form-switch clearfix">
+                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="PowerModeCheck">
+                                </div>
+                    </td>
+                     </tr>
+                     
+                </tbody>
+            </table>
             </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="SeatPositionCheck">
-                <label class="form-check-label" for="SeatPositionCheck">
-                    Seat Position
-                </label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="AutoHoldCheck" >
-                <label class="form-check-label" for="AutoHoldCheck">
-                    AutoHold
-                </label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="MirrorStatusCheck">
-                <label class="form-check-label" for="MirrorStatusCheck">
-                    Mirror Status
-                </label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="SteeringModeCheck" >
-                <label class="form-check-label" for="SteeringModeCheck">
-                    Steering Mode
-                </label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="BrakingModeCheck" >
-                <label class="form-check-label" for="BrakingModeCheck">
-                    BrakingMode
-                </label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="PowerModeCheck">
-                <label class="form-check-label" for="PowerModeCheck">
-                    Power Mode
-                </label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="ACTemperatureCheck">
-                <label class="form-check-label" for="ACTemperatureCheck">
-                    AC temperature
-                </label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="ACAirFlowLevelCheck" >
-                <label class="form-check-label" for="ACAirFlowLevelCheck">
-                    AC Air Flow Level 
-                </label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="SteeringWheelWarmCheck">
-                <label class="form-check-label" for="SteeringWheelWarmCheck">
-                    Steering Wheel Warm
-                </label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="SeatHeatLevelCheck">
-                <label class="form-check-label" for="SeatHeatLevelCheck">
-                    Seat Heat Level
-                </label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="SeatVentilationCheck">
-                <label class="form-check-label" for="SeatVentilationCheck">
-                    Seat Ventilation
-                </label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="ADASWarningBeepLevelCheck">
-                <label class="form-check-label" for="ADASWarningBeepLevelCheck">
-                    ADAS Warning beep level
-                </label>
-            </div>
+
+
+
+
+
 
         </div>
 
@@ -228,6 +342,19 @@ const plugin=({widgets, simulator, vehicle}) =>{
     onOffButton.addEventListener('click', function(event) {
         var isOn = event.target.checked;
         console.log('On/Off:', isOn);
+        let childrenList = personalSettingModule.querySelectorAll(".setting-checkbox-child")
+        if(isOn == true){
+            for(let item of childrenList){
+                if(item.getAttribute('disabled')){
+                    item.removeAttribute('disabled')
+                }
+                
+            }
+        }else{
+            for(let item of childrenList){
+                item.setAttribute('disabled','disabled');
+            }
+        }   
     });
 
     welcomeWordCheck.addEventListener('click', function(event) {
@@ -535,7 +662,7 @@ function readTextFile(fileName){
         if(rawFile.readyState === 4){
             if(rawFile.status === 200 || rawFile.status == 0){
                 var allText = rawFile.responseText;
-                alert(allText);
+                // alert(allText);
                 console.log(allText.split("\n"));
             }
         }
