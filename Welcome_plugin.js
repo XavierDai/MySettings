@@ -500,15 +500,17 @@ const plugin=({widgets, simulator, vehicle}) =>{
         </head>
 
         <body>
-            <div>
+            <div class="card" style="margin-left:10px;margin-right:10px;margin-top:5px;">
+                <h5 class="card-title">External Setting</h5>
+                <span class="placeholder col-12 bg-info placeholder-xs"></span>
+
                 <label for="rainRange" class="form-label">Rain Intensity (0% ~ 100%)：</label>
                 <span id="rainRangeDisplay">
                     50
                 </span>%
                 </br>
                 <input type="range" class="form-range w-50" min="0" max="100" id="rainRange">
-            </div>
-            <div>
+
                 <label for="temperatureRange" class="form-label">Outside Temperature (-50°C ~ +50°C)：</label>
                 <span id="temperatureRangeDisplay">
                     0
@@ -516,6 +518,7 @@ const plugin=({widgets, simulator, vehicle}) =>{
                 </br>
                 <input type="range" class="form-range w-50" min="-50" max="50" id="temperatureRange">
             </div>
+        
             <script src=https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
@@ -620,6 +623,9 @@ const plugin=({widgets, simulator, vehicle}) =>{
                 }
                 .driver-card-h5{
                     font-size:6vw;
+                }
+                .list-group-item:hover{
+                    cursor:pointer;
                 }
             </style>
 
