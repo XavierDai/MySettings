@@ -1,8 +1,6 @@
 const plugin=({widgets, simulator, vehicle}) =>{
 
     var txt = readTextFile("http://127.0.0.1:5500/ident.txt");
-
-
     // widget for setting1
     const personalSettingModule =document.createElement("div")
     personalSettingModule.setAttribute("style", `height: 100%; width: calc(100% - 10px);margin-left:10px;`)
@@ -607,98 +605,98 @@ const plugin=({widgets, simulator, vehicle}) =>{
     })
 
 
-    const personModule =document.createElement("div")
-    personModule.setAttribute("style", `height: 100%; width: 100%;`)
-    personModule.innerHTML=(`
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
+    // const personModule =document.createElement("div")
+    // personModule.setAttribute("style", `height: 100%; width: 100%;`)
+    // personModule.innerHTML=(`
+    //     <head>
+    //         <meta charset="utf-8">
+    //         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-            <style>
-                .driver-name{
-                    font-size:4.5vw;
-                }
-                .driver-description{
-                    font-size:4.5vw;
-                }
-                .driver-card-h5{
-                    font-size:6vw;
-                }
-                .list-group-item:hover{
-                    cursor:pointer;
-                }
-            </style>
-
-
-
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-        </head>
-
-        <body>
-            <div class="card" style="margin-left:10px;margin-right:10px;margin:top:10px;">
-                <h5 class="card-header driver-card-h5">Pick a driver</h5>
-                <div class="card-body">
-                    <div id="multipleUsersDiv"></div>
-                </div>
-            </div>
-            <script src=https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-        </body>   
-    `)
-
-    var personDic = {"Person1":["Yilong Dai","xxxxxxxxx"],"Person2":["Kyrie Irving","Asdadasdadadasd"],"Person3":["Ziyi Wang","abaaba"]};
+    //         <style>
+    //             .driver-name{
+    //                 font-size:4.5vw;
+    //             }
+    //             .driver-description{
+    //                 font-size:4.5vw;
+    //             }
+    //             .driver-card-h5{
+    //                 font-size:6vw;
+    //             }
+    //             .list-group-item:hover{
+    //                 cursor:pointer;
+    //             }
+    //         </style>
 
 
-    var html = '';
-    html+=`<div class="row">
-                <div class="col-5">
-                    <div class="list-group driver-name" id="list-tab" role="tablist">`
-    for(var key in personDic){
-        html+='<a class="list-group-item list-group-item-action " id="'+key+'" data-bs-toggle="list" role="tab" aria-controls="'+personDic[key][1]+'Content">'+personDic[key][0]+'</a>'
-    }
-    html+=`
-        </div>
-                </div>
-            <div class="col-7">
-                <div class="tab-content driver-description" id="nav-tabContent">
-    `
-    for(var key in personDic){
-        html+='<div class="tab-pane fade " id="'+key+'Content" role="tabpanel" aria-labelledby="'+key+'">'+personDic[key][1]+'</div>'
-    }
-    html+=`
-    </div>
-            </div>
-          </div>
-    `
-    personModule.querySelector('#multipleUsersDiv').innerHTML = html;
 
-    var previousTab = null;
-    var previousContent = null;
-    for(var key in personDic){
+    //         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    //     </head>
 
-        personModule.querySelector('#'+key).addEventListener('click',function(event){
-            console.log(this.id)
+    //     <body>
+    //         <div class="card" style="margin-left:10px;margin-right:10px;margin:top:10px;">
+    //             <h5 class="card-header driver-card-h5">Pick a driver</h5>
+    //             <div class="card-body">
+    //                 <div id="multipleUsersDiv"></div>
+    //             </div>
+    //         </div>
+    //         <script src=https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    //         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    //         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    //     </body>   
+    // `)
+
+    // var personDic = {"Person1":["Yilong Dai","xxxxxxxxx"],"Person2":["Kyrie Irving","Asdadasdadadasd"],"Person3":["Ziyi Wang","abaaba"]};
+
+
+    // var html = '';
+    // html+=`<div class="row">
+    //             <div class="col-5">
+    //                 <div class="list-group driver-name" id="list-tab" role="tablist">`
+    // for(var key in personDic){
+    //     html+='<a class="list-group-item list-group-item-action " id="'+key+'" data-bs-toggle="list" role="tab" aria-controls="'+personDic[key][1]+'Content">'+personDic[key][0]+'</a>'
+    // }
+    // html+=`
+    //     </div>
+    //             </div>
+    //         <div class="col-7">
+    //             <div class="tab-content driver-description" id="nav-tabContent">
+    // `
+    // for(var key in personDic){
+    //     html+='<div class="tab-pane fade " id="'+key+'Content" role="tabpanel" aria-labelledby="'+key+'">'+personDic[key][1]+'</div>'
+    // }
+    // html+=`
+    // </div>
+    //         </div>
+    //       </div>
+    // `
+    // personModule.querySelector('#multipleUsersDiv').innerHTML = html;
+
+    // var previousTab = null;
+    // var previousContent = null;
+    // for(var key in personDic){
+
+    //     personModule.querySelector('#'+key).addEventListener('click',function(event){
+    //         console.log(this.id)
             
-            if(previousTab != null){
-                previousTab.setAttribute("class","list-group-item list-group-item-action");
-                previousContent.setAttribute("class","tab-pane fade");
-            }
-            previousTab = personModule.querySelector('#'+this.id);
-            previousContent = personModule.querySelector('#'+this.id+"Content");
-            previousTab.setAttribute("class","list-group-item list-group-item-action active");
-            previousContent.setAttribute("class","tab-pane fade show active");
-        })
-        console.log(key)
+    //         if(previousTab != null){
+    //             previousTab.setAttribute("class","list-group-item list-group-item-action");
+    //             previousContent.setAttribute("class","tab-pane fade");
+    //         }
+    //         previousTab = personModule.querySelector('#'+this.id);
+    //         previousContent = personModule.querySelector('#'+this.id+"Content");
+    //         previousTab.setAttribute("class","list-group-item list-group-item-action active");
+    //         previousContent.setAttribute("class","tab-pane fade show active");
+    //     })
+    //     console.log(key)
 
-    }
+    // }
 
     
 
-    widgets.register("Person",
-        (box) =>{
-        box.injectNode(personModule)
-    })
+    // widgets.register("Person",
+    //     (box) =>{
+    //     box.injectNode(personModule)
+    // })
 
 
 
@@ -759,66 +757,134 @@ const plugin=({widgets, simulator, vehicle}) =>{
     <head>
     <title>Tree Diagram</title>
     <style>
-      .topNode{
-          height:13%;
-          width:23%;
+      
+      .start{
+        height:10vw;
+        width:10vw;
+        position:absolute;
+        left: calc(50% - 5vw);
+        border-radius:5vw 5vw 5vw 5vw;
+        top:10%;
+        background-color:grey;
+    }
+    .judge{
+        width:10vw;
+        height:10vw;
+        -webkit-clip-path:polygon(0px 50%,50% 0px,100% 50%,50% 100%,0px 50%);
+    }
+    .end {
+        height:10vw;
+        width:10vw;
           position:absolute;
-          left: 40%;
-          top:10%;
-          background-color:aquamarine;
+          left: calc(50% - 5vw);
+          top:75%;
+          background-color:grey;
           text-align:center;
-          border-radius: 5px;
-          border: 1px solid gray;
+          border-radius:5vw 5vw 5vw 5vw;
           font-size:80% ;
       }
+      .topNode{
+        height:13%;
+        width:26%;
+        position:absolute;
+        left: calc(50% - 13%);
+        top:10%;
+        background-color:#71D5FF;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        border-radius: 3vw;
+        border: 1px solid gray;
+        font-size:4vw;
+    }
       .middleNode {
         height:13%;
-        width:23%;
+        width:26%;
           position:absolute;
-          left: 40%;
-          top:40%;
-          background-color:aquamarine;
+          left: calc(50% - 13%);
+          top:41%;
+          background-color:#00A2E8;
+          display:flex;
+          align-items:center;
+          justify-content:center;
           text-align:center;
-          border-radius: 5px;
+          border-radius: 3vw;
           border: 1px solid gray;
-          font-size:80% ;
+          box-shadow:0px 0px 3px 3px #aaa;
+          font-size:4vw ;
       }
       .bottomNode {
         height:13%;
-        width:23%;
+        width:26%;
           position:absolute;
-          left: 40%;
+          left: calc(50% - 13%);
           top:75%;
-          background-color:aquamarine;
+          background-color:#71D5FF;
+          display:flex;
+          align-items:center;
+          justify-content:center;
           text-align:center;
-          border-radius: 5px;
+          border-radius: 3vw;
           border: 1px solid gray;
-          font-size:80% ;
+          font-size:4vw ;
       }
       .bottomLeftNode {
         height:13%;
-        width:23%;
+        width:26%;
           position:absolute;
-          left: 10%;
+          left: calc(20% - 13%);
           top:75%;
-          background-color:aquamarine;
+          background-color:#71D5FF;
+          display:flex;
+          align-items:center;
+          justify-content:center;
           text-align:center;
-          border-radius: 5px;
+          border-radius: 3vw;
           border: 1px solid gray;
-          font-size:80% ;
+          font-size:4vw ;
       }
       .bottomRightNode {
         height:13%;
-        width:23%;
+        width:26%;
           position:absolute;
-          left: 70%;
+          left: calc(80% - 13%);
           top:75%;
-          background-color:aquamarine;
+          background-color:#71D5FF;
+          display:flex;
+          align-items:center;
+          justify-content:center;
           text-align:center;
-          border-radius: 5px;
+          border-radius: 3vw;
           border: 1px solid gray;
-          font-size:80% ;
+          font-size:4vw ;
       }
+    .stateSpan {
+        position:absolute;
+        left: 57%;
+        top: 40%;
+        font-size:4vw ;
+    }
+    .leftConditionSpan {
+        position:absolute;
+        left: 25%;
+        top: 50%;
+        font-size:4vw ;
+    }
+    .rightConditionSpan{
+        position:absolute;
+        left: 65%;
+        top: 50%;
+        font-size:4vw ;
+    }
+    
+    .middleConditionSpan{
+        position:absolute;
+        left: 52%;
+        top: 60%;
+        font-size:4vw ;
+    }
+
     </style>
   </head>
   <body>
@@ -833,32 +899,39 @@ const plugin=({widgets, simulator, vehicle}) =>{
 
     const tt ={
         val:"Vehicle Key Detection",
+        type:"activity",
         left:null,
         right:null,
         middle:{
             val:"Driver Identification",
+            type:"activity",
             left:null,
             right:null,
             middle:{
                 val:"Check Memory Data",
+                type:"activity",
                 left:null,
                 right:null,
                 middle:{
-                    val:"Judge",
+                    val:{state:"Driver Memory=",leftCondition:"1",middleCondition:"2",rightCondition:"3"},
+                    type:"judge",
                     left:{
                         val:"Pull Driver 1",
+                        type:"activity",
                         left:null,
                         right:null,
                         middle:{}
                     },
                     right:{
                         val:"Pull Driver 2",
+                        type:"activity",
                         left:null,
                         right:null,
                         middle:{}
                     },
                     middle:{
                         val:"Pull Driver 3",
+                        type:"activity",
                         left:null,
                         right:null,
                         middle:{}
@@ -873,64 +946,128 @@ const plugin=({widgets, simulator, vehicle}) =>{
     })
 
     var previousVal = null;
+    var previousType = null;
     function drawTree(tree) {
         var space = flowChartModule.querySelector('#flowChart');
         var html = "";
-        var option = 0;
+        var link = "";
         if(tree.left==null){
             if(tree.right==null){
-                option = 4;
+                link = "https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fmiddle.png?alt=media&token=40a862dc-6df5-40f2-aced-61906d9a2577";
             }else{
-                option = 2;
+                link = "https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2F3.png?alt=media&token=da075ded-47a1-45ac-a8b4-b3d5f1b59032";
             }
         }else{
             if(tree.right==null){
-                option = 3;
+                link ="https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fleft.png?alt=media&token=d40ffc11-0602-41d4-b449-94221e7bc83d";
             }else{
-                option = 1;
+                link ="https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fall.png?alt=media&token=74576bf0-adf5-4a70-bfbb-8c97870ea4f0";
             }
         }
         html += `
-        <div style="height: 200px;width:200px;background-image:url(./`+ option +`.png);background-size: 100%;background-repeat:no-repeat;border-width:1px;border-color:#000">
+        <div style="height: 100%;width:100%;background-image:url(`+ link +`);background-size: 100%;background-repeat:no-repeat;border-width:1px;border-color:#000">
         `;
-        html += `
-        <div class="middleNode">
-        `+tree.val +`
-        </div>
-        `;
-        if(previousVal!=null){
+        if(tree.type == "activity"){
             html += `
-            <div class="topNode">
-            `+previousVal +`
+            <div class="middleNode">
+            `+tree.val +`
             </div>
             `;
-        }else{
-
+        }else if(tree.type == "judge"){
+            html += `
+            <div class="middleNode judge">
+            </div>
+            <div class="stateSpan">
+            `+ tree.val.state +`
+            </div>
+            <div class = "leftConditionSpan">
+            `+ tree.val.leftCondition +`
+            </div>
+            <div class = "middleConditionSpan">
+            `+ tree.val.middleCondition +`
+            </div>
+            <div class = "rightConditionSpan">
+            `+ tree.val.rightCondition +`
+            </div>
+            `;
         }
-        if(tree.left!=null){
+        
+        if(previousVal!=null){
+            if(previousType == "activity"){
+                html += `
+                <div class="topNode">
+                `+previousVal +`
+                </div>
+                `;
+            }else if (previousType == "judge"){
+                html += `
+                <div class="topNode judge">
+                </div>
+                `;
+            }
+        }else{
             html += `
-            <div class="bottomLeftNode">
-            `+tree.left.val +`
+            <div class="start">
             </div>
             `;
+        }
+
+        if(tree.left!=null){
+            if(tree.left.type == "activity"){
+                html += `
+                <div class="bottomLeftNode">
+                `+tree.left.val +`
+                </div>
+                `;
+            }
+            else if(tree.left.type == "judge"){
+                html += `
+                <div class="bottomLeftNode judge">
+                </div>
+                `;
+            }
         }
         if(tree.right!=null){
-            html += `
-            <div class="bottomRightNode">
-            `+tree.right.val +`
-            </div>
-            `;
+            if(tree.right.type == "activity"){
+                html += `
+                <div class="bottomRightNode">
+                `+tree.right.val +`
+                </div>
+                `;
+            }
+            else if(tree.right.type == "judge"){
+                html += `
+                <div class="bottomRightNode judge">
+                `+tree.right.val +`
+                </div>
+                `;
+            }
+         
         }
         if(tree.middle!=null){
+            if(tree.middle.type == "activity"){
+                html += `
+                <div class="bottomNode">
+                `+tree.middle.val +`
+                </div>
+                `;
+            }
+            else if(tree.middle.type == "judge"){
+                html += `
+                <div class="bottomNode judge">
+                </div>
+                `;
+            }
+        }else{
             html += `
-            <div class="bottomNode">
-            `+tree.middle.val +`
+            <div class="end">
             </div>
             `;
         }
         html += `          </div>`
         space.innerHTML = html;
         previousVal = tree.val;
+        previousType = tree.type;
         setTimeout(function(){
             drawTree(tree.middle)
         },2000)
@@ -951,12 +1088,160 @@ const plugin=({widgets, simulator, vehicle}) =>{
 
 
 
+    // widget for externalSetting
+    const bigBoxModule =document.createElement("div")
+    bigBoxModule.setAttribute("style", `height: 100%; width: 100%;`)
+    bigBoxModule.innerHTML=(`
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+             <style>
+                .driver-name{
+                    font-size:1.5vw;
+                }
+                .driver-description{
+                    font-size:1.5vw;
+                }
+                .driver-card-h5{
+                    font-size:2vw;
+                }
+                .list-group-item:hover{
+                    cursor:pointer;
+                }
+            </style>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+        </head>
+
+        <body>
+            <div class="container text-center">
+                <div style="height:65%;">   
+                    123
+                </div>
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="card" style="margin-left:10px;margin-right:10px;margin-top:5px;">
+                            <h5 class="card-header">External Setting</h5>
+
+    
+             
+                            <div class="row">
+                                <label class="col-sm-4 col-form-label col-form-label-lg">Rain Intensity</label>
+                                <div class="col-sm-7" style="background-color:#CAECF4;border-radius:5px;">
+                                    <label for="rainRange" class="form-label">Scope: 0% ~ 100%</label>
+                                    </br>
+                                    Current:<span id="rainRangeDisplay" style="text-decoration:underline;">
+                                        50
+                                    </span>%
+                                    </br>
+                                    <input type="range" class="form-range" min="0" max="100" id="rainRange">
+                                </div>
+                            </div>
+                            </br>
+                            <div class="row">
+                                <label class="col-sm-4 col-form-label col-form-label-lg">Outside Temperature</label>
+                                <div class="col-sm-7" style="background-color:#FFBE7D;border-radius:5px;">
+                                    <label for="rainRange" class="form-label">Scope: -50°C ~ +50°C</label>
+                                    </br>
+                                    Current:<span id="temperatureRangeDisplay" style="text-decoration:underline;">
+                                        50
+                                    </span>°C
+                                    </br>
+                                    <input type="range" class="form-range" min="-50" max="50" id="temperatureRange">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                         <div class="card" style="margin-left:10px;margin-right:10px;margin:top:10px;">
+                            <h5 class="card-header driver-card-h5">Pick a driver</h5>
+                            <div class="card-body">
+                                <div id="multipleUsersDiv"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <script src=https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+        </body>   
+    `)
+
+    // var RainIntensityRange = bigBoxModule.querySelector('#rainRange');
+    // RainIntensityRange.addEventListener('click',function(event){})
+    var RainIntensityRange2 = bigBoxModule.querySelector('#rainRange');
+    RainIntensityRange2.addEventListener('click',function(event){
+        var rainIntensity = event.target.value;
+        console.log('rainIntensity:',rainIntensity);
+        bigBoxModule.querySelector('#rainRangeDisplay').innerHTML = rainIntensity
+
+    })
+
+    var temperatureRange2 = bigBoxModule.querySelector('#temperatureRange');
+    temperatureRange2.addEventListener('click',function(event){
+        var OutsideTemperature = event.target.value;
+        console.log('OutsideTemperature:',OutsideTemperature);
+        bigBoxModule.querySelector('#temperatureRangeDisplay').innerHTML = OutsideTemperature
+
+    })
+
+
+    var personDic = {"Person1":["Yilong Dai","xxxxxxxxx"],"Person2":["Kyrie Irving","Asdadasdadadasd"],"Person3":["Ziyi Wang","abaaba"]};
+
+    var html = '';
+    html+=`<div class="row">
+                <div class="col-5">
+                    <div class="list-group driver-name" id="list-tab" role="tablist">`
+    for(var key in personDic){
+        html+='<a class="list-group-item list-group-item-action " id="'+key+'" data-bs-toggle="list" role="tab" aria-controls="'+personDic[key][1]+'Content">'+personDic[key][0]+'</a>'
+    }
+    html+=`
+        </div>
+                </div>
+            <div class="col-7">
+                <div class="tab-content driver-description" id="nav-tabContent">
+    `
+    for(var key in personDic){
+        html+='<div class="tab-pane fade " id="'+key+'Content" role="tabpanel" aria-labelledby="'+key+'">'+personDic[key][1]+'</div>'
+    }
+    html+=`
+    </div>
+            </div>
+          </div>
+    `
+    bigBoxModule.querySelector('#multipleUsersDiv').innerHTML = html;
+
+    var previousTab = null;
+    var previousContent = null;
+    for(var key in personDic){
+
+        bigBoxModule.querySelector('#'+key).addEventListener('click',function(event){
+            console.log(this.id)
+            
+            if(previousTab != null){
+                previousTab.setAttribute("class","list-group-item list-group-item-action");
+                previousContent.setAttribute("class","tab-pane fade");
+            }
+            previousTab = bigBoxModule.querySelector('#'+this.id);
+            previousContent = bigBoxModule.querySelector('#'+this.id+"Content");
+            previousTab.setAttribute("class","list-group-item list-group-item-action active");
+            previousContent.setAttribute("class","tab-pane fade show active");
+        })
+        console.log(key)
+
+    }
 
 
 
+    
 
-
-
+    widgets.register("BigBox",
+        (box) =>{
+        box.injectNode(bigBoxModule)
+    })
 
 
 
