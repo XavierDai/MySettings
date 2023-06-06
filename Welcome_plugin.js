@@ -1108,6 +1108,7 @@ const plugin=({widgets, simulator, vehicle}) =>{
                 drawTree(tree.middle)
             },2000)
         }
+        
     }
 
 
