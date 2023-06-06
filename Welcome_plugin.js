@@ -54,27 +54,59 @@ const plugin=({widgets, simulator, vehicle}) =>{
         </head>
 
         <body>
-        <div style="background-color:#F1F1F1;border:8px solid black;border-radius:35px;height:100%;">
+        <div style="background-color:#F1F1F1;border:8px solid black;border-radius:35px;height:100%;overflow-y:hidden">
         <div id="top-phone-box"style="height：15%">
             <h1 class="setting-h1" style="margin-left:20px;margin-top:5px;">
                 Settings:
             </h1>
-            <div class="alert alert-light setting-table" role="alert" style="margin-left:10px;margin-right:10px;">
-                <!-- On/Off Button -->
-                <span class="float-start" >
-                    Use personal setting or not:
-                </span>
+            <div style="background-color:white;border-radius:20px;margin-left:10px;margin-right:15px;margin-top:5px">
+            <table class = "table setting-table">
+            <tbody>
+                <tr>
+  
+                    <td>
+                            <div class="container">
+                                <div class="row row-cols-auto">
+                                    <div class="col">
+                                        <div id="avatar" style="margin-top:5px;width:7vh;height:7vh;border-radius:3.5vh 3.5vh 3.5vh 3.5vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2FDrowsiness_2.png?alt=media&token=c085c451-ec32-4579-b3bf-1b77108f1c81);">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <span style="font-size:6vw">
+                                            Hi, 
+                                        </span>
+                                        <span id="driver-name-span" style="font-size:6vw">
+                                            Driver!
+                                        </span>
+                                        </br>
+                                        <span id="driver-name-bottom-span" style="font-size:4vw">
+                                            welcome
+                                        </span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                            <span class="float-start" style="margin-left:8px">
+                                Enable Personal Settings:
+                            </span>
+                            <div class="form-switch clearfix">
+                            <input class="form-check-input float-end" type="checkbox" role="switch"  id="on-off-button" checked>
+                    </td>
+                </tr>
+             
                 
-                <div class="clearfix">
-                    <input class="form-check-input float-end" type="checkbox" id="on-off-button" checked>
-                </div>
-                
-            </div>
 
+            </tbody>
+        </table>
+        </div>
         </div>
         
 
-        <div class="phone-container" style="height:calc(85% - 25px);overflow-y:auto;margin-top:5px;margin-bottom:15px;">
+        <div class="phone-container" style="height:calc(78% - 25px);overflow-y:auto;margin-top:5px;margin-bottom:15px;">
             
 
 
@@ -803,7 +835,7 @@ const plugin=({widgets, simulator, vehicle}) =>{
         width:26%;
           position:absolute;
           left: calc(50% - 13%);
-          top:41%;
+          top:40%;
           background-color:#00A2E8;
           display:flex;
           align-items:center;
@@ -920,34 +952,36 @@ const plugin=({widgets, simulator, vehicle}) =>{
                         type:"activity",
                         left:null,
                         right:null,
-                        middle:{}
+                        middle:null
                     },
                     right:{
                         val:"Pull Driver 2",
                         type:"activity",
                         left:null,
                         right:null,
-                        middle:{}
+                        middle:null
                     },
                     middle:{
                         val:"Pull Driver 3",
                         type:"activity",
                         left:null,
                         right:null,
-                        middle:{}
+                        middle:null
                     }
                 }
             }
         }
     }   
-
+    var drawFlag = true;
     flowChartModule.querySelector('#drawTree').addEventListener('click',function(){
+        drawFlag = true;
         drawTree(tt);
     })
 
     var previousVal = null;
     var previousType = null;
     function drawTree(tree) {
+
         var space = flowChartModule.querySelector('#flowChart');
         var html = "";
         var link = "";
@@ -1059,6 +1093,7 @@ const plugin=({widgets, simulator, vehicle}) =>{
                 `;
             }
         }else{
+            drawFlag = false;
             html += `
             <div class="end">
             </div>
@@ -1068,10 +1103,13 @@ const plugin=({widgets, simulator, vehicle}) =>{
         space.innerHTML = html;
         previousVal = tree.val;
         previousType = tree.type;
-        setTimeout(function(){
-            drawTree(tree.middle)
-        },2000)
+        if(drawFlag){
+            setTimeout(function(){
+                drawTree(tree.middle)
+            },2000)
+        }
     }
+
 
 
 
@@ -1191,6 +1229,12 @@ const plugin=({widgets, simulator, vehicle}) =>{
 
     var personDic = {"Person1":["Yilong Dai","xxxxxxxxx"],"Person2":["Kyrie Irving","Asdadasdadadasd"],"Person3":["Ziyi Wang","abaaba"]};
 
+    var usrAvatar =   personalSettingModule.querySelector('#avatar');
+
+    var driverName = personalSettingModule.querySelector('#driver-name-span');
+
+    var driverWelcome = personalSettingModule.querySelector('#driver-name-bottom-span');
+
     var html = '';
     html+=`<div class="row">
                 <div class="col-5">
@@ -1229,6 +1273,9 @@ const plugin=({widgets, simulator, vehicle}) =>{
             previousContent = bigBoxModule.querySelector('#'+this.id+"Content");
             previousTab.setAttribute("class","list-group-item list-group-item-action active");
             previousContent.setAttribute("class","tab-pane fade show active");
+            driverName.innerHTML = personDic[this.id][0];
+            driverWelcome.innerHTML = personDic[this.id][1];
+
         })
         console.log(key)
 
