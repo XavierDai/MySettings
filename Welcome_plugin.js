@@ -1,8 +1,182 @@
 const plugin = ({ widgets, simulator, vehicle }) => {
   var txt = readTextFile("http://127.0.0.1:5500/ident.txt");
-  let test1 ="hello world";
-  let test2 = "hello world!";
-  let selectedDriverName = "";
+  
+  var selectedDriverName = null;
+  var isPersonal = false;
+  var interiorLight = null;
+  var welcomeWord = null;
+  var language = null;
+  var lightColor = null;
+  var parkingWarningBeepLevel = null;
+  var musicURI = null;
+  var seatPosition = null;
+  var mirrorLeftTilt = null;
+  var mirrorLeftPan = null;
+  var mirrorRightTilt = null;
+  var mirrorRightPan = null;
+  var ACAirFlowLevel = null;
+  var ACTemperature = null;
+  var SteeringWheelWarm = null;
+  var SeatHeatLevel = null;
+  var SeatVentilation = null;
+  var AutoHoldIsOn = null;
+  var SteeringMode = null;
+  var BrakingMode = null;
+  var PowerModeMode = null;
+  var OutsideTemperature = null;
+  var rainIntensity = null;
+
+
+  var afterTempJudge = {
+    val: "Set AC Air Flow",
+    type: "activity",
+    left: null,
+    right: null,
+    middle: {
+      val: "Set ADAS warning beep level",
+      type: "activity",
+      left: null,
+      right: null,
+      middle: null,
+    },
+  }
+  var personalTree = {
+    val: "Personalized Welcome Word",
+    type: "activity",
+    left: null,
+    right: null,
+    middle: {
+      val: "Personalized UI Interface",
+      type: "activity",
+      left: null,
+      right: null,
+      middle: {
+        val: "Set Prefer Language",
+        type: "activity",
+        left: null,
+        right: null,
+        middle: {
+          val: "Set US/Metric Units",
+          type: "activity",
+          left: null,
+          right: null,
+          middle: {
+            val: "Set Interior Light",
+            type: "activity",
+            left: null,
+            right: null,
+            middle: {
+              val: "Set Parking Warning Beep Level",
+              type: "activity",
+              left: null,
+              right: null,
+              middle: {
+                val: "Turn On Preferred Music",
+                type: "activity",
+                left: null,
+                right: null,
+                middle: {
+                  val: "Set Seat Position",
+                  type: "activity",
+                  left: null,
+                  right: null,
+                  middle: {
+                    val: "Set AutoHold",
+                    type: "activity",
+                    left: null,
+                    right: null,
+                    middle: {
+                      val: "Set Mirror Status",
+                      type: "activity",
+                      left: null,
+                      right: null,
+                      middle: {
+                        val: "Set Steering Mode",
+                        type: "activity",
+                        left: null,
+                        right: null,
+                        middle: {
+                          val: "Set Braking Mode",
+                          type: "activity",
+                          left: null,
+                          right: null,
+                          middle: {
+                            val: "Set Power Mode",
+                            type: "activity",
+                            left: null,
+                            right: null,
+                            middle: {
+                              val: "Get Outside Temperature",
+                              type: "activity",
+                              left: null,
+                              right: null,
+                              middle: {
+                                val: {
+                                  state: "temp < 9",
+                                  leftCondition: "Yes",
+                                  middleCondition: "No",
+                                  rightCondition: null,
+                                },
+                                type: "judge",
+                                left:  {
+                                  val: "Turn on & Set AC",
+                                  type: "activity",
+                                  left: null,
+                                  right: null,
+                                  middle: {
+                                    val: "Turn on Seat Heat",
+                                    type: "activity",
+                                    left: null,
+                                    right: null,
+                                    middle: {
+                                      val: "Turn Steering Wheel Warm",
+                                      type: "activity",
+                                      left: null,
+                                      right: null,
+                                      middle: afterTempJudge,
+                                    },
+                                  },
+                                },
+                                right: null,
+                                middle:  {
+                                  val: {
+                                    state: "temp > 25",
+                                    leftCondition: "Yes",
+                                    middleCondition: "No",
+                                    rightCondition: null,
+                                  },
+                                  type: "judge",
+                                  left:  {
+                                    val: "Turn on & Set AC",
+                                    type: "activity",
+                                    left: null,
+                                    right: null,
+                                    middle: {
+                                      val: "Turn On Seat Ventilation",
+                                      type: "activity",
+                                      left: null,
+                                      right: null,
+                                      middle: afterTempJudge,
+                                    },
+                                  },
+                                  right: null,
+                                  middle: afterTempJudge,
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  }
   const tt = {
     val: "Vehicle Key Detection",
     type: "activity",
@@ -31,27 +205,35 @@ const plugin = ({ widgets, simulator, vehicle }) => {
             type: "activity",
             left: null,
             right: null,
-            middle: null,
+            middle: personalTree,
           },
           right: {
             val: "Default Driver",
             type: "activity",
             left: null,
             right: null,
-            middle: null,
+            middle: {
+              val: "Default Setting",
+              type: "activity",
+              left: null,
+              right: null,
+              middle: null,
+            },
           },
           middle: {
             val: "Pull Driver Kyrie Irving",
             type: "activity",
             left: null,
             right: null,
-            middle: null,
+            middle: personalTree,
           },
         },
       },
     },
   };
   var curTree = tt;
+  
+  
   // widget for setting1
   const personalSettingModule = document.createElement("div");
   personalSettingModule.setAttribute(
@@ -1264,10 +1446,13 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   function getDirection(val){
     if(val.state == "Driver Memory"){
         if(selectedDriverName == val.leftCondition){
+            isPersonal = true;
             return "left";
         }else if(selectedDriverName == val.middleCondition){
+            isPersonal = true;
             return "middle";
         }
+        isPersonal = false;
         return "right";
     }else if (state == "Outside Temperature"){
         return null;
@@ -1305,9 +1490,31 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
         <body>
             <div>
+                
+
                 <div style="height:65%;">   
-                    123
-                    <button id="run" type="submit">run</button>
+               
+                  <div class="toast-container position-fixed bottom-50 end-50 p-3">
+                    <div id="liveToast" class="toast show fade" role="alert" aria-live="assertive" aria-atomic="true">
+                      <div class="toast-header">
+                        <strong class="me-auto">Bootstrap</strong>
+                        <small>11 mins ago</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                      </div>
+                      <div class="toast-body">
+                        Hello, world! This is a toast message.
+                      </div>
+                    </div>
+                  </div>
+                
+                    
+                    
+
+                  <div>
+                    <span id = "personalizedWelcomeWordSpan">
+                      welcome!
+                    </span>
+                  </div>
                 </div>
                 <div class="row" style="height:35%;width:100%;overflow-y:auto;">
                     <div class="col" >
@@ -1552,14 +1759,14 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   // RainIntensityRange.addEventListener('click',function(event){})
   var RainIntensityRange2 = bigBoxModule.querySelector("#rainRange");
   RainIntensityRange2.addEventListener("click", function (event) {
-    var rainIntensity = event.target.value;
+    rainIntensity = event.target.value;
     console.log("rainIntensity:", rainIntensity);
     bigBoxModule.querySelector("#rainRangeDisplay").innerHTML = rainIntensity;
   });
 
   var temperatureRange2 = bigBoxModule.querySelector("#temperatureRange");
   temperatureRange2.addEventListener("click", function (event) {
-    var OutsideTemperature = event.target.value;
+    OutsideTemperature = event.target.value;
     console.log("OutsideTemperature:", OutsideTemperature);
     bigBoxModule.querySelector("#temperatureRangeDisplay").innerHTML =
       OutsideTemperature;
@@ -1567,15 +1774,15 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   var SeatPositionRange = bigBoxModule.querySelector("#SeatPositionRange");
   SeatPositionRange.addEventListener("click", function (event) {
-    var SeatPosition = event.target.value;
-    console.log("Seat Position:", SeatPosition);
+    seatPosition = event.target.value;
+    console.log("Seat Position:", seatPosition);
     bigBoxModule.querySelector("#seatPositionRangeDisplay").innerHTML =
-    SeatPosition;
+    seatPosition;
   });
 
   var ACTemperatureRange = bigBoxModule.querySelector("#ACTemperatureRange");
   ACTemperatureRange.addEventListener("click", function (event) {
-    var ACTemperature = event.target.value;
+    ACTemperature = event.target.value;
     console.log("AC Temperature:", ACTemperature);
     bigBoxModule.querySelector("#ACTemperatureRangeDisplay").innerHTML =
         ACTemperature;
@@ -1583,14 +1790,14 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   var ACAirFlowLevelRange = bigBoxModule.querySelector("#ACAirFlowLevelRange");
   ACAirFlowLevelRange.addEventListener("click", function (event) {
-    var ACAirFlowLevel = event.target.value;
+    ACAirFlowLevel = event.target.value;
     console.log("AC Air Flow Level:",ACAirFlowLevel);
     bigBoxModule.querySelector("#ACAirFlowLevelRangeDisplay").innerHTML =
         ACAirFlowLevel;
   });
   var SteeringWheelWarmRange = bigBoxModule.querySelector("#SteeringWheelWarmRange");
   SteeringWheelWarmRange.addEventListener("click", function (event) {
-    var SteeringWheelWarm = event.target.value;
+    SteeringWheelWarm = event.target.value;
     console.log("Steering Wheel Warm:", SteeringWheelWarm);
     bigBoxModule.querySelector("#SteeringWheelWarmRangeDisplay").innerHTML =
         SteeringWheelWarm;
@@ -1598,7 +1805,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   var SeatHeatLevelRange = bigBoxModule.querySelector("#SeatHeatLevelRange");
   SeatHeatLevelRange.addEventListener("click", function (event) {
-    var SeatHeatLevel= event.target.value;
+    SeatHeatLevel = event.target.value;
     console.log("Seat Heat Level:", SeatHeatLevel);
     bigBoxModule.querySelector("#SeatHeatLevelRangeDisplay").innerHTML =
     SeatHeatLevel;
@@ -1606,7 +1813,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   var SeatVentilationRange = bigBoxModule.querySelector("#SeatVentilationRange");
   SeatVentilationRange.addEventListener("click", function (event) {
-    var SeatVentilation= event.target.value;
+    SeatVentilation = event.target.value;
     console.log("Sea tVentilation:", SeatVentilation);
     bigBoxModule.querySelector("#SeatVentilationRangeDisplay").innerHTML =
     SeatVentilation;
@@ -1616,31 +1823,27 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var SteeringModeControl = bigBoxModule.querySelector("#SteeringModeControl");
   var BrakingModeControl = bigBoxModule.querySelector("#BrakingModeControl");
   var PowerModeControl = bigBoxModule.querySelector("#PowerModeControl");
-  var run = bigBoxModule.querySelector("#run");
-  run.addEventListener("click", function (event) {
-    test1="success1";
-    test2="success2";
-  });
+
 
   AutoHoldControl.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
+    AutoHoldIsOn = event.target.checked;
+    console.log("On/Off:", AutoHoldIsOn);
   });
   MirrorStatusControl.addEventListener("click", function (event) {
     var isOn = event.target.checked;
     console.log("On/Off:", isOn);
   });
   SteeringModeControl.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
+    SteeringMode = event.target.checked;
+    console.log("On/Off:", SteeringMode);
   });
   BrakingModeControl.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
+    BrakingMode = event.target.checked;
+    console.log("On/Off:", BrakingMode);
   });
   PowerModeControl.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
+    PowerModeMode = event.target.checked;
+    console.log("On/Off:", PowerModeMode);
   });
 
 
@@ -1698,9 +1901,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var previousTab = null;
   var previousContent = null;
   for (var key in personDic) {
-    bigBoxModule
-      .querySelector("#" + key)
-      .addEventListener("click", function (event) {
+    bigBoxModule.querySelector("#" + key).addEventListener("click", function (event) {
         console.log(this.id);
 
         if (previousTab != null) {
@@ -1724,56 +1925,141 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     console.log(key);
   }
 
-
-  simulator(
-    "Vehicle.Body.Lights.IsHighBeamOn",
-    "get",
-    async () => {
-      return test1
+  var dividing = false;
+  function nextStep(){
+      if(!dividing){
+        if(curTree.type == "activity"){
+            drawTree(curTree);
+            curTree = curTree.middle;
+        }else if (curTree.type == "judge"){
+            moveDirection = getDirection(curTree.val);
+            dividing = true;
+            console.log(moveDirection);
+            drawTree(curTree);
+            
+        }
+    }else{
+        if(moveDirection == "left"){
+            drawTree(curTree.left);
+            curTree = curTree.left;
+        }else if(moveDirection == "middle"){
+            drawTree(curTree.middle);
+            curTree = curTree.middle;
+        }else if(moveDirection == "right"){
+            drawTree(curTree.right);
+            curTree = curTree.right;
+        }
+        dividing = false;
     }
-  );
+  }
+
   simulator(
     "Vehicle.Cabin.Seat.Row1.Pos1.Position",
     "get",
     async () => {
-      return test2
+      return seatPosition;
     }
   );
-    var dividing = false;
-    widgets.register("BigBox", (box) => {
+  simulator(
+    "Vehicle.Cabin.Lights.Spotlight.Row1.IsLeftOn",
+    "get",
+    async () => {
+      return interiorLight;
+    }
+  );
+  simulator(
+    "Vehicle.Cabin.Infotainment.Media.Played.URI",
+    "get",
+    async () => {
+      return musicURI;
+    }
+  );
+  simulator(
+    "Vehicle.Body.Mirrors.Left.Tilt",
+    "get",
+    async () => {
+      return mirrorLeftTilt;
+    }
+  );
+  simulator(
+    "Vehicle.Body.Mirrors.Left.Pan",
+    "get",
+    async () => {
+      return mirrorLeftPan;
+    }
+  );
+  simulator(
+    "Vehicle.Body.Mirrors.Right.Tilt",
+    "get",
+    async () => {
+      return mirrorRightTilt;
+    }
+  );
+  simulator(
+    "Vehicle.Body.Mirrors.Right.Pan",
+    "get",
+    async () => {
+      return mirrorRightPan;
+    }
+  );
+
+
+    
+  widgets.register("BigBox", (box) => {
     box.injectNode(bigBoxModule);
   });
+
   return{
-    test : function(input){
-        console.log(test1);
-        console.log(input);
+    nextStepPY : function(){
+        nextStep();
+        return "return";
     },
-    nextStep : function(){
-        if(!dividing){
-            if(curTree.type == "activity"){
-                drawTree(curTree);
-                curTree = curTree.middle;
-            }else if (curTree.type == "judge"){
-                moveDirection = getDirection(curTree.val);
-                dividing = true;
-                console.log(moveDirection);
-                drawTree(curTree);
-                
-            }
-        }else{
-            if(moveDirection == "left"){
-                drawTree(curTree.left);
-                curTree = curTree.left;
-            }else if(moveDirection == "middle"){
-                drawTree(curTree.middle);
-                curTree = curTree.middle;
-            }else if(moveDirection == "right"){
-                drawTree(curTree.right);
-                curTree = curTree.right;
-            }
-            dividing = false;
-        }
+    selectDriver:function(){
+      let count = 5;
+      while(count > 0){
+        setTimeout(function () {
+          console.log("！");
+          nextStep();
+          count = count - 1;
+        }, 2000);
+      }
+      
+      if (isPersonal == false){
+        setTimeout(function () {
+          console.log("！");
+          nextStep();
+        }, 2000);
+      }
+      return isPersonal;
     },
+    setWelcome:function(){
+
+    },
+    setInteriorLight:function(){
+
+    },
+    setParkingWarningBeepLevel:function(){
+
+    },
+    turnOnPreferredMusic:function(){
+
+    },
+    setSeatPosition:function(){
+
+    },
+    setAutoHold:function(){
+
+    },
+    setMirrorStatus:function(){
+
+    },
+    setDriveMode:function(){
+
+    },
+    setComfortSetting:function(){
+
+    },
+
     refresh:function(){
         selectedDriverName = "";
         curTree = tt;
@@ -1782,6 +2068,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         previousVal = null;
         previousType = null;
         moveDirection = null;
+        isPersonal = false;
     }
 
   }
@@ -1803,6 +2090,7 @@ function readTextFile(fileName) {
   };
   rawFile.send(null);
 }
+
 
 
 export default plugin;
