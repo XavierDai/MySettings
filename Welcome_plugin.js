@@ -1,15 +1,32 @@
+class ControlEntity{
+  constructor(value,onOff){
+    this.value = value;
+    this.onOff = onOff;
+  }
+}
+
 const plugin = ({ widgets, simulator, vehicle }) => {
   var txt = readTextFile("http://127.0.0.1:5500/ident.txt");
-  
+
+  analysisTxt(txt);
+  // live args
   var selectedDriverName = null;
   var isPersonal = false;
-  var interiorLight = null;
+  var OutsideTemperature = 20;
+  var rainIntensity = null;
+
+  // auto save
   var welcomeWord = null;
   var language = null;
-  var lightColor = null;
-  var parkingWarningBeepLevel = null;
+  var UIInterface = null;
+  var USMetricUnit = null;
+  var interiorLight = null;
+  var parkingBeepLevel = null;
   var musicURI = null;
-  var seatPosition = null;
+  var ADASBeepLevel = null;
+
+  // with a on/off switch
+  var seatPosition = new ControlEntity(0,"on");
   var mirrorLeftTilt = null;
   var mirrorLeftPan = null;
   var mirrorRightTilt = null;
@@ -22,9 +39,8 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var AutoHoldIsOn = null;
   var SteeringMode = null;
   var BrakingMode = null;
-  var PowerModeMode = null;
-  var OutsideTemperature = null;
-  var rainIntensity = null;
+  var PowerMode = null;
+
 
 
   var afterTempJudge = {
@@ -146,7 +162,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                     rightCondition: null,
                                   },
                                   type: "judge",
-                                  left:  {
+                                  left: {
                                     val: "Turn on & Set AC",
                                     type: "activity",
                                     left: null,
@@ -762,8 +778,8 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
 
   SeatPositionCheck.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
+    seatPosition.onOff = event.target.checked;
+    console.log("On/Off:", seatPosition.onOff);
   });
   AutoHoldCheck.addEventListener("click", function (event) {
     var isOn = event.target.checked;
@@ -808,18 +824,22 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   });
 
   LanguageSelect.onchange = function(){
+    language = this.value;
     console.log("language：",this.value);
   }
 
   UIStyleSelect.onchange = function(){
+    UIInterface = this.value;
     console.log("Selected UI style：",this.value);
   }
 
   UnitSelect.onchange = function(){
+    USMetricUnit = this.value;
     console.log("Selected Unit:",this.value);
   }
 
   PreferredMusicSelect.onchange = function(){
+    musicURI = this.value;
     console.log("Selected Unit:",this.value);
   }
 
@@ -828,10 +848,12 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   }
 
   ParkingBeepLevelSelect.onchange = function(){
+    parkingBeepLevel = this.value;
     console.log("Parking Beep Level：",this.value);
   }
 
   ADASBeepLevelSelect.onchange = function(){
+    ADASBeepLevel = this.value;
     console.log("ADAS Beep Level：",this.value);
   }
 
@@ -1439,6 +1461,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         space.innerHTML = html;
         previousVal = null;
         previousType = null;
+        drawFlag = true;
       }, 2000);
     }
   }
@@ -1454,8 +1477,18 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         }
         isPersonal = false;
         return "right";
-    }else if (state == "Outside Temperature"){
-        return null;
+    }else if (val.state == "temp < 9"){
+        if(OutsideTemperature < 9){
+          return "left";
+        }else{
+          return "middle";
+        }
+    }else if (val.state == "temp > 25"){
+        if (OutsideTemperature > 25){
+          return "left";
+        }else{
+          return "middle";
+        }
     }
     return null;
   }
@@ -1484,6 +1517,43 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                 .list-group-item:hover{
                     cursor:pointer;
                 }
+                input[type="range"] {
+
+                -webkit-box-shadow: 0 0.5px 0 0px #424242, 0 1px 0 #060607 inset, 0px 2px 10px 0px black inset, 1px 0px 2px rgba(0, 0, 0, 0.4) inset, 0 0px 1px rgba(0, 0, 0, 0.6) inset;
+
+                margin-top: 2px;
+
+                background-color: #272728;
+
+                border-radius: 15px;
+
+             
+                -webkit-appearance: none;
+
+                height:10px;
+
+            }
+
+            input[type="range"]::-webkit-slider-thumb {
+
+                -webkit-appearance: none;
+
+                cursor: default;
+
+
+                height: 17.5px;
+
+                width: 17.5px;
+
+                transform: translateY(-4px);
+
+                background: none repeat scroll 0 0 #777;
+
+                border-radius: 15px;
+
+                -webkit-box-shadow: 0 -1px 1px black inset;
+
+            }
             </style>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         </head>
@@ -1497,26 +1567,68 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                   <div class="toast-container position-fixed bottom-50 end-50 p-3">
                     <div id="liveToast" class="toast show fade" role="alert" aria-live="assertive" aria-atomic="true">
                       <div class="toast-header">
-                        <strong class="me-auto">Bootstrap</strong>
-                        <small>11 mins ago</small>
-                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        <strong class="me-auto" style="font-size:2vw;">Tips!</strong>
+                        <small>now</small>
+                        <button type="button" id="closeAlert" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                       </div>
-                      <div class="toast-body">
-                        Hello, world! This is a toast message.
+                      <div class="toast-body" style="font-size:2vw;">
+                        Please select a driver first!
                       </div>
                     </div>
                   </div>
                 
                     
-                    
+                  <div style="width:90%;height:100%;border:1px solid black;">
+                    <div id="welcomeWord">
 
-                  <div>
-                    <span id = "personalizedWelcomeWordSpan">
-                      welcome!
-                    </span>
+                    </div>
+                    <div id="UI" style ="width:40px;height:40px;border:1px solid black">
+                    </div>
+                    <div id="language">
+
+                    </div>
+                    <div id="music">
+
+                    </div>
+                    <div id="units">
+
+                    </div>
+                    <div id="steeringWheelWarmImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fsteer_warm.png?alt=media&token=6fc318d0-c9c4-4c77-8f5a-daf7ae6fe84c);">
+
+                    </div>
+                    <div id="powerImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fpower.png?alt=media&token=71d28680-67c3-480d-8576-38081e688b03);">
+
+                    </div>
+
+                    <div id="autoHoldImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fautohold2.png?alt=media&token=fb01db01-c525-4af8-9440-f3a330994d04);">
+
+                    </div>
+                    <div id="steeringImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2FESP.png?alt=media&token=34c1f5fb-9132-46e7-abb7-3898f507b923);">
+
+                    </div>
+                    <div id="brakingImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fautohold.png?alt=media&token=b3905c3c-089a-44fe-b3b7-b609f827785a);">
+
+                    </div>
+
+                    <div id="SeatHeatImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fseat_heat.png?alt=media&token=8ce653bc-23d9-4840-8bd6-f785de555dac);">
+
+                    </div>
+                    
+                    <div id="SeatVentilationImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fseat_ventilation.png?alt=media&token=1ae63e59-21af-48aa-a2c1-f398dfcac9a2);">
+
+                    </div>
+                    <div id="warmACImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fheat.png?alt=media&token=e7a4c8df-df29-4146-b7ca-cf178e56691a);">
+
+                    </div>
+                    <div id="coolACImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fcold2.png?alt=media&token=c33bb747-e29f-423b-9624-d536a0998ba4);">
+
+                    </div>
+
+
                   </div>
+
                 </div>
-                <div class="row" style="height:35%;width:100%;overflow-y:auto;">
+                <div class="row" style="height:35%;width:100%;overflow-y:auto;margin-top:1%;">
                     <div class="col" >
                         <div class="card" style="margin-left:10px;margin-right:10px;margin-top:5px;">
                             <h5 class="card-header">External Setting</h5>
@@ -1553,8 +1665,8 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                     </div>
                     
 
-                    <div class="col">
-                    <table class = "table setting-table table-info">
+                    <div class="col" style="height:100%;overflow-y:auto;">
+                    <table class = "table setting-table ">
                     <tbody>
                         <tr>
           
@@ -1683,12 +1795,73 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                      <tr>
                
                          <td>
-                                 <span class="float-start" style="margin-left:8px">
-                                     Mirror Status
-                                 </span>
-                                 <div class="form-switch clearfix">
-                                     <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="MirrorStatusControl">
-                                 </div>
+                                <div class="row g-3 align-items-center">
+                                  <div class="col-7">
+                                      <span class="float-start" style="margin-left:8px">
+                                        mirrorLeftTilt:&nbsp;
+                                      </span>
+                                      <span id="mirrorLeftTiltRangeDisplay" style="text-decoration:underline;">
+                                          50
+                                      </span>
+                                  </div>
+                                  <div class="col-5">
+                                      <input type="range" class="form-range float-end" min="-50" max="50" id="mirrorLeftTiltRange">
+                                  </div>
+                              </div>
+                              </td>
+                              </tr>
+                              <tr>
+                      
+                             <td>
+                              <div class="row g-3 align-items-center">
+                                <div class="col-7">
+                                    <span class="float-start" style="margin-left:8px">
+                                      mirrorLeftPan:&nbsp;
+                                    </span>
+                                    <span id="mirrorLeftPanRangeDisplay" style="text-decoration:underline;">
+                                        50
+                                    </span>
+                                </div>
+                                <div class="col-5">
+                                    <input type="range" class="form-range float-end" min="-50" max="50" id="mirrorLeftPanRange">
+                                </div>
+                            </div>
+                            </td>
+                            </tr>
+                            <tr>
+                    
+                           <td>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-7">
+                                    <span class="float-start" style="margin-left:8px">
+                                        mirrorRightTilt:&nbsp;
+                                    </span>
+                                    <span id="mirrorRightTiltRangeDisplay" style="text-decoration:underline;">
+                                        50
+                                    </span>
+                                </div>
+                                <div class="col-5">
+                                    <input type="range" class="form-range float-end" min="-50" max="50" id="mirrorRightTiltRange">
+                                </div>
+                            </div>
+                            </td>
+                         </tr>
+                         <tr>
+                 
+                        <td>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-7">
+                                    <span class="float-start" style="margin-left:8px">
+                                    mirrorRightPan:&nbsp;
+                                    </span>
+                                    <span id="mirrorRightPanRangeDisplay" style="text-decoration:underline;">
+                                        50
+                                    </span>
+                                </div>
+                                <div class="col-5">
+                                    <input type="range" class="form-range float-end" min="-50" max="50" id="mirrorRightPanRange">
+                                </div>
+                            </div>
                          </td>
                      </tr>
                      <tr>
@@ -1739,7 +1912,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
                     
                     <div class="col">
-                         <div class="card" style="margin-left:10px;margin-right:10px;margin:top:10px;">
+                         <div id="pickDriver" class="card" style="margin-left:10px;margin-right:10px;margin-top:10px;border:3px solid red;box-shadow:0px 0px 4px 4px red;">
                             <h5 class="card-header driver-card-h5">Pick a driver</h5>
                             <div class="card-body">
                                 <div id="multipleUsersDiv"></div>
@@ -1774,10 +1947,10 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   var SeatPositionRange = bigBoxModule.querySelector("#SeatPositionRange");
   SeatPositionRange.addEventListener("click", function (event) {
-    seatPosition = event.target.value;
-    console.log("Seat Position:", seatPosition);
+    seatPosition.value = event.target.value;
+    console.log("Seat Position:", seatPosition.value);
     bigBoxModule.querySelector("#seatPositionRangeDisplay").innerHTML =
-    seatPosition;
+    seatPosition.value;
   });
 
   var ACTemperatureRange = bigBoxModule.querySelector("#ACTemperatureRange");
@@ -1785,7 +1958,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     ACTemperature = event.target.value;
     console.log("AC Temperature:", ACTemperature);
     bigBoxModule.querySelector("#ACTemperatureRangeDisplay").innerHTML =
-        ACTemperature;
+        ACTemperature;    
   });
 
   var ACAirFlowLevelRange = bigBoxModule.querySelector("#ACAirFlowLevelRange");
@@ -1807,7 +1980,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   SeatHeatLevelRange.addEventListener("click", function (event) {
     SeatHeatLevel = event.target.value;
     console.log("Seat Heat Level:", SeatHeatLevel);
-    bigBoxModule.querySelector("#SeatHeatLevelRangeDisplay").innerHTML =
+    bigBoxModule.querySelecto("#SeatHeatLevelRangeDisplay").innerHTML =
     SeatHeatLevel;
   });
 
@@ -1818,21 +1991,64 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     bigBoxModule.querySelector("#SeatVentilationRangeDisplay").innerHTML =
     SeatVentilation;
   });
+
+  var mirrorLeftTiltRange = bigBoxModule.querySelector("#mirrorLeftTiltRange");
+  mirrorLeftTiltRange.addEventListener("click", function (event) {
+    mirrorLeftTilt = event.target.value;
+    console.log("mirrorLeftTilt:", mirrorLeftTilt);
+    bigBoxModule.querySelector("#mirrorLeftTiltRangeDisplay").innerHTML =
+    mirrorLeftTilt;
+  });
+
+  var mirrorLeftPanRange = bigBoxModule.querySelector("#mirrorLeftPanRange");
+  mirrorLeftPanRange.addEventListener("click", function (event) {
+    mirrorLeftPan = event.target.value;
+    console.log("mirrorLeftPan:", mirrorLeftPan);
+    bigBoxModule.querySelector("#mirrorLeftPanRangeDisplay").innerHTML =
+    mirrorLeftPan;
+  });
+
+  var mirrorRightTiltRange = bigBoxModule.querySelector("#mirrorRightTiltRange");
+  mirrorRightTiltRange.addEventListener("click", function (event) {
+    mirrorRightTilt = event.target.value;
+    console.log("mirrorRightTilt:", mirrorRightTilt);
+    bigBoxModule.querySelector("#mirrorRightTiltRangeDisplay").innerHTML =
+    mirrorRightTilt;
+  });
+
+  var mirrorRightPanRange = bigBoxModule.querySelector("#mirrorRightPanRange");
+  mirrorRightPanRange.addEventListener("click", function (event) {
+    mirrorRightPan = event.target.value;
+    console.log("mirrorRightPan:", mirrorRightPan);
+    bigBoxModule.querySelector("#mirrorRightPanRangeDisplay").innerHTML =
+    mirrorRightPan;
+  });
+
+
+
+
+
+
+
+
   var AutoHoldControl = bigBoxModule.querySelector("#AutoHoldControl");
-  var MirrorStatusControl = bigBoxModule.querySelector("#MirrorStatusControl");
+  
   var SteeringModeControl = bigBoxModule.querySelector("#SteeringModeControl");
   var BrakingModeControl = bigBoxModule.querySelector("#BrakingModeControl");
   var PowerModeControl = bigBoxModule.querySelector("#PowerModeControl");
+
+  var closeAlert = bigBoxModule.querySelector("#closeAlert");
+  var alertDiv = bigBoxModule.querySelector("#liveToast");
+  closeAlert.addEventListener("click", function (event) {
+    alertDiv.setAttribute("class","toast");
+  });
 
 
   AutoHoldControl.addEventListener("click", function (event) {
     AutoHoldIsOn = event.target.checked;
     console.log("On/Off:", AutoHoldIsOn);
   });
-  MirrorStatusControl.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
-  });
+
   SteeringModeControl.addEventListener("click", function (event) {
     SteeringMode = event.target.checked;
     console.log("On/Off:", SteeringMode);
@@ -1842,15 +2058,15 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     console.log("On/Off:", BrakingMode);
   });
   PowerModeControl.addEventListener("click", function (event) {
-    PowerModeMode = event.target.checked;
-    console.log("On/Off:", PowerModeMode);
+    PowerMode = event.target.checked;
+    console.log("On/Off:", PowerMode);
   });
 
 
   var personDic = {
-    Person1: ["Yilong Dai", "xxxxxxxxx"],
-    Person2: ["Kyrie Irving", "Asdadasdadadasd"],
-    Person3: ["Ziyi Wang", "abaaba"],
+    Person1: ["Yilong Dai", "Me"],
+    Person2: ["Kyrie Irving", "NBA all star"],
+    Person3: ["Driver by you", "Customize your own"],
   };
 
   var usrAvatar = personalSettingModule.querySelector("#avatar");
@@ -1863,7 +2079,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   var html = "";
   html += `<div class="row">
-                <div class="col-5">
+                <div class="col-6">
                     <div class="list-group driver-name" id="list-tab" role="tablist">`;
   for (var key in personDic) {
     html +=
@@ -1878,7 +2094,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   html += `
         </div>
                 </div>
-            <div class="col-7">
+            <div class="col-6">
                 <div class="tab-content driver-description" id="nav-tabContent">
     `;
   for (var key in personDic) {
@@ -1903,7 +2119,8 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   for (var key in personDic) {
     bigBoxModule.querySelector("#" + key).addEventListener("click", function (event) {
         console.log(this.id);
-
+        bigBoxModule.querySelector("#pickDriver").style.border="1px solid #CCCCCC";
+        bigBoxModule.querySelector("#pickDriver").style.boxShadow = "0px 0px 0px 0px";
         if (previousTab != null) {
           previousTab.setAttribute(
             "class",
@@ -1934,30 +2151,43 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         }else if (curTree.type == "judge"){
             moveDirection = getDirection(curTree.val);
             dividing = true;
-            console.log(moveDirection);
             drawTree(curTree);
             
         }
     }else{
-        if(moveDirection == "left"){
-            drawTree(curTree.left);
-            curTree = curTree.left;
-        }else if(moveDirection == "middle"){
-            drawTree(curTree.middle);
-            curTree = curTree.middle;
-        }else if(moveDirection == "right"){
-            drawTree(curTree.right);
-            curTree = curTree.right;
-        }
         dividing = false;
+        if(moveDirection == "left"){ 
+          curTree = curTree.left;
+          drawTree(curTree);
+        }else if(moveDirection == "middle"){
+          curTree = curTree.middle;
+            drawTree(curTree);
+        }else if(moveDirection == "right"){
+          curTree = curTree.right;
+            drawTree(curTree);
+        }
+
+        if(curTree.type == "judge"){
+          moveDirection = getDirection(curTree.val);
+          dividing = true;
+          console.log(moveDirection)
+        }else{
+          curTree = curTree.middle;
+        }
+        
     }
   }
+
+  function fixedDriverPicked(pickedDriverName){
+
+  }
+
 
   simulator(
     "Vehicle.Cabin.Seat.Row1.Pos1.Position",
     "get",
     async () => {
-      return seatPosition;
+      return seatPosition.value;
     }
   );
   simulator(
@@ -2014,51 +2244,129 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         nextStep();
         return "return";
     },
+    isPersonalPY : function(){
+        return isPersonal;
+    },
     selectDriver:function(){
-      let count = 5;
-      while(count > 0){
-        setTimeout(function () {
-          console.log("！");
-          nextStep();
-          count = count - 1;
-        }, 2000);
-      }
+
+      nextStep();
+      setTimeout(function () {
+        nextStep();
+      }, 2000);
+      setTimeout(function () {
+        nextStep();
+      }, 4000);
+      setTimeout(function () {
+        nextStep();
+      }, 6000);
+      setTimeout(function () {
+        nextStep(); 
+      }, 8000);
       
+ 
       if (isPersonal == false){
         setTimeout(function () {
-          console.log("！");
           nextStep();
-        }, 2000);
+        }, 10000);
       }
-      return isPersonal;
+      return [true,isPersonal];
     },
     setWelcome:function(){
-
+      if(welcomeWord != null){
+        bigBoxModule.querySelector("#welcomeWord").innerHTML = welcomeWord;
+      }
+    },
+    setPersonalizedWelcomeWord:function(){
+      if(welcomeWord != null){
+        bigBoxModule.querySelector("#welcomeWord").innerHTML = welcomeWord;
+      }
+    },
+    setPersonalizedUIInterface:function(){
+      if(UIInterface != null){
+        bigBoxModule.querySelector("#UI").style.background = UIInterface;
+      }
+    },
+    setPreferLanguage:function(){
+      if(language != null){
+        bigBoxModule.querySelector("#language").innerHTML = language;
+      }
+    },
+    setUSMetricUnits:function(){
+      if(USMetricUnit != null){
+        bigBoxModule.querySelector("#units").innerHTML = USMetricUnit;
+      }
     },
     setInteriorLight:function(){
-
+        return interiorLight;
     },
     setParkingWarningBeepLevel:function(){
 
     },
     turnOnPreferredMusic:function(){
-
+      if(musicURI!= null){
+        bigBoxModule.querySelector("#music").innerHTML = musicURI;
+      }
+        return musicURI;
     },
     setSeatPosition:function(){
-
+        return seatPosition.value;
     },
     setAutoHold:function(){
-
+        if(AutoHoldIsOn){
+          bigBoxModule.querySelector("#autoHoldImage").style.display = "block";
+        }
     },
     setMirrorStatus:function(){
 
     },
-    setDriveMode:function(){
+    setSteeringMode:function(){
+      if(SteeringMode){
+        bigBoxModule.querySelector("#steeringImage").style.display = "block";
+      }
+    },
+    setBrakingMode:function(){
+      if(BrakingMode){
+        bigBoxModule.querySelector("#brakingImage").style.display = "block";
+      }
+    },
+    setPowerMode:function(){
+      if(PowerMode){
+        bigBoxModule.querySelector("#powerImage").style.display = "block";
+      }
+    },
+    getOutsideTemperature:function(){
+      return OutsideTemperature;
+    },
+    turnOnSetAC:function(ACMode){
+      if(ACMode == "warm AC"){
+        bigBoxModule.querySelector("#warmACImage").style.display = "block";
+      }else if(ACMode = "cool AC"){
+        bigBoxModule.querySelector("#coolACImage").style.display = "block";
+      }
+      console.log(ACMode);
+    },
+    turnOnSeatHeat:function(){
+      if(SeatHeatLevel > 0){
+        bigBoxModule.querySelector("#SeatHeatImage").style.display = "block";
+      }
+    },
+    turnSteeringWheelWarm:function(){
+      if(SteeringWheelWarm> 0){
+        bigBoxModule.querySelector("#SteeringWheelWarmImage").style.display = "block";
+      }
+    },
+    turnOnSeatVentilation:function(){
+      if(SeatVentilation> 0){
+        bigBoxModule.querySelector("#SeatVentilationImage").style.display = "block";
+      }
+    },
+    setACAirFlow:function(){
 
     },
-    setComfortSetting:function(){
+    setADASWarningBeepLevel:function(){
 
     },
+
 
     refresh:function(){
         selectedDriverName = "";
@@ -2078,19 +2386,47 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
 function readTextFile(fileName) {
   var rawFile = new XMLHttpRequest();
+  var infoList = [];
   rawFile.open("GET", fileName, false);
   rawFile.onreadystatechange = function () {
     if (rawFile.readyState === 4) {
       if (rawFile.status === 200 || rawFile.status == 0) {
-        var allText = rawFile.responseText;
+        var allText = rawFile.responseText.toString();
         // alert(allText);
-        console.log(allText.split("\n"));
+        infoList = allText.split("\r\n");
       }
     }
   };
   rawFile.send(null);
+  return infoList;
 }
 
+function analysisTxt(txt){
+  console.log("analysis")
+
+  let dictionaryInfo = {};
+  let dictionaryDriver = {}
+  let identInfo = null;
+  let identName = null;
+  let key;
+  let value;
+  console.log(txt);
+  for (var i=0; i < txt.length; i++){
+    console.log(txt[i]);
+    identInfo = txt[i].split("#");
+    console.log(identInfo);
+    identName = identInfo.shift().split(":")[1]
+    for(var j=0; j<identInfo.length;j++){
+      key = identInfo[j].split(":")[0];
+      value = identInfo[j].split(":")[1];
+      dictionaryInfo[key] = value;
+    }
+    dictionaryDriver[identName] = dictionaryInfo;
+  }
+
+  console.log(dictionaryDriver);
+  return dictionaryDriver;
+}
 
 
 export default plugin;
