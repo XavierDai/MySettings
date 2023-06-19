@@ -1,17 +1,24 @@
 const plugin = ({ widgets, simulator, vehicle }) => {
   var txt = readTextFile("http://127.0.0.1:5500/ident.txt");
   var allDriverDictionary = analysisTxt(txt);
-  var defaultDriverDictionary = allDriverDictionary["Default_Driver"]
-  console.log(defaultDriverDictionary);
-  console.log(defaultDriverDictionary.seatPosition);
-  var customizedDefaultDriverDictionary = defaultDriverDictionary;
-  var systemDictionary = defaultDriverDictionary;
+  var defaultDriverDictionary = pasteToNewDictionary(allDriverDictionary["Default_Driver"]);
+  // var originalCustomDriverDictionary = {};
+  // Object.assign(originalCustomDriverDictionary,allDriverDictionary["custom"])
+  // var originalCustomDriverDictionary = {...allDriverDictionary["custom"]};
+  var originalCustomDriverDictionary = pasteToNewDictionary(allDriverDictionary["custom"]);
+  // var customizedDriverDictionary = {};
+  // Object.assign(customizedDriverDictionary,originalCustomDriverDictionary)
+  var customizedDriverDictionary = pasteToNewDictionary(originalCustomDriverDictionary);
+  // var systemDictionary = {};
+  // Object.assign(systemDictionary,defaultDriverDictionary);
+  var systemDictionary = pasteToNewDictionary(defaultDriverDictionary);
+  console.log(originalCustomDriverDictionary);
   // live args
   var selectedDriverName = null;
   var isPersonal = false;
   var OutsideTemperature = 20;
   var rainIntensity = null;
-
+  var previousSelectedDriverName = null;
   // auto save
   // var welcomeWord = null;
   // var language = null;
@@ -42,41 +49,8 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   var driveMode = null;
 
-  function fixedDriverPicked(pickedDriverName){
-    systemDictionary = allDriverDictionary[pickedDriverName];
-    console.log(systemDictionary);
-  }
 
-  function updateWebpage(pickedDriverName){
-    if(pickedDriverName == "Default_Driver" || pickedDriverName == "Kyrie_Irving"){
-      updateWebpageContent(allDriverDictionary[pickedDriverName]);
-    }else{
-      updateWebpageContent(customizedDefaultDriverDictionary);
-    }
 
-    // update welcome word
-    // update language
-    // update UI interface
-    // update US/Metric unit
-    // update interior light
-    // update parking beep level
-    // update music
-    // update ADAS beep level
-    // update mirror status
-    // update AC air flow
-    // update AC temperature
-    // update steering wheel warm
-    // update seat heat
-    // update seat ventilation
-    // update auto hold
-    // update steering mode
-    // update braking mode
-    // update power mode
-    // update drive mode
-  }
-  function updateWebpageContent(dictionary){
-    
-  }
 
   var afterTempJudge = {
     val: "Set AC Air Flow",
@@ -423,10 +397,10 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                 </div>
                                 <div class="col-5">
                                     <select class="form-select float-end setting-checkbox-child driver-input-child" id="LanguageSelect">
-                                        <option id="optionChinese" value="Chinese">Chinese</option>
-                                        <option id="optionEnglish" value="English">English</option>
-                                        <option id="optionGerman" value="German">German</option>
-                                        <option id="optionSpanish" value="Spanish">Spanish</option>
+                                        <option id="Chinese" value="Chinese">Chinese</option>
+                                        <option id="English" value="English">English</option>
+                                        <option id="German" value="German">German</option>
+                                        <option id="Spanish" value="Spanish">Spanish</option>
                                     </select>
                                 </div>
                                 
@@ -447,10 +421,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                             </div>
                             <div class="col-5">
                                 <select class="form-select float-end setting-checkbox-child driver-input-child" id="UIStyleSelect">
-                                    <option id="optionGrey" value="Grey">grey</option>
-                                    <option id="optionPink" value="Pink">pink</option>
-                                    <option id="optionBlue" value="Blue">blue</option>
-                                    <option id="optionGreen" value="Green">green</option>
+                                    <option id="grey" value="Grey">grey</option>
+                                    <option id="pink" value="Pink">pink</option>
+                                    <option id="blue" value="Blue">blue</option>
+                                    <option id="green" value="Green">green</option>
+                                    <option id="black" value="Black">black</option>
                                 </select>
                             </div>
                         </div>
@@ -467,8 +442,8 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                     </div>
                                     <div class="col-5">
                                         <select class="form-select float-end setting-checkbox-child driver-input-child" id="UnitSelect">
-                                            <option id="optionUS" value="US">US</option>
-                                            <option id="optionMetric" value="Metric">Metric</option>
+                                            <option id="US" value="US">US</option>
+                                            <option id="metric" value="Metric">Metric</option>
                                             
                                         </select>
                                     </div>
@@ -537,10 +512,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                 </div>
                                 <div class="col-6">
                                     <select class="form-select float-end setting-checkbox-child driver-input-child" id="PreferredMusicSelect">
-                                        <option id="optionRunaway" value="Runaway">Runaway</option>
                                         <option id="optionClosedOnSunday" value="ClosedOnSunday">Closed on Sunday</option>
                                         <option id="optionYikes" value="Yikes">Yikes</option>
                                         <option id="optionGhostTown" value="GhostTown">Ghost Town</option>
+                                        <option id="optionRidiculous" value="Ridiculous">Ridiculous</option>
+                                        <option id="optionWithoutYou" value="WithoutYou">WithoutYou</option>
                                     </select>
                                 </div>
                             
@@ -1873,11 +1849,12 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var previousContent = null;
   for (var key in personDic) {
     bigBoxModule.querySelector("#" + key).addEventListener("click", function (event) {
+        selectedDriverName = personDic[this.id][0];
         console.log(this.id);
         bigBoxModule.querySelector("#pickDriver").style.border="1px solid #CCCCCC";
         bigBoxModule.querySelector("#pickDriver").style.boxShadow = "0px 0px 0px 0px";
         alertDiv.setAttribute("class","toast");
-        fixedDriverPicked(personDic[this.id][0]);
+        switchSystemDictionary(personDic[this.id][0]);
         if (previousTab != null) {
           previousTab.setAttribute(
             "class",
@@ -1894,7 +1871,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         previousContent.setAttribute("class", "tab-pane fade show active");
         driverName.innerHTML = personDic[this.id][0];
         driverWelcome.innerHTML = personDic[this.id][1];
-        selectedDriverName = personDic[this.id][0];
+        
 
 
         let inputList = personalSettingModule.querySelectorAll(
@@ -1924,8 +1901,8 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         }
 
         updateWebpage(personDic[this.id][0]);
+        previousSelectedDriverName = selectedDriverName;
       });
-    console.log(key);
   }
 
   var dividing = false;
@@ -1964,6 +1941,111 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     }
   }
 
+
+
+  function updateWebpage(pickedDriverName){
+
+    if(pickedDriverName == "Default_Driver" || pickedDriverName == "Kyrie_Irving"){
+      updateWebpageContent(allDriverDictionary[pickedDriverName]);
+
+    }else{
+      updateWebpageContent(customizedDriverDictionary);
+
+    }
+
+  }
+  function updateWebpageContent(dictionary){
+    console.log("update webpage");
+    console.log(dictionary["seatPosition"].val);
+
+    personalSettingModule.querySelector("#"+dictionary["language"].val).selected = true;
+
+    personalSettingModule.querySelector("#"+dictionary["UIInterface"].val).selected = true;
+
+    personalSettingModule.querySelector("#"+dictionary["USMetricUnit"].val).selected = true;
+
+    personalSettingModule.querySelector("#optionParking"+dictionary["parkingBeepLevel"].val).selected = true;
+
+    personalSettingModule.querySelector("#optionADAS"+dictionary["ADASBeepLevel"].val).selected = true;
+
+    personalSettingModule.querySelector("#option"+dictionary["musicURI"].val).selected = true;
+
+    personalSettingModule.querySelector("#InteriorLightColor").value = "#" + dictionary["InteriorLight"].val;
+
+    bigBoxModule.querySelector("#seatPositionRangeDisplay").innerHTML = dictionary["seatPosition"].val;
+    bigBoxModule.querySelector("#SeatPositionRange").value = dictionary["seatPosition"].val;
+
+    bigBoxModule.querySelector("#ACTemperatureIfColdRangeDisplay").innerHTML = dictionary["ACTemperatureIfCold"].val;
+    bigBoxModule.querySelector("#ACTemperatureIfColdRange").value = dictionary["ACTemperatureIfCold"].val;
+
+    bigBoxModule.querySelector("#ACTemperatureIfHotRangeDisplay").innerHTML = dictionary["ACTemperatureIfHot"].val;
+    bigBoxModule.querySelector("#ACTemperatureIfHotRange").value = dictionary["ACTemperatureIfHot"].val;
+
+    bigBoxModule.querySelector("#ACAirFlowLevelRangeDisplay").innerHTML = dictionary["ACAirFlowLevel"].val;
+    bigBoxModule.querySelector("#ACAirFlowLevelRange").value = dictionary["ACAirFlowLevel"].val;
+
+    bigBoxModule.querySelector("#SteeringWheelWarmRangeDisplay").innerHTML = dictionary["SteeringWheelWarm"].val;
+    bigBoxModule.querySelector("#SteeringWheelWarmRange").value = dictionary["SteeringWheelWarm"].val;
+
+    bigBoxModule.querySelector("#SeatHeatLevelRangeDisplay").innerHTML = dictionary["SeatHeatLevel"].val;
+    bigBoxModule.querySelector("#SeatHeatLevelRange").value = dictionary["SeatHeatLevel"].val;
+
+    bigBoxModule.querySelector("#SeatVentilationRangeDisplay").innerHTML = dictionary["SeatVentilation"].val;
+    bigBoxModule.querySelector("#SeatVentilationRange").value = dictionary["SeatVentilation"].val;
+
+    // autohold
+
+    bigBoxModule.querySelector("#mirrorLeftTiltRangeDisplay").innerHTML = dictionary["mirrorLeftTilt"].val;
+    bigBoxModule.querySelector("#mirrorLeftTiltRange").value = dictionary["mirrorLeftTilt"].val;
+
+    bigBoxModule.querySelector("#mirrorLeftPanRangeDisplay").innerHTML = dictionary["mirrorLeftPan"].val;
+    bigBoxModule.querySelector("#mirrorLeftPanRange").value = dictionary["mirrorLeftPan"].val;
+
+    bigBoxModule.querySelector("#mirrorRightTiltRangeDisplay").innerHTML = dictionary["mirrorRightTilt"].val;
+    bigBoxModule.querySelector("#mirrorRightTiltRange").value = dictionary["mirrorRightTilt"].val;
+
+    bigBoxModule.querySelector("#mirrorRightPanRangeDisplay").innerHTML = dictionary["mirrorRightPan"].val;
+    bigBoxModule.querySelector("#mirrorRightPanRange").value = dictionary["mirrorRightPan"].val;
+
+   // drive mode
+
+  }
+
+
+  function switchSystemDictionary(pickedDriverName){
+    if(previousSelectedDriverName == "custom"){
+      console.log(originalCustomDriverDictionary);
+      customizedDriverDictionary = systemDictionary;
+      Object.entries(customizedDriverDictionary).forEach(([key,value])=>{
+        if(value.onOff == false){
+          customizedDriverDictionary[key].val = originalCustomDriverDictionary[key].val;
+        }
+      });
+      console.log(originalCustomDriverDictionary);
+    }
+
+    if(pickedDriverName == "Kyrie_Irving" || pickedDriverName == "Default_Driver"){
+      systemDictionary = allDriverDictionary[pickedDriverName];
+    }else{
+      systemDictionary = customizedDriverDictionary;
+    }
+
+  }
+
+  function pasteToNewDictionary(oldDictionary){
+    let newDictionary = {};
+    let tempValue = {};
+    Object.entries(oldDictionary).forEach(([key,value])=>{
+      tempValue = {
+        val:value.val,
+        onOff:value.onOff
+      }
+      newDictionary[key] = tempValue;
+      tempValue = {};
+    });
+
+    return newDictionary;
+  }
   
 
 
