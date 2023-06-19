@@ -2047,6 +2047,13 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     return newDictionary;
   }
   
+  function toFahrenheit(value){
+
+  }
+
+  function toCelsius(value){
+
+  }
 
 
   simulator(
