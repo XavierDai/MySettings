@@ -1,17 +1,11 @@
-class ControlEntity{
-  constructor(value,onOff){
-    this.value = value;
-    this.onOff = onOff;
-  }
-}
-
 const plugin = ({ widgets, simulator, vehicle }) => {
   var txt = readTextFile("http://127.0.0.1:5500/ident.txt");
   var allDriverDictionary = analysisTxt(txt);
   var defaultDriverDictionary = allDriverDictionary["Default_Driver"]
-
-  console.log(defaultDriverDictionary["seatPosition"]);
-  var systemDictionary = {};
+  console.log(defaultDriverDictionary);
+  console.log(defaultDriverDictionary.seatPosition);
+  var customizedDefaultDriverDictionary = defaultDriverDictionary;
+  var systemDictionary = defaultDriverDictionary;
   // live args
   var selectedDriverName = null;
   var isPersonal = false;
@@ -19,37 +13,69 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var rainIntensity = null;
 
   // auto save
-  var welcomeWord = null;
-  var language = null;
-  var UIInterface = null;
-  var USMetricUnit = null;
+  // var welcomeWord = null;
+  // var language = null;
+  // var UIInterface = null;
+  // var USMetricUnit = null;
+
   var interiorLight = null;
-  var parkingBeepLevel = null;
-  var musicURI = null;
-  var ADASBeepLevel = null;
+  // var parkingBeepLevel = null;
+  // var musicURI = null;
+  // var ADASBeepLevel = null;
 
   // with a on/off switch
-  var seatPosition = new ControlEntity(0,"on");
-  var mirrorLeftTilt = null;
-  var mirrorLeftPan = null;
-  var mirrorRightTilt = null;
-  var mirrorRightPan = null;
-  var ACAirFlowLevel = null;
-  var ACTemperature = null;
-  var ACTemperatureIfHot = null;
-  var ACTemperatureIfCold = null;
-  var SteeringWheelWarm = null;
-  var SeatHeatLevel = null;
-  var SeatVentilation = null;
+  // var mirrorLeftTilt = null;
+  // var mirrorLeftPan = null;
+  // var mirrorRightTilt = null;
+  // var mirrorRightPan = null;
+  // var ACAirFlowLevel = null;
+  // var ACTemperature = null;
+  // var ACTemperatureIfHot = null;
+  // var ACTemperatureIfCold = null;
+  // var SteeringWheelWarm = null;
+  // var SeatHeatLevel = null;
+  // var SeatVentilation = null;
   var AutoHoldIsOn = null;
   var SteeringMode = null;
   var BrakingMode = null;
   var PowerMode = null;
+
   var driveMode = null;
 
   function fixedDriverPicked(pickedDriverName){
     systemDictionary = allDriverDictionary[pickedDriverName];
     console.log(systemDictionary);
+  }
+
+  function updateWebpage(pickedDriverName){
+    if(pickedDriverName == "Default_Driver" || pickedDriverName == "Kyrie_Irving"){
+      updateWebpageContent(allDriverDictionary[pickedDriverName]);
+    }else{
+      updateWebpageContent(customizedDefaultDriverDictionary);
+    }
+
+    // update welcome word
+    // update language
+    // update UI interface
+    // update US/Metric unit
+    // update interior light
+    // update parking beep level
+    // update music
+    // update ADAS beep level
+    // update mirror status
+    // update AC air flow
+    // update AC temperature
+    // update steering wheel warm
+    // update seat heat
+    // update seat ventilation
+    // update auto hold
+    // update steering mode
+    // update braking mode
+    // update power mode
+    // update drive mode
+  }
+  function updateWebpageContent(dictionary){
+    
   }
 
   var afterTempJudge = {
@@ -220,13 +246,13 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         middle: {
           val: {
             state: "Driver Memory",
-            leftCondition: "Yilong Dai",
+            leftCondition: "custom",
             middleCondition: "Kyrie Irving",
             rightCondition: "default",
           },
           type: "judge",
           left: {
-            val: "Pull Driver Yilong Dai",
+            val: "Customize Your Own Driver",
             type: "activity",
             left: null,
             right: null,
@@ -355,7 +381,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                 Enable Personal Settings:
                             </span>
                             <div class="form-switch clearfix">
-                            <input class="form-check-input float-end" type="checkbox" role="switch"  id="on-off-button" checked>
+                            <input class="form-check-input float-end driver-input-child" type="checkbox" role="switch"  id="on-off-button" checked>
                     </td>
                 </tr>
              
@@ -382,7 +408,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                     Welcome Word
                                 </span>
                                 <div class="form-switch clearfix">
-                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="welcomeWordCheck">
+                                    <input class="form-check-input driver-input-child float-end setting-checkbox-child" type="checkbox" role="switch" id="welcomeWordCheck">
                                 </div>
                         </td>
                     </tr>
@@ -392,11 +418,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                         <div class="row g-3 align-items-center">
                                 <div class="col-7">
                                     <span class="float-start" style="margin-left:8px">
-                                    Language
+                                      Language
                                     </span>
                                 </div>
                                 <div class="col-5">
-                                    <select class="form-select float-end setting-checkbox-child" id="LanguageSelect">
+                                    <select class="form-select float-end setting-checkbox-child driver-input-child" id="LanguageSelect">
                                         <option id="optionChinese" value="Chinese">Chinese</option>
                                         <option id="optionEnglish" value="English">English</option>
                                         <option id="optionGerman" value="German">German</option>
@@ -420,7 +446,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                
                             </div>
                             <div class="col-5">
-                                <select class="form-select float-end setting-checkbox-child" id="UIStyleSelect">
+                                <select class="form-select float-end setting-checkbox-child driver-input-child" id="UIStyleSelect">
                                     <option id="optionGrey" value="Grey">grey</option>
                                     <option id="optionPink" value="Pink">pink</option>
                                     <option id="optionBlue" value="Blue">blue</option>
@@ -440,7 +466,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                         </span>
                                     </div>
                                     <div class="col-5">
-                                        <select class="form-select float-end setting-checkbox-child" id="UnitSelect">
+                                        <select class="form-select float-end setting-checkbox-child driver-input-child" id="UnitSelect">
                                             <option id="optionUS" value="US">US</option>
                                             <option id="optionMetric" value="Metric">Metric</option>
                                             
@@ -474,7 +500,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                 <div class="col-5">
                                     <div class="form-switch clearfix">
                                 
-                                        <input type="color" class="form-control form-control-color float-end setting-checkbox-child" id="InteriorLightColor" value="#563d7c" title="Choose your color">
+                                        <input type="color" class="form-control form-control-color float-end setting-checkbox-child driver-input-child" id="InteriorLightColor" value="#563d7c" title="Choose your color">
                                     </div>
                                 </div>
                             </div>
@@ -490,7 +516,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                     </span>
                                 </div>
                                 <div class="col-4">
-                                    <select class="form-select float-end setting-checkbox-child" id="ParkingBeepLevelSelect">
+                                    <select class="form-select float-end setting-checkbox-child driver-input-child" id="ParkingBeepLevelSelect">
                                         <option id="optionParkingLow" value="Low">Low</option>
                                         <option id="optionParkingMedium" value="Medium">Medium</option>
                                         <option id="optionParkingHigh" value="High">High</option>
@@ -510,7 +536,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                     </span>
                                 </div>
                                 <div class="col-6">
-                                    <select class="form-select float-end setting-checkbox-child" id="PreferredMusicSelect">
+                                    <select class="form-select float-end setting-checkbox-child driver-input-child" id="PreferredMusicSelect">
                                         <option id="optionRunaway" value="Runaway">Runaway</option>
                                         <option id="optionClosedOnSunday" value="ClosedOnSunday">Closed on Sunday</option>
                                         <option id="optionYikes" value="Yikes">Yikes</option>
@@ -533,7 +559,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                 </span>
                             </div>
                             <div class="col-4">
-                                <select class="form-select float-end setting-checkbox-child" id="ADASBeepLevelSelect">
+                                <select class="form-select float-end setting-checkbox-child driver-input-child" id="ADASBeepLevelSelect">
                                     <option id="optionADASLow" value="Low">Low</option>
                                     <option id="optionADASMedium" value="Medium">Medium</option>
                                     <option id="optionADASHigh" value="High">High</option>
@@ -562,7 +588,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                 Seat Position
                                 </span>
                                 <div class="form-switch clearfix">
-                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="SeatPositionCheck">
+                                    <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="SeatPositionCheck">
                                 </div>
                         </td>
                     </tr>
@@ -573,7 +599,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                 AC temperature
                                 </span>
                                 <div class="form-switch clearfix">
-                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="ACTemperatureCheck">
+                                    <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="ACTemperatureCheck">
                                 </div>
                         </td>
                     </tr>
@@ -585,7 +611,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                 AC Air Flow Level 
                                     </span>
                                     <div class="form-switch clearfix">
-                                        <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="ACAirFlowLevelCheck">
+                                        <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="ACAirFlowLevelCheck">
                                     </div>
                         </td>
                     </tr>
@@ -597,7 +623,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                             Steering Wheel Warm
                                 </span>
                                 <div class="form-switch clearfix">
-                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="SteeringWheelWarmCheck">
+                                    <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="SteeringWheelWarmCheck">
                                 </div>
                     </td>
                      </tr>
@@ -609,7 +635,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                             Seat Heat Level
                                 </span>
                                 <div class="form-switch clearfix">
-                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="SeatHeatLevelCheck">
+                                    <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="SeatHeatLevelCheck">
                                 </div>
                     </td>
                      </tr>
@@ -621,7 +647,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                             Seat Ventilation
                                 </span>
                                 <div class="form-switch clearfix">
-                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="SeatVentilationCheck">
+                                    <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="SeatVentilationCheck">
                                 </div>
                     </td>
                      </tr>
@@ -643,7 +669,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                     AutoHold
                                 </span>
                                 <div class="form-switch clearfix">
-                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="AutoHoldCheck">
+                                    <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="AutoHoldCheck">
                                 </div>
                         </td>
                     </tr>
@@ -654,7 +680,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                     Mirror Status
                                 </span>
                                 <div class="form-switch clearfix">
-                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="MirrorStatusCheck">
+                                    <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="MirrorStatusCheck">
                                 </div>
                         </td>
                     </tr>
@@ -663,38 +689,14 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                         <td>
 
                                 <span class="float-start" style="margin-left:8px">
-                                    Steering Mode
+                                  Drive Mode
                                     </span>
                                     <div class="form-switch clearfix">
-                                        <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="SteeringModeCheck">
+                                        <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="DriveModeCheck">
                                     </div>
                         </td>
                     </tr>
-                    <tr>
-             
-                    <td>
-
-                            <span class="float-start" style="margin-left:8px">
-                            Braking Mode
-                                </span>
-                                <div class="form-switch clearfix">
-                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="BrakingModeCheck">
-                                </div>
-                    </td>
-                     </tr>
-                     <tr>
-             
-                    <td>
-
-                            <span class="float-start" style="margin-left:8px">
-                            Power Mode
-                                </span>
-                                <div class="form-switch clearfix">
-                                    <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="PowerModeCheck">
-                                </div>
-                    </td>
-                     </tr>
-                     
+                    
                 </tbody>
             </table>
             </div>
@@ -732,11 +734,9 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var AutoHoldCheck = personalSettingModule.querySelector("#AutoHoldCheck");
   var MirrorStatusCheck =
     personalSettingModule.querySelector("#MirrorStatusCheck");
-  var SteeringModeCheck =
-    personalSettingModule.querySelector("#SteeringModeCheck");
-  var BrakingModeCheck =
-    personalSettingModule.querySelector("#BrakingModeCheck");
-  var PowerModeCheck = personalSettingModule.querySelector("#PowerModeCheck");
+  var DriveModeCheck =
+    personalSettingModule.querySelector("#DriveModeCheck");
+
   var ACTemperatureCheck = personalSettingModule.querySelector(
     "#ACTemperatureCheck"
   );
@@ -787,68 +787,63 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
 
   SeatPositionCheck.addEventListener("click", function (event) {
-    seatPosition.onOff = event.target.checked;
-    console.log("On/Off:", seatPosition.onOff);
+    systemDictionary["seatPosition"].onOff = event.target.checked;
+    console.log("On/Off:", systemDictionary["seatPosition"].onOff);
   });
   AutoHoldCheck.addEventListener("click", function (event) {
     var isOn = event.target.checked;
     console.log("On/Off:", isOn);
   });
   MirrorStatusCheck.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
+    systemDictionary.mirrorLeftTilt.onOff= event.target.checked;
+    systemDictionary.mirrorLeftPan.onOff= event.target.checked;
+    systemDictionary.mirrorRightTilt.onOff= event.target.checked;
+    systemDictionary.mirrorRightPan.onOff= event.target.checked;
+    console.log("On/Off:", systemDictionary.mirrorLeftTilt.onOff);
   });
-  SteeringModeCheck.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
-  });
-  BrakingModeCheck.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
-  });
-  PowerModeCheck.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
+  DriveModeCheck.addEventListener("click", function (event) {
+    systemDictionary.driveMode.onOff = event.target.checked;
+    console.log("On/Off:", systemDictionary.driveMode.onOff);
   });
   ACAirFlowLevelCheck.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
+    systemDictionary.ACAirFlowLevel.onOff = event.target.checked;
+    console.log("On/Off:", isystemDictionary.ACAirFlowLevel.onOff);
   });
   ACTemperatureCheck.addEventListener("click", function (event) {
     var isOn = event.target.checked;
     console.log("On/Off:", isOn);
   });
   SteeringWheelWarmCheck.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
+    systemDictionary.SteeringWheelWarm.onOff = event.target.checked;
+    console.log("On/Off:", systemDictionary.SteeringWheelWarm.onOff);
   });
   SeatHeatLevelCheck.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
+    systemDictionary.SeatHeatLevel.onOff = event.target.checked;
+    console.log("On/Off:", systemDictionary.SeatHeatLevel.onOff);
   });
 
   SeatVentilationCheck.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
+    systemDictionary.SeatVentilation.onOff = event.target.checked;
+    console.log("On/Off:", systemDictionary.SeatVentilation.onOff);
   });
 
   LanguageSelect.onchange = function(){
-    language = this.value;
+    systemDictionary.language.val = this.value;
     console.log("language：",this.value);
   }
 
   UIStyleSelect.onchange = function(){
-    UIInterface = this.value;
+    systemDictionary.UIInterface.val = this.value;
     console.log("Selected UI style：",this.value);
   }
 
   UnitSelect.onchange = function(){
-    USMetricUnit = this.value;
+    systemDictionary.USMetricUnit.val = this.value;
     console.log("Selected Unit:",this.value);
   }
 
   PreferredMusicSelect.onchange = function(){
-    musicURI = this.value;
+    systemDictionary.musicURI.val = this.value;
     console.log("Selected Unit:",this.value);
   }
 
@@ -857,12 +852,12 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   }
 
   ParkingBeepLevelSelect.onchange = function(){
-    parkingBeepLevel = this.value;
+    systemDictionary.parkingBeepLevel.val = this.value;
     console.log("Parking Beep Level：",this.value);
   }
 
   ADASBeepLevelSelect.onchange = function(){
-    ADASBeepLevel = this.value;
+    systemDictionary.ADASBeepLevel.val = this.value;
     console.log("ADAS Beep Level：",this.value);
   }
 
@@ -1445,11 +1440,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                             Seat Position:&nbsp;
                                         </span>
                                         <span id="seatPositionRangeDisplay" style="text-decoration:underline;">
-                                            ` + defaultDriverDictionary["seatPosition"] + `
+                                            ` + systemDictionary["seatPosition"].val + `
                                         </span>
                                     </div>
                                     <div class="col-5">
-                                        <input type="range" class="form-range float-end" min="-50" max="50" id="SeatPositionRange" value="`+ defaultDriverDictionary["seatPosition"] +`">
+                                        <input type="range" class="form-range float-end driver-input-child" min="-50" max="50" id="SeatPositionRange" value="`+ systemDictionary["seatPosition"].val +`">
                                     </div>
                                     
                                 </div>
@@ -1465,11 +1460,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                                 AC temperature if cold:&nbsp;
                                             </span>
                                             <span id="ACTemperatureIfColdRangeDisplay" style="text-decoration:underline;">
-                                                50
+                                                `+ systemDictionary.ACTemperatureIfCold.val +`
                                             </span>°C
                                         </div>
                                         <div class="col-5">
-                                            <input type="range" class="form-range float-end" min="-50" max="50" id="ACTemperatureIfColdRange">
+                                            <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.ACTemperatureIfCold.val +`" id="ACTemperatureIfColdRange">
                                         </div>
                                     </div>
                             </td>
@@ -1483,11 +1478,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                                 AC temperature if hot:&nbsp;
                                             </span>
                                             <span id="ACTemperatureIfHotRangeDisplay" style="text-decoration:underline;">
-                                                50
+                                                `+ systemDictionary.ACTemperatureIfHot.val +`
                                             </span>°C
                                         </div>
                                         <div class="col-5">
-                                            <input type="range" class="form-range float-end" min="-50" max="50" id="ACTemperatureIfHotRange">
+                                            <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.ACTemperatureIfHot.val +`" id="ACTemperatureIfHotRange">
                                         </div>
                                     </div>
                             </td>
@@ -1502,11 +1497,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                             AC Air Flow Level:&nbsp;
                                         </span>
                                         <span id="ACAirFlowLevelRangeDisplay" style="text-decoration:underline;">
-                                            50
+                                            `+ systemDictionary.ACAirFlowLevel.val +`
                                         </span>°C
                                     </div>
                                     <div class="col-5">
-                                        <input type="range" class="form-range float-end" min="-50" max="50" id="ACAirFlowLevelRange">
+                                        <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.ACAirFlowLevel.val +`" id="ACAirFlowLevelRange">
                                     </div>
                                 </div>
                                    
@@ -1521,11 +1516,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                         Steering Wheel Warm:&nbsp;
                                     </span>
                                     <span id="SteeringWheelWarmRangeDisplay" style="text-decoration:underline;">
-                                        50
+                                      `+ systemDictionary.SteeringWheelWarm.val +`
                                     </span>°C
                                 </div>
                                 <div class="col-5">
-                                    <input type="range" class="form-range float-end" min="-50" max="50" id="SteeringWheelWarmRange">
+                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.SteeringWheelWarm.val +`" id="SteeringWheelWarmRange">
                                 </div>
                             </div>
                             
@@ -1540,11 +1535,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                             Seat Heat Level:&nbsp;
                                         </span>
                                         <span id="SeatHeatLevelRangeDisplay" style="text-decoration:underline;">
-                                            50
+                                            `+ systemDictionary.SeatHeatLevel.val +`
                                         </span>°C
                                     </div>
                                     <div class="col-5">
-                                        <input type="range" class="form-range float-end" min="-50" max="50" id="SeatHeatLevelRange">
+                                        <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.SeatHeatLevel.val +`" id="SeatHeatLevelRange">
                                     </div>
                                 </div>
                         </td>
@@ -1558,11 +1553,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                         Seat Ventilation:&nbsp;
                                     </span>
                                     <span id="SeatVentilationRangeDisplay" style="text-decoration:underline;">
-                                        50
+                                    `+ systemDictionary.SeatVentilation.val +`
                                     </span>°C
                                 </div>
                                 <div class="col-5">
-                                    <input type="range" class="form-range float-end" min="-50" max="50" id="SeatVentilationRange">
+                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.SeatVentilation.val +`" id="SeatVentilationRange">
                                 </div>
                             </div>
                         </td>
@@ -1574,7 +1569,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                      AutoHold
                                  </span>
                                  <div class="form-switch clearfix">
-                                     <input class="form-check-input float-end " type="checkbox" role="switch" id="AutoHoldControl">
+                                     <input class="form-check-input driver-input-child float-end " type="checkbox" role="switch" id="AutoHoldControl">
                                  </div>
                          </td>
                      </tr>
@@ -1587,11 +1582,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                         mirrorLeftTilt:&nbsp;
                                       </span>
                                       <span id="mirrorLeftTiltRangeDisplay" style="text-decoration:underline;">
-                                          50
+                                          `+  systemDictionary.mirrorLeftTilt.val +`
                                       </span>
                                   </div>
                                   <div class="col-5">
-                                      <input type="range" class="form-range float-end" min="-50" max="50" id="mirrorLeftTiltRange">
+                                      <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.mirrorLeftTilt.val +`" id="mirrorLeftTiltRange">
                                   </div>
                               </div>
                               </td>
@@ -1605,11 +1600,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                       mirrorLeftPan:&nbsp;
                                     </span>
                                     <span id="mirrorLeftPanRangeDisplay" style="text-decoration:underline;">
-                                        50
+                                    `+  systemDictionary.mirrorLeftPan.val +`
                                     </span>
                                 </div>
                                 <div class="col-5">
-                                    <input type="range" class="form-range float-end" min="-50" max="50" id="mirrorLeftPanRange">
+                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.mirrorLeftPan.val +`" id="mirrorLeftPanRange">
                                 </div>
                             </div>
                             </td>
@@ -1623,11 +1618,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                         mirrorRightTilt:&nbsp;
                                     </span>
                                     <span id="mirrorRightTiltRangeDisplay" style="text-decoration:underline;">
-                                        50
+                                      `+ systemDictionary.mirrorRightTilt.val +`
                                     </span>
                                 </div>
                                 <div class="col-5">
-                                    <input type="range" class="form-range float-end" min="-50" max="50" id="mirrorRightTiltRange">
+                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.mirrorRightTilt.val +`" id="mirrorRightTiltRange">
                                 </div>
                             </div>
                             </td>
@@ -1641,11 +1636,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                     mirrorRightPan:&nbsp;
                                     </span>
                                     <span id="mirrorRightPanRangeDisplay" style="text-decoration:underline;">
-                                        50
+                                      `+ systemDictionary.mirrorRightPan.val +`
                                     </span>
                                 </div>
                                 <div class="col-5">
-                                    <input type="range" class="form-range float-end" min="-50" max="50" id="mirrorRightPanRange">
+                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.mirrorRightPan.val +`" id="mirrorRightPanRange">
                                 </div>
                             </div>
                          </td>
@@ -1655,38 +1650,13 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                          <td>
  
                                  <span class="float-start" style="margin-left:8px">
-                                     Steering Mode
+                                     Drive Mode
                                      </span>
                                      <div class="form-switch clearfix">
-                                         <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="SteeringModeControl">
+                                         <input class="form-check-input driver-input-child float-end setting-checkbox-child" type="checkbox" role="switch" id="DriveModeControl">
                                      </div>
                          </td>
                      </tr>
-                     <tr>
-              
-                     <td>
- 
-                             <span class="float-start" style="margin-left:8px">
-                             Braking Mode
-                                 </span>
-                                 <div class="form-switch clearfix">
-                                     <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="BrakingModeControl">
-                                 </div>
-                     </td>
-                      </tr>
-                      <tr>
-              
-                     <td>
- 
-                             <span class="float-start" style="margin-left:8px">
-                             Power Mode
-                                 </span>
-                                 <div class="form-switch clearfix">
-                                     <input class="form-check-input float-end setting-checkbox-child" type="checkbox" role="switch" id="PowerModeControl">
-                                 </div>
-                     </td>
-                      </tr>
-
 
 
 
@@ -1733,89 +1703,89 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   var SeatPositionRange = bigBoxModule.querySelector("#SeatPositionRange");
   SeatPositionRange.addEventListener("click", function (event) {
-    seatPosition.value = event.target.value;
-    console.log("Seat Position:", seatPosition.value);
+    systemDictionary.seatPosition.val = event.target.value;
+    console.log("Seat Position:", systemDictionary.seatPosition.val);
     bigBoxModule.querySelector("#seatPositionRangeDisplay").innerHTML =
-    seatPosition.value;
+    systemDictionary.seatPosition.val;
   });
 
   var ACTemperatureIfHotRange = bigBoxModule.querySelector("#ACTemperatureIfHotRange");
   ACTemperatureIfHotRange.addEventListener("click", function (event) {
-    ACTemperatureIfHot = event.target.value;
-    console.log("AC Temperature IfHot:", ACTemperatureIfHot);
+    systemDictionary.ACTemperatureIfHot.val = event.target.value;
+    console.log("AC Temperature IfHot:", systemDictionary.ACTemperatureIfHot.val);
     bigBoxModule.querySelector("#ACTemperatureIfHotRangeDisplay").innerHTML =
-        ACTemperatureIfHot;    
+      systemDictionary.ACTemperatureIfHot.val;    
   });
 
   var ACTemperatureIfColdRange = bigBoxModule.querySelector("#ACTemperatureIfColdRange");
   ACTemperatureIfColdRange.addEventListener("click", function (event) {
-    ACTemperatureIfCold = event.target.value;
-    console.log("AC Temperature IfCold:", ACTemperatureIfCold);
+    systemDictionary.ACTemperatureIfCold.val = event.target.value;
+    console.log("AC Temperature IfCold:", systemDictionary.ACTemperatureIfCold.val);
     bigBoxModule.querySelector("#ACTemperatureIfColdRangeDisplay").innerHTML =
-        ACTemperatureIfCold;    
+      systemDictionary.ACTemperatureIfCold.val;    
   });
 
   var ACAirFlowLevelRange = bigBoxModule.querySelector("#ACAirFlowLevelRange");
   ACAirFlowLevelRange.addEventListener("click", function (event) {
-    ACAirFlowLevel = event.target.value;
-    console.log("AC Air Flow Level:",ACAirFlowLevel);
+    systemDictionary.ACAirFlowLevel.val = event.target.value;
+    console.log("AC Air Flow Level:",systemDictionary.ACAirFlowLevel.val);
     bigBoxModule.querySelector("#ACAirFlowLevelRangeDisplay").innerHTML =
-        ACAirFlowLevel;
+      systemDictionary.ACAirFlowLevel.val;
   });
   var SteeringWheelWarmRange = bigBoxModule.querySelector("#SteeringWheelWarmRange");
   SteeringWheelWarmRange.addEventListener("click", function (event) {
-    SteeringWheelWarm = event.target.value;
-    console.log("Steering Wheel Warm:", SteeringWheelWarm);
+    systemDictionary.SteeringWheelWarm.val = event.target.value;
+    console.log("Steering Wheel Warm:", systemDictionary.SteeringWheelWarm.val);
     bigBoxModule.querySelector("#SteeringWheelWarmRangeDisplay").innerHTML =
-        SteeringWheelWarm;
+        systemDictionary.SteeringWheelWarm.val;
   });
 
   var SeatHeatLevelRange = bigBoxModule.querySelector("#SeatHeatLevelRange");
   SeatHeatLevelRange.addEventListener("click", function (event) {
-    SeatHeatLevel = event.target.value;
-    console.log("Seat Heat Level:", SeatHeatLevel);
+    systemDictionary.SeatHeatLevel.val = event.target.value;
+    console.log("Seat Heat Level:", systemDictionary.SeatHeatLevel.val);
     bigBoxModule.querySelecto("#SeatHeatLevelRangeDisplay").innerHTML =
-    SeatHeatLevel;
+      systemDictionary.SeatHeatLevel.val;
   });
 
   var SeatVentilationRange = bigBoxModule.querySelector("#SeatVentilationRange");
   SeatVentilationRange.addEventListener("click", function (event) {
-    SeatVentilation = event.target.value;
-    console.log("Sea tVentilation:", SeatVentilation);
+    systemDictionary.SeatVentilation.val = event.target.value;
+    console.log("Seat Ventilation:", systemDictionary.SeatVentilation.val);
     bigBoxModule.querySelector("#SeatVentilationRangeDisplay").innerHTML =
-    SeatVentilation;
+      systemDictionary.SeatVentilation.val;
   });
 
   var mirrorLeftTiltRange = bigBoxModule.querySelector("#mirrorLeftTiltRange");
   mirrorLeftTiltRange.addEventListener("click", function (event) {
-    mirrorLeftTilt = event.target.value;
-    console.log("mirrorLeftTilt:", mirrorLeftTilt);
+    systemDictionary.mirrorLeftTilt.val = event.target.value;
+    console.log("mirrorLeftTilt:", systemDictionary.mirrorLeftTilt.val);
     bigBoxModule.querySelector("#mirrorLeftTiltRangeDisplay").innerHTML =
-    mirrorLeftTilt;
+    systemDictionary.mirrorLeftTilt.val;
   });
 
   var mirrorLeftPanRange = bigBoxModule.querySelector("#mirrorLeftPanRange");
   mirrorLeftPanRange.addEventListener("click", function (event) {
-    mirrorLeftPan = event.target.value;
-    console.log("mirrorLeftPan:", mirrorLeftPan);
+    systemDictionary.mirrorLeftPan.val = event.target.value;
+    console.log("mirrorLeftPan:", systemDictionary.mirrorLeftPan.val);
     bigBoxModule.querySelector("#mirrorLeftPanRangeDisplay").innerHTML =
-    mirrorLeftPan;
+    systemDictionary.mirrorLeftPan.val;
   });
 
   var mirrorRightTiltRange = bigBoxModule.querySelector("#mirrorRightTiltRange");
   mirrorRightTiltRange.addEventListener("click", function (event) {
-    mirrorRightTilt = event.target.value;
-    console.log("mirrorRightTilt:", mirrorRightTilt);
+    systemDictionary.mirrorRightTilt.val = event.target.value;
+    console.log("mirrorRightTilt:", systemDictionary.mirrorRightTilt.val);
     bigBoxModule.querySelector("#mirrorRightTiltRangeDisplay").innerHTML =
-    mirrorRightTilt;
+    systemDictionary.mirrorRightTilt.val;
   });
 
   var mirrorRightPanRange = bigBoxModule.querySelector("#mirrorRightPanRange");
   mirrorRightPanRange.addEventListener("click", function (event) {
-    mirrorRightPan = event.target.value;
-    console.log("mirrorRightPan:", mirrorRightPan);
+    systemDictionary.mirrorRightPan.val = event.target.value;
+    console.log("mirrorRightPan:", systemDictionary.mirrorRightPan.val);
     bigBoxModule.querySelector("#mirrorRightPanRangeDisplay").innerHTML =
-    mirrorRightPan;
+    systemDictionary.mirrorRightPan.val;
   });
 
 
@@ -1827,9 +1797,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   var AutoHoldControl = bigBoxModule.querySelector("#AutoHoldControl");
   
-  var SteeringModeControl = bigBoxModule.querySelector("#SteeringModeControl");
-  var BrakingModeControl = bigBoxModule.querySelector("#BrakingModeControl");
-  var PowerModeControl = bigBoxModule.querySelector("#PowerModeControl");
+  var DriveModeControl = bigBoxModule.querySelector("#DriveModeControl");
 
   var closeAlert = bigBoxModule.querySelector("#closeAlert");
   var alertDiv = bigBoxModule.querySelector("#liveToast");
@@ -1843,24 +1811,17 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     console.log("On/Off:", AutoHoldIsOn);
   });
 
-  SteeringModeControl.addEventListener("click", function (event) {
-    SteeringMode = event.target.checked;
-    console.log("On/Off:", SteeringMode);
+  DriveModeControl.addEventListener("click", function (event) {
+    systemDictionary.driveMode.val = event.target.checked;
+    console.log("On/Off:", systemDictionary.driveMode.val);
   });
-  BrakingModeControl.addEventListener("click", function (event) {
-    BrakingMode = event.target.checked;
-    console.log("On/Off:", BrakingMode);
-  });
-  PowerModeControl.addEventListener("click", function (event) {
-    PowerMode = event.target.checked;
-    console.log("On/Off:", PowerMode);
-  });
+
 
 
   var personDic = {
-    Person1: ["Yilong_Dai", "Me"],
+    Person1: ["custom", "Customize your own"],
     Person2: ["Kyrie_Irving", "NBA all star"],
-    Person3: ["Driver by you", "Customize your own"],
+    Person3: ["Default_Driver", "Pre-set driver"],
   };
 
   var usrAvatar = personalSettingModule.querySelector("#avatar");
@@ -1934,6 +1895,35 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         driverName.innerHTML = personDic[this.id][0];
         driverWelcome.innerHTML = personDic[this.id][1];
         selectedDriverName = personDic[this.id][0];
+
+
+        let inputList = personalSettingModule.querySelectorAll(
+          ".driver-input-child"
+        );
+        let inputList2 = bigBoxModule.querySelectorAll(
+          ".driver-input-child"
+        );
+        if (personDic[this.id][0] == "custom") {
+          for (let item of inputList) {
+            if (item.getAttribute("disabled")) {
+              item.removeAttribute("disabled");
+            }
+          }
+          for (let item of inputList2) {
+            if (item.getAttribute("disabled")) {
+              item.removeAttribute("disabled");
+            }
+          }
+        } else {
+          for (let item of inputList) {
+            item.setAttribute("disabled", "disabled");
+          }
+          for (let item of inputList2) {
+            item.setAttribute("disabled", "disabled");
+          }
+        }
+
+        updateWebpage(personDic[this.id][0]);
       });
     console.log(key);
   }
@@ -1981,7 +1971,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     "Vehicle.Cabin.Seat.Row1.Pos1.Position",
     "get",
     async () => {
-      return seatPosition.value;
+      return systemDictionary.seatPosition.val;
     }
   );
   simulator(
@@ -1995,35 +1985,35 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     "Vehicle.Cabin.Infotainment.Media.Played.URI",
     "get",
     async () => {
-      return musicURI;
+      return systemDictionary.musicURI.val;
     }
   );
   simulator(
     "Vehicle.Body.Mirrors.Left.Tilt",
     "get",
     async () => {
-      return mirrorLeftTilt;
+      return systemDictionary.mirrorLeftTilt.val;
     }
   );
   simulator(
     "Vehicle.Body.Mirrors.Left.Pan",
     "get",
     async () => {
-      return mirrorLeftPan;
+      return systemDictionary.mirrorLeftPan.val;
     }
   );
   simulator(
     "Vehicle.Body.Mirrors.Right.Tilt",
     "get",
     async () => {
-      return mirrorRightTilt;
+      return systemDictionary.mirrorRightTilt.val;
     }
   );
   simulator(
     "Vehicle.Body.Mirrors.Right.Pan",
     "get",
     async () => {
-      return mirrorRightPan;
+      return systemDictionary.mirrorRightPan.val;
     }
   );
 
@@ -2066,28 +2056,28 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       return [true,isPersonal];
     },
     setWelcome:function(){
-      if(welcomeWord != null){
-        bigBoxModule.querySelector("#welcomeWord").innerHTML = welcomeWord;
+      if(systemDictionary.welcomeWord.val != null){
+        bigBoxModule.querySelector("#welcomeWord").innerHTML = systemDictionary.welcomeWord.val;
       }
     },
     setPersonalizedWelcomeWord:function(){
-      if(welcomeWord != null){
-        bigBoxModule.querySelector("#welcomeWord").innerHTML = welcomeWord;
+      if(systemDictionary.welcomeWord.val != null){
+        bigBoxModule.querySelector("#welcomeWord").innerHTML = systemDictionary.welcomeWord.val;
       }
     },
     setPersonalizedUIInterface:function(){
-      if(UIInterface != null){
-        bigBoxModule.querySelector("#UI").style.background = UIInterface;
+      if(systemDictionary.UIInterface.val != null){
+        bigBoxModule.querySelector("#UI").style.background = systemDictionary.UIInterface.val;
       }
     },
     setPreferLanguage:function(){
-      if(language != null){
-        bigBoxModule.querySelector("#language").innerHTML = language;
+      if(systemDictionary.language.val != null){
+        bigBoxModule.querySelector("#language").innerHTML = systemDictionary.language.val;
       }
     },
     setUSMetricUnits:function(){
-      if(USMetricUnit != null){
-        bigBoxModule.querySelector("#units").innerHTML = USMetricUnit;
+      if(systemDictionary.USMetricUnit.val != null){
+        bigBoxModule.querySelector("#units").innerHTML = systemDictionary.USMetricUnit.val;
       }
     },
     setInteriorLight:function(){
@@ -2097,13 +2087,13 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
     },
     turnOnPreferredMusic:function(){
-      if(musicURI!= null){
-        bigBoxModule.querySelector("#music").innerHTML = musicURI;
+      if(systemDictionary.musicURI.val!= null){
+        bigBoxModule.querySelector("#music").innerHTML = systemDictionary.musicURI.val;
       }
-        return musicURI;
+        return systemDictionary.musicURI.val;
     },
     setSeatPosition:function(){
-        return seatPosition.value;
+        return systemDictionary.seatPosition.val;
     },
     setAutoHold:function(){
         if(AutoHoldIsOn){
@@ -2128,6 +2118,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         bigBoxModule.querySelector("#powerImage").style.display = "block";
       }
     },
+    setDriveMode:function(){
+      if(systemDictionary.driveMode.val){
+        bigBoxModule.querySelector("#powerImage").style.display = "block";
+      }
+    },
     getOutsideTemperature:function(){
       return OutsideTemperature;
     },
@@ -2140,17 +2135,17 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       console.log(ACMode);
     },
     turnOnSeatHeat:function(){
-      if(SeatHeatLevel > 0){
+      if(systemDictionary.SeatHeatLevel.val > 0){
         bigBoxModule.querySelector("#SeatHeatImage").style.display = "block";
       }
     },
     turnSteeringWheelWarm:function(){
-      if(SteeringWheelWarm> 0){
+      if(systemDictionary.SteeringWheelWarm.val > 0){
         bigBoxModule.querySelector("#SteeringWheelWarmImage").style.display = "block";
       }
     },
     turnOnSeatVentilation:function(){
-      if(SeatVentilation> 0){
+      if(systemDictionary.SeatVentilation.val> 0){
         bigBoxModule.querySelector("#SeatVentilationImage").style.display = "block";
       }
     },
@@ -2208,13 +2203,19 @@ function analysisTxt(txt){
   for (var i=0; i < txt.length; i++){
     identInfo = txt[i].split("#");
     identName = identInfo.shift().split(":")[1]
+    var innerTuple = {}
     for(var j=0; j<identInfo.length;j++){
       key = identInfo[j].split(":")[0];
       value = identInfo[j].split(":")[1];
-      dictionaryInfo[key] = value;
+      innerTuple = {
+        val:value,
+        onOff:false
+      }
+      dictionaryInfo[key] = innerTuple;
     }
     dictionaryDriver[identName] = dictionaryInfo;
     dictionaryInfo = {};
+    innerTuple = {};
   }
 
   console.log(dictionaryDriver);
