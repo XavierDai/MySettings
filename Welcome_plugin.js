@@ -442,8 +442,9 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                     </div>
                                     <div class="col-5">
                                         <select class="form-select float-end setting-checkbox-child driver-input-child" id="UnitSelect">
+                                          <option id="Metric" value="Metric">Metric</option>
                                             <option id="US" value="US">US</option>
-                                            <option id="metric" value="Metric">Metric</option>
+                                            
                                             
                                         </select>
                                     </div>
@@ -753,6 +754,18 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       for (let item of childrenList) {
         item.setAttribute("disabled", "disabled");
       }
+      Object.entries(systemDictionary).forEach(([key,value])=>{
+        value.onOff = false;
+      })
+      personalSettingModule.querySelector("#SeatPositionCheck").checked = false;
+      personalSettingModule.querySelector("#ACTemperatureCheck").checked = false;
+      personalSettingModule.querySelector("#ACAirFlowLevelCheck").checked = false;
+      personalSettingModule.querySelector("#SteeringWheelWarmCheck").checked = false;
+      personalSettingModule.querySelector("#SeatHeatLevelCheck").checked = false;
+      personalSettingModule.querySelector("#SeatVentilationCheck").checked = false;
+      personalSettingModule.querySelector("#AutoHoldCheck").checked = false;
+      personalSettingModule.querySelector("#MirrorStatusCheck").checked = false;
+      personalSettingModule.querySelector("#DriveModeCheck").checked = false;
     }
   });
 
@@ -783,11 +796,12 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   });
   ACAirFlowLevelCheck.addEventListener("click", function (event) {
     systemDictionary.ACAirFlowLevel.onOff = event.target.checked;
-    console.log("On/Off:", isystemDictionary.ACAirFlowLevel.onOff);
+    console.log("On/Off:", systemDictionary.ACAirFlowLevel.onOff);
   });
   ACTemperatureCheck.addEventListener("click", function (event) {
-    var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
+    systemDictionary.ACTemperatureIfCold.onOff = event.target.checked;
+    systemDictionary.ACTemperatureIfHot.onOff = event.target.checked
+    console.log("On/Off:", event.target.checked);
   });
   SteeringWheelWarmCheck.addEventListener("click", function (event) {
     systemDictionary.SteeringWheelWarm.onOff = event.target.checked;
@@ -816,6 +830,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   UnitSelect.onchange = function(){
     systemDictionary.USMetricUnit.val = this.value;
     console.log("Selected Unit:",this.value);
+    changeTemperatureUnit(this.value);
   }
 
   PreferredMusicSelect.onchange = function(){
@@ -1301,7 +1316,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
             <div>
                 
 
-                <div style="height:65%;">   
+                <div style="height:63.5%;">   
                
                   <div class="toast-container position-fixed bottom-50 end-50 p-3">
                     <div id="liveToast" class="toast show fade" role="alert" aria-live="assertive" aria-atomic="true">
@@ -1375,9 +1390,9 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     
              
                             <div class="row">
-                                <label class="col-sm-4 col-form-label col-form-label">Rain Intensity</label>
-                                <div class="col-sm-7" style="background-color:#CAECF4;border-radius:5px;">
-                                    <label for="rainRange" class="form-label">Scope: 0% ~ 100%</label>
+                                <label class="col-sm-5 col-form-label col-form-label">Rain Intensity</label>
+                                <div class="col-sm-6" style="background-color:#CAECF4;border-radius:5px;">
+                                    <label for="rainRange" class="form-label">0% ~ 100%</label>
                                     </br>
                                     Current:<span id="rainRangeDisplay" style="text-decoration:underline;">
                                         50
@@ -1387,14 +1402,20 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                 </div>
                             </div>
                             </br>
+                            
                             <div class="row">
-                                <label class="col-sm-4 col-form-label col-form-label">Outside Temperature</label>
-                                <div class="col-sm-7" style="background-color:#FFBE7D;border-radius:5px;">
-                                    <label for="rainRange" class="form-label">Scope: -50°C ~ +50°C</label>
+                                <label class="col-sm-5 col-form-label col-form-label">Outside Temperature</label>
+                                <div class="col-sm-6" style="background-color:#FFBE7D;border-radius:5px;">
+                                    <label for="temperatureRange" class="form-label">
+                                      <span id="temperatureRangeLabel">-50°C ~ +50°C</span>
+                                    </label>
                                     </br>
                                     Current:<span id="temperatureRangeDisplay" style="text-decoration:underline;">
                                         50
-                                    </span>°C
+                                    </span>
+                                    <span class="temperatureUnit">
+                                      °C
+                                    </span>
                                     </br>
                                     <input type="range" class="form-range" min="-50" max="50" id="temperatureRange">
                                 </div>
@@ -1435,9 +1456,12 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                             <span class="float-start" style="margin-left:8px">
                                                 AC temperature if cold:&nbsp;
                                             </span>
-                                            <span id="ACTemperatureIfColdRangeDisplay" style="text-decoration:underline;">
+                                            <span id="ACTemperatureIfColdRangeDisplay" style="text-decoration:underline;" class="temperatureValue">
                                                 `+ systemDictionary.ACTemperatureIfCold.val +`
-                                            </span>°C
+                                            </span>
+                                            <span class="temperatureUnit">
+                                              °C
+                                            </span>
                                         </div>
                                         <div class="col-5">
                                             <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.ACTemperatureIfCold.val +`" id="ACTemperatureIfColdRange">
@@ -1453,9 +1477,12 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                             <span class="float-start" style="margin-left:8px">
                                                 AC temperature if hot:&nbsp;
                                             </span>
-                                            <span id="ACTemperatureIfHotRangeDisplay" style="text-decoration:underline;">
+                                            <span id="ACTemperatureIfHotRangeDisplay" style="text-decoration:underline;"  class="temperatureValue">
                                                 `+ systemDictionary.ACTemperatureIfHot.val +`
-                                            </span>°C
+                                            </span>
+                                            <span class="temperatureUnit">
+                                              °C
+                                            </span>
                                         </div>
                                         <div class="col-5">
                                             <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.ACTemperatureIfHot.val +`" id="ACTemperatureIfHotRange">
@@ -1474,7 +1501,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                         </span>
                                         <span id="ACAirFlowLevelRangeDisplay" style="text-decoration:underline;">
                                             `+ systemDictionary.ACAirFlowLevel.val +`
-                                        </span>°C
+                                        </span>
                                     </div>
                                     <div class="col-5">
                                         <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.ACAirFlowLevel.val +`" id="ACAirFlowLevelRange">
@@ -1493,7 +1520,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                     </span>
                                     <span id="SteeringWheelWarmRangeDisplay" style="text-decoration:underline;">
                                       `+ systemDictionary.SteeringWheelWarm.val +`
-                                    </span>°C
+                                    </span>
                                 </div>
                                 <div class="col-5">
                                     <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.SteeringWheelWarm.val +`" id="SteeringWheelWarmRange">
@@ -1512,7 +1539,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                         </span>
                                         <span id="SeatHeatLevelRangeDisplay" style="text-decoration:underline;">
                                             `+ systemDictionary.SeatHeatLevel.val +`
-                                        </span>°C
+                                        </span>
                                     </div>
                                     <div class="col-5">
                                         <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.SeatHeatLevel.val +`" id="SeatHeatLevelRange">
@@ -1530,7 +1557,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                     </span>
                                     <span id="SeatVentilationRangeDisplay" style="text-decoration:underline;">
                                     `+ systemDictionary.SeatVentilation.val +`
-                                    </span>°C
+                                    </span>
                                 </div>
                                 <div class="col-5">
                                     <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.SeatVentilation.val +`" id="SeatVentilationRange">
@@ -1673,8 +1700,13 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   temperatureRange2.addEventListener("click", function (event) {
     OutsideTemperature = event.target.value;
     console.log("OutsideTemperature:", OutsideTemperature);
-    bigBoxModule.querySelector("#temperatureRangeDisplay").innerHTML =
+    if(systemDictionary.USMetricUnit.val == "US"){
+      bigBoxModule.querySelector("#temperatureRangeDisplay").innerHTML =
+      toFahrenheit(OutsideTemperature);
+    }else if(systemDictionary.USMetricUnit.val == "Metric"){
+      bigBoxModule.querySelector("#temperatureRangeDisplay").innerHTML =
       OutsideTemperature;
+    }
   });
 
   var SeatPositionRange = bigBoxModule.querySelector("#SeatPositionRange");
@@ -1688,17 +1720,27 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var ACTemperatureIfHotRange = bigBoxModule.querySelector("#ACTemperatureIfHotRange");
   ACTemperatureIfHotRange.addEventListener("click", function (event) {
     systemDictionary.ACTemperatureIfHot.val = event.target.value;
-    console.log("AC Temperature IfHot:", systemDictionary.ACTemperatureIfHot.val);
-    bigBoxModule.querySelector("#ACTemperatureIfHotRangeDisplay").innerHTML =
-      systemDictionary.ACTemperatureIfHot.val;    
+    console.log("AC Temperature IfHot:", systemDictionary.ACTemperatureIfHot.val);   
+    if(systemDictionary.USMetricUnit.val == "US"){
+      bigBoxModule.querySelector("#ACTemperatureIfHotRangeDisplay").innerHTML =
+      toFahrenheit(event.target.value);
+    }else if(systemDictionary.USMetricUnit.val == "Metric"){
+      bigBoxModule.querySelector("#ACTemperatureIfHotRangeDisplay").innerHTML =
+      event.target.value;
+    }
   });
 
   var ACTemperatureIfColdRange = bigBoxModule.querySelector("#ACTemperatureIfColdRange");
   ACTemperatureIfColdRange.addEventListener("click", function (event) {
     systemDictionary.ACTemperatureIfCold.val = event.target.value;
     console.log("AC Temperature IfCold:", systemDictionary.ACTemperatureIfCold.val);
-    bigBoxModule.querySelector("#ACTemperatureIfColdRangeDisplay").innerHTML =
-      systemDictionary.ACTemperatureIfCold.val;    
+    if(systemDictionary.USMetricUnit.val == "US"){
+      bigBoxModule.querySelector("#ACTemperatureIfColdRangeDisplay").innerHTML =
+      toFahrenheit(event.target.value);
+    }else if(systemDictionary.USMetricUnit.val == "Metric"){
+      bigBoxModule.querySelector("#ACTemperatureIfColdRangeDisplay").innerHTML =
+      event.target.value;
+    }
   });
 
   var ACAirFlowLevelRange = bigBoxModule.querySelector("#ACAirFlowLevelRange");
@@ -1810,7 +1852,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   var html = "";
   html += `<div class="row">
-                <div class="col-6">
+                <div class="col-7">
                     <div class="list-group driver-name" id="list-tab" role="tablist">`;
   for (var key in personDic) {
     html +=
@@ -1825,7 +1867,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   html += `
         </div>
                 </div>
-            <div class="col-6">
+            <div class="col-5">
                 <div class="tab-content driver-description" id="nav-tabContent">
     `;
   for (var key in personDic) {
@@ -1944,10 +1986,10 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
 
   function updateWebpage(pickedDriverName){
+    
 
     if(pickedDriverName == "Default_Driver" || pickedDriverName == "Kyrie_Irving"){
       updateWebpageContent(allDriverDictionary[pickedDriverName]);
-
     }else{
       updateWebpageContent(customizedDriverDictionary);
 
@@ -1957,7 +1999,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   function updateWebpageContent(dictionary){
     console.log("update webpage");
     console.log(dictionary["seatPosition"].val);
-
+    changeTemperatureUnit(dictionary["USMetricUnit"].val);
     personalSettingModule.querySelector("#"+dictionary["language"].val).selected = true;
 
     personalSettingModule.querySelector("#"+dictionary["UIInterface"].val).selected = true;
@@ -1971,6 +2013,26 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     personalSettingModule.querySelector("#option"+dictionary["musicURI"].val).selected = true;
 
     personalSettingModule.querySelector("#InteriorLightColor").value = "#" + dictionary["InteriorLight"].val;
+
+    personalSettingModule.querySelector("#SeatPositionCheck").checked = dictionary["seatPosition"].onOff;
+    
+    personalSettingModule.querySelector("#ACTemperatureCheck").checked = dictionary["ACTemperatureIfCold"].onOff;
+    
+    personalSettingModule.querySelector("#ACAirFlowLevelCheck").checked = dictionary["ACAirFlowLevel"].onOff;
+    
+    personalSettingModule.querySelector("#SteeringWheelWarmCheck").checked = dictionary["SteeringWheelWarm"].onOff;
+    
+    personalSettingModule.querySelector("#SeatHeatLevelCheck").checked = dictionary["SeatHeatLevel"].onOff;
+    
+    personalSettingModule.querySelector("#SeatVentilationCheck").checked = dictionary["SeatVentilation"].onOff;
+    
+    personalSettingModule.querySelector("#AutoHoldCheck").checked = dictionary["AutoHold"].onOff;
+    
+    personalSettingModule.querySelector("#MirrorStatusCheck").checked = dictionary["mirrorLeftTilt"].onOff;
+    
+    personalSettingModule.querySelector("#DriveModeCheck").checked = dictionary["driveMode"].onOff;
+  
+
 
     bigBoxModule.querySelector("#seatPositionRangeDisplay").innerHTML = dictionary["seatPosition"].val;
     bigBoxModule.querySelector("#SeatPositionRange").value = dictionary["seatPosition"].val;
@@ -2047,13 +2109,37 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     return newDictionary;
   }
   
+  function changeTemperatureUnit(targetUnit){
+    if(targetUnit == "US"){
+      bigBoxModule.querySelector("#temperatureRangeLabel").innerHTML = "-58°F ~ +122°F";
+      bigBoxModule.querySelector("#temperatureRangeDisplay").innerHTML = toFahrenheit(OutsideTemperature);
+      for(let item of bigBoxModule.querySelectorAll(".temperatureValue")){
+        let name = item.id.replace("RangeDisplay","");
+        item.innerHTML = toFahrenheit(systemDictionary[name].val);
+      }
+      for(let item of bigBoxModule.querySelectorAll(".temperatureUnit")){
+        item.innerHTML = "°F";
+      }
+    }else if(targetUnit == "Metric"){
+      bigBoxModule.querySelector("#temperatureRangeLabel").innerHTML = "-50°C ~ +50°C";
+      bigBoxModule.querySelector("#temperatureRangeDisplay").innerHTML = OutsideTemperature;
+     for(let item of bigBoxModule.querySelectorAll(".temperatureValue")){
+        let name = item.id.replace("RangeDisplay","");
+        item.innerHTML = systemDictionary[name].val;
+      }
+      for(let item of bigBoxModule.querySelectorAll(".temperatureUnit")){
+        item.innerHTML = "°C";
+      }
+    }
+  }
+
   function toFahrenheit(value){
-
+    return Math.floor( (parseInt(value)*1.8 + 32) * 100 )/100
   }
 
-  function toCelsius(value){
-
-  }
+  // function toCelsius(value){
+  //   return (parseInt(value) - 32)/1.8;
+  // }
 
 
   simulator(
