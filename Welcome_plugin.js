@@ -221,8 +221,8 @@ const plugin = ({ widgets, simulator, vehicle }) => {
           val: {
             state: "Driver Memory",
             leftCondition: "custom",
-            middleCondition: "Kyrie Irving",
-            rightCondition: "default",
+            middleCondition: "Kyrie_Irving",
+            rightCondition: "Default_Driver",
           },
           type: "judge",
           left: {
@@ -1332,7 +1332,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                   </div>
                 
                     
-                  <div style="width:90%;height:100%;border:1px solid black;">
+                  <div style="width:100%;height:100%;border:1px solid black;">
                     <div id="welcomeWord">
 
                     </div>
