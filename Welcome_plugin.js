@@ -1389,9 +1389,9 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                             <h5 class="card-header">External Setting</h5>
 
     
-             
+                            </br>
                             <div class="row">
-                                <label class="col-sm-5 col-form-label col-form-label">Rain Intensity</label>
+                                <label class="col-sm-5 col-form-label col-form-label">&nbsp;&nbsp;&nbsp;Rain Intensity</label>
                                 <div class="col-sm-6" style="background-color:#CAECF4;border-radius:5px;">
                                     <label for="rainRange" class="form-label">0% ~ 100%</label>
                                     </br>
@@ -1400,12 +1400,13 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                     </span>%
                                     </br>
                                     <input type="range" class="form-range" min="0" max="100" id="rainRange">
-                                </div>
+                           
+                                  </div>
                             </div>
                             </br>
                             
-                            <div class="row">
-                                <label class="col-sm-5 col-form-label col-form-label">Outside Temperature</label>
+                            <div class="row" >
+                                <label class="col-sm-5 col-form-label col-form-label">&nbsp;&nbsp;&nbsp;Outside Temperature</label>
                                 <div class="col-sm-6" style="background-color:#FFBE7D;border-radius:5px;">
                                     <label for="temperatureRange" class="form-label">
                                       <span id="temperatureRangeLabel">-50°C ~ +50°C</span>
@@ -1417,10 +1418,12 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                     <span class="temperatureUnit">
                                       °C
                                     </span>
-                                    </br>
+                              </br>
                                     <input type="range" class="form-range" min="-50" max="50" id="temperatureRange">
-                                </div>
+              
+                                  </div>
                             </div>
+                            </br>
 
                         </div>
                     </div>
