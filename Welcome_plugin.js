@@ -2,17 +2,17 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var txt = readTextFile("http://127.0.0.1:5500/ident.txt");
   var allDriverDictionary = analysisTxt(txt);
   var defaultDriverDictionary = pasteToNewDictionary(allDriverDictionary["Default_Driver"]);
-  // var originalCustomDriverDictionary = {};
-  // Object.assign(originalCustomDriverDictionary,allDriverDictionary["custom"])
-  // var originalCustomDriverDictionary = {...allDriverDictionary["custom"]};
-  var originalCustomDriverDictionary = pasteToNewDictionary(allDriverDictionary["custom"]);
-  // var customizedDriverDictionary = {};
-  // Object.assign(customizedDriverDictionary,originalCustomDriverDictionary)
-  var customizedDriverDictionary = pasteToNewDictionary(originalCustomDriverDictionary);
+  // var originalCustomDictionary = {};
+  // Object.assign(originalCustomDictionary,allDriverDictionary["custom"])
+  // var originalCustomDictionary = {...allDriverDictionary["custom"]};
+  var originalCustomDictionary = pasteToNewDictionary(allDriverDictionary["custom"]);
+  // var customizedDictionary = {};
+  // Object.assign(customizedDictionary,originalCustomDictionary)
+  var customizedDictionary = pasteToNewDictionary(originalCustomDictionary);
   // var systemDictionary = {};
   // Object.assign(systemDictionary,defaultDriverDictionary);
   var systemDictionary = pasteToNewDictionary(defaultDriverDictionary);
-  console.log(originalCustomDriverDictionary);
+  console.log(originalCustomDictionary);
   // live args
   var selectedDriverName = null;
   var isPersonal = false;
@@ -202,7 +202,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       },
     },
   }
-  const tt = {
+  const flowChartTree = {
     val: "Vehicle Key Detection",
     type: "activity",
     left: null,
@@ -256,7 +256,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       },
     },
   };
-  var curTree = tt;
+  var curTree = flowChartTree;
   
   
   // widget for setting1
@@ -840,6 +840,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   InteriorLightColor.onchange = function(){
     console.log("color：",this.value);
+    systemDictionary.InteriorLight.val = this.value.replace("#","");
   }
 
   ParkingBeepLevelSelect.onchange = function(){
@@ -1438,10 +1439,10 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                         </span>
                                         <span id="seatPositionRangeDisplay" style="text-decoration:underline;">
                                             ` + systemDictionary["seatPosition"].val + `
-                                        </span>
+                                        </span> mm
                                     </div>
                                     <div class="col-5">
-                                        <input type="range" class="form-range float-end driver-input-child" min="-50" max="50" id="SeatPositionRange" value="`+ systemDictionary["seatPosition"].val +`">
+                                        <input type="range" class="form-range float-end driver-input-child" min="0" max="500" id="SeatPositionRange" value="`+ systemDictionary["seatPosition"].val +`">
                                     </div>
                                     
                                 </div>
@@ -1991,7 +1992,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     if(pickedDriverName == "Default_Driver" || pickedDriverName == "Kyrie_Irving"){
       updateWebpageContent(allDriverDictionary[pickedDriverName]);
     }else{
-      updateWebpageContent(customizedDriverDictionary);
+      updateWebpageContent(customizedDictionary);
 
     }
 
@@ -2076,20 +2077,20 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   function switchSystemDictionary(pickedDriverName){
     if(previousSelectedDriverName == "custom"){
-      console.log(originalCustomDriverDictionary);
-      customizedDriverDictionary = systemDictionary;
-      Object.entries(customizedDriverDictionary).forEach(([key,value])=>{
+      console.log(originalCustomDictionary);
+      customizedDictionary = systemDictionary;
+      Object.entries(customizedDictionary).forEach(([key,value])=>{
         if(value.onOff == false){
-          customizedDriverDictionary[key].val = originalCustomDriverDictionary[key].val;
+          customizedDictionary[key].val = originalCustomDictionary[key].val;
         }
       });
-      console.log(originalCustomDriverDictionary);
+      console.log(originalCustomDictionary);
     }
 
     if(pickedDriverName == "Kyrie_Irving" || pickedDriverName == "Default_Driver"){
       systemDictionary = allDriverDictionary[pickedDriverName];
     }else{
-      systemDictionary = customizedDriverDictionary;
+      systemDictionary = customizedDictionary;
     }
 
   }
@@ -2334,7 +2335,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
     refresh:function(){
         selectedDriverName = "";
-        curTree = tt;
+        curTree = flowChartTree;
         drawFlag = true;
         dividing = false;
         previousVal = null;
