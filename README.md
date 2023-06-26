@@ -103,5 +103,12 @@ This pedal simulates some basic operation buttons on users' phone.
 
 - Internal Settings
 <img src="https://github.com/XavierDai/MySettings/blob/main/img/internalSettings.png"/>
+
   1. This panel allows users to adjust personal settings.
   2. Those changes will be saved only when the corresponding switches (in the phone panel) are turned on.
+
+- Flow Chart
+<img src="https://github.com/XavierDai/MySettings/blob/main/img/flowChart.png"/>
+
+  1. This panel shows the current step, previous step and following step(s).
+  2. This panel is just for display and cannot be edited directly.
