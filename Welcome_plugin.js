@@ -1389,7 +1389,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                             <h5 class="card-header">External Setting</h5>
 
     
-                            </br>
+                   
                             <div class="row">
                                 <label class="col-sm-5 col-form-label col-form-label">&nbsp;&nbsp;&nbsp;Rain Intensity</label>
                                 <div class="col-sm-6" style="background-color:#CAECF4;border-radius:5px;">
@@ -1403,7 +1403,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                            
                                   </div>
                             </div>
-                            </br>
+                   
                             
                             <div class="row" >
                                 <label class="col-sm-5 col-form-label col-form-label">&nbsp;&nbsp;&nbsp;Outside Temperature</label>
@@ -1423,7 +1423,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
               
                                   </div>
                             </div>
-                            </br>
+                  
 
                         </div>
                     </div>
