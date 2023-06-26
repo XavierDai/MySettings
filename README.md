@@ -103,6 +103,7 @@ This pedal simulates some basic operation buttons on users' phone.
 
 ### Pick a Driver
 <img src="https://github.com/XavierDai/MySettings/blob/main/img/pickDriver.png"/>
+   
   1. This panel requires users to select a driver.
   2. All the available users are listed here.
   3. When users click on a driver, relevant information will be displayed.
