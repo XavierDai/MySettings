@@ -96,19 +96,30 @@ This pedal simulates some basic operation buttons on users' phone.
 
   1. This panel is full of switches. If a switch is turned on, the modified data of this entry will be saved.
 
-- External Settings
+### External Settings
 <img src="https://github.com/XavierDai/MySettings/blob/main/img/externalSettings.png"/>
 
   1. This panel allows users to simulate different weather conditions, which might influence the vehicle mode and behavior.
 
-- Internal Settings
+### Pick a Driver
+<img src="https://github.com/XavierDai/MySettings/blob/main/img/pickDriver.png"/>
+  1. This panel requires users to select a driver.
+  2. All the available users are listed here.
+  3. When users click on a driver, relevant information will be displayed.
+
+### Internal Settings
 <img src="https://github.com/XavierDai/MySettings/blob/main/img/internalSettings.png"/>
 
   1. This panel allows users to adjust personal settings.
   2. Those changes will be saved only when the corresponding switches (in the phone panel) are turned on.
 
-- Flow Chart
+### Flow Chart
 <img src="https://github.com/XavierDai/MySettings/blob/main/img/flowChart.png"/>
 
   1. This panel shows the current step, previous step and following step(s).
   2. This panel is just for display and cannot be edited directly.
+
+### Terminal
+<img src="https://github.com/XavierDai/MySettings/blob/main/img/Terminal.png"/>
+
+  1. This panel simulates a real terminal and displays information users might be interested.
