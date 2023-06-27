@@ -1,0 +1,22 @@
+[
+    {
+        "boxes":[1,6],
+        "plugin": "Welcome_plugin",
+        "widget": "Setting1"
+    },
+   {
+        "boxes":[2,3,4,7,8,9],
+        "plugin": "Welcome_plugin",
+        "widget": "BigBox"
+    },
+    {
+        "boxes":[5],
+        "plugin": "Welcome_plugin",
+        "widget": "FlowChart"       
+    },
+    {
+        "boxes":[10],
+        "plugin": "Terminal",
+        "widget": "Terminal"       
+    }
+]
