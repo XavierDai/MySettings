@@ -1,16 +1,14 @@
+import SignalWithMedia from "http://127.0.0.1:5500/SignalWithMedia.js";
 const plugin = ({ widgets, simulator, vehicle }) => {
   var txt = readTextFile("http://127.0.0.1:5500/ident.txt");
   var allDriverDictionary = analysisTxt(txt);
-  var defaultDriverDictionary = pasteToNewDictionary(allDriverDictionary["Default_Driver"]);
-  // var originalCustomDictionary = {};
-  // Object.assign(originalCustomDictionary,allDriverDictionary["custom"])
-  // var originalCustomDictionary = {...allDriverDictionary["custom"]};
-  var originalCustomDictionary = pasteToNewDictionary(allDriverDictionary["custom"]);
-  // var customizedDictionary = {};
-  // Object.assign(customizedDictionary,originalCustomDictionary)
+  var defaultDriverDictionary = pasteToNewDictionary(
+    allDriverDictionary["Default_Driver"]
+  );
+  var originalCustomDictionary = pasteToNewDictionary(
+    allDriverDictionary["custom"]
+  );
   var customizedDictionary = pasteToNewDictionary(originalCustomDictionary);
-  // var systemDictionary = {};
-  // Object.assign(systemDictionary,defaultDriverDictionary);
   var systemDictionary = pasteToNewDictionary(defaultDriverDictionary);
   console.log(originalCustomDictionary);
   // live args
@@ -19,12 +17,12 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var OutsideTemperature = 20;
   var rainIntensity = null;
   var previousSelectedDriverName = null;
+
   // auto save
   // var welcomeWord = null;
   // var language = null;
   // var UIInterface = null;
   // var USMetricUnit = null;
-
   var interiorLight = null;
   // var parkingBeepLevel = null;
   // var musicURI = null;
@@ -49,8 +47,10 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   var driveMode = null;
 
-
-
+  var signalList = [
+    "Cabin.Door.Row1.Left.IsOpen",
+    "Vehicle.Cabin.Seat.Row1.Pos1.Height",
+  ];
 
   var afterTempJudge = {
     val: "Set AC Air Flow",
@@ -64,44 +64,45 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       right: null,
       middle: null,
     },
-  }
+  };
   var personalTree = {
-    val: "Personalized Welcome Word",
+    val: "Set Seat Position",
+    type: "activity",
     type: "activity",
     left: null,
     right: null,
     middle: {
-      val: "Personalized UI Interface",
+      val: "Personalized Welcome Word",
       type: "activity",
       left: null,
       right: null,
       middle: {
-        val: "Set Prefer Language",
+        val: "Personalized UI Interface",
         type: "activity",
         left: null,
         right: null,
         middle: {
-          val: "Set US/Metric Units",
+          val: "Set Prefer Language",
           type: "activity",
           left: null,
           right: null,
           middle: {
-            val: "Set Interior Light",
+            val: "Set US/Metric Units",
             type: "activity",
             left: null,
             right: null,
             middle: {
-              val: "Set Parking Warning Beep Level",
+              val: "Set Interior Light",
               type: "activity",
               left: null,
               right: null,
               middle: {
-                val: "Turn On Preferred Music",
+                val: "Set Parking Warning Beep Level",
                 type: "activity",
                 left: null,
                 right: null,
                 middle: {
-                  val: "Set Seat Position",
+                  val: "Turn On Preferred Music",
                   type: "activity",
                   left: null,
                   right: null,
@@ -143,7 +144,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                   rightCondition: null,
                                 },
                                 type: "judge",
-                                left:  {
+                                left: {
                                   val: "Turn on & Set AC",
                                   type: "activity",
                                   left: null,
@@ -163,7 +164,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                   },
                                 },
                                 right: null,
-                                middle:  {
+                                middle: {
                                   val: {
                                     state: "temp > 25",
                                     leftCondition: "Yes",
@@ -201,7 +202,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         },
       },
     },
-  }
+  };
   const flowChartTree = {
     val: "Vehicle Key Detection",
     type: "activity",
@@ -257,8 +258,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     },
   };
   var curTree = flowChartTree;
-  
-  
+
   // widget for setting1
   const personalSettingModule = document.createElement("div");
   personalSettingModule.setAttribute(
@@ -352,7 +352,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                 <tr>
                     <td>
                             <span class="float-start" style="margin-left:8px">
-                                Enable Personal Settings:
+                                Enable MySettings:
                             </span>
                             <div class="form-switch clearfix">
                             <input class="form-check-input float-end driver-input-child" type="checkbox" role="switch"  id="on-off-button" checked>
@@ -532,7 +532,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                         <div class="row g-3 align-items-center">
                             <div class="col-8">
                                 <span class="float-start" style="margin-left:8px">
-                                    ADAS beep level
+                                    ADAS Beep level
                                 </span>
                             </div>
                             <div class="col-4">
@@ -692,8 +692,6 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         </body>    
         `;
 
-
-        
   // Accessing the on/off button
   var onOffButton = personalSettingModule.querySelector("#on-off-button");
 
@@ -711,8 +709,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var AutoHoldCheck = personalSettingModule.querySelector("#AutoHoldCheck");
   var MirrorStatusCheck =
     personalSettingModule.querySelector("#MirrorStatusCheck");
-  var DriveModeCheck =
-    personalSettingModule.querySelector("#DriveModeCheck");
+  var DriveModeCheck = personalSettingModule.querySelector("#DriveModeCheck");
 
   var ACTemperatureCheck = personalSettingModule.querySelector(
     "#ACTemperatureCheck"
@@ -733,10 +730,18 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var UnitSelect = personalSettingModule.querySelector("#UnitSelect");
 
   var UIStyleSelect = personalSettingModule.querySelector("#UIStyleSelect");
-  var InteriorLightColor = personalSettingModule.querySelector("#InteriorLightColor");
-  var PreferredMusicSelect = personalSettingModule.querySelector("#PreferredMusicSelect");
-  var ParkingBeepLevelSelect = personalSettingModule.querySelector("#ParkingBeepLevelSelect");
-  var ADASBeepLevelSelect = personalSettingModule.querySelector("#ADASBeepLevelSelect");
+  var InteriorLightColor = personalSettingModule.querySelector(
+    "#InteriorLightColor"
+  );
+  var PreferredMusicSelect = personalSettingModule.querySelector(
+    "#PreferredMusicSelect"
+  );
+  var ParkingBeepLevelSelect = personalSettingModule.querySelector(
+    "#ParkingBeepLevelSelect"
+  );
+  var ADASBeepLevelSelect = personalSettingModule.querySelector(
+    "#ADASBeepLevelSelect"
+  );
   // Event listener for the on/off button click
   onOffButton.addEventListener("click", function (event) {
     var isOn = event.target.checked;
@@ -754,15 +759,25 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       for (let item of childrenList) {
         item.setAttribute("disabled", "disabled");
       }
-      Object.entries(systemDictionary).forEach(([key,value])=>{
+      Object.entries(systemDictionary).forEach(([key, value]) => {
         value.onOff = false;
-      })
+      });
       personalSettingModule.querySelector("#SeatPositionCheck").checked = false;
-      personalSettingModule.querySelector("#ACTemperatureCheck").checked = false;
-      personalSettingModule.querySelector("#ACAirFlowLevelCheck").checked = false;
-      personalSettingModule.querySelector("#SteeringWheelWarmCheck").checked = false;
-      personalSettingModule.querySelector("#SeatHeatLevelCheck").checked = false;
-      personalSettingModule.querySelector("#SeatVentilationCheck").checked = false;
+      personalSettingModule.querySelector(
+        "#ACTemperatureCheck"
+      ).checked = false;
+      personalSettingModule.querySelector(
+        "#ACAirFlowLevelCheck"
+      ).checked = false;
+      personalSettingModule.querySelector(
+        "#SteeringWheelWarmCheck"
+      ).checked = false;
+      personalSettingModule.querySelector(
+        "#SeatHeatLevelCheck"
+      ).checked = false;
+      personalSettingModule.querySelector(
+        "#SeatVentilationCheck"
+      ).checked = false;
       personalSettingModule.querySelector("#AutoHoldCheck").checked = false;
       personalSettingModule.querySelector("#MirrorStatusCheck").checked = false;
       personalSettingModule.querySelector("#DriveModeCheck").checked = false;
@@ -774,7 +789,6 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     console.log("On/Off:", isOn);
   });
 
-
   SeatPositionCheck.addEventListener("click", function (event) {
     systemDictionary["seatPosition"].onOff = event.target.checked;
     console.log("On/Off:", systemDictionary["seatPosition"].onOff);
@@ -784,10 +798,10 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     console.log("On/Off:", isOn);
   });
   MirrorStatusCheck.addEventListener("click", function (event) {
-    systemDictionary.mirrorLeftTilt.onOff= event.target.checked;
-    systemDictionary.mirrorLeftPan.onOff= event.target.checked;
-    systemDictionary.mirrorRightTilt.onOff= event.target.checked;
-    systemDictionary.mirrorRightPan.onOff= event.target.checked;
+    systemDictionary.mirrorLeftTilt.onOff = event.target.checked;
+    systemDictionary.mirrorLeftPan.onOff = event.target.checked;
+    systemDictionary.mirrorRightTilt.onOff = event.target.checked;
+    systemDictionary.mirrorRightPan.onOff = event.target.checked;
     console.log("On/Off:", systemDictionary.mirrorLeftTilt.onOff);
   });
   DriveModeCheck.addEventListener("click", function (event) {
@@ -800,7 +814,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   });
   ACTemperatureCheck.addEventListener("click", function (event) {
     systemDictionary.ACTemperatureIfCold.onOff = event.target.checked;
-    systemDictionary.ACTemperatureIfHot.onOff = event.target.checked
+    systemDictionary.ACTemperatureIfHot.onOff = event.target.checked;
     console.log("On/Off:", event.target.checked);
   });
   SteeringWheelWarmCheck.addEventListener("click", function (event) {
@@ -817,55 +831,46 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     console.log("On/Off:", systemDictionary.SeatVentilation.onOff);
   });
 
-  LanguageSelect.onchange = function(){
+  LanguageSelect.onchange = function () {
     systemDictionary.language.val = this.value;
-    console.log("language：",this.value);
-  }
+    console.log("language：", this.value);
+  };
 
-  UIStyleSelect.onchange = function(){
+  UIStyleSelect.onchange = function () {
     systemDictionary.UIInterface.val = this.value;
-    console.log("Selected UI style：",this.value);
-  }
+    console.log("Selected UI style：", this.value);
+  };
 
-  UnitSelect.onchange = function(){
+  UnitSelect.onchange = function () {
     systemDictionary.USMetricUnit.val = this.value;
-    console.log("Selected Unit:",this.value);
+    console.log("Selected Unit:", this.value);
     changeTemperatureUnit(this.value);
-  }
+  };
 
-  PreferredMusicSelect.onchange = function(){
+  PreferredMusicSelect.onchange = function () {
     systemDictionary.musicURI.val = this.value;
-    console.log("Selected Unit:",this.value);
-  }
+    console.log("Selected Unit:", this.value);
+  };
 
-  InteriorLightColor.onchange = function(){
-    console.log("color：",this.value);
-    systemDictionary.InteriorLight.val = this.value.replace("#","");
-  }
+  InteriorLightColor.onchange = function () {
+    console.log("color：", this.value);
+    systemDictionary.InteriorLight.val = this.value.replace("#", "");
+  };
 
-  ParkingBeepLevelSelect.onchange = function(){
+  ParkingBeepLevelSelect.onchange = function () {
     systemDictionary.parkingBeepLevel.val = this.value;
-    console.log("Parking Beep Level：",this.value);
-  }
+    console.log("Parking Beep Level：", this.value);
+  };
 
-  ADASBeepLevelSelect.onchange = function(){
+  ADASBeepLevelSelect.onchange = function () {
     systemDictionary.ADASBeepLevel.val = this.value;
-    console.log("ADAS Beep Level：",this.value);
-  }
-
-
-  
-
-
-
-
+    console.log("ADAS Beep Level：", this.value);
+  };
 
   widgets.register("Setting1", (box) => {
     box.injectNode(personalSettingModule);
   });
 
-
-  
   const flowChartModule = document.createElement("div");
   flowChartModule.innerHTML = `
     <head>
@@ -1010,9 +1015,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     </body> 
     `;
 
-  
   var drawFlag = true;
-
 
   var previousVal = null;
   var previousType = null;
@@ -1173,8 +1176,8 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     //   setTimeout(function () {
     //     drawTree(tree.middle);
     //   }, 2000);
-    // } else 
-    if(!drawFlag){
+    // } else
+    if (!drawFlag) {
       setTimeout(function () {
         var space = flowChartModule.querySelector("#flowChart");
         var html = "";
@@ -1221,29 +1224,29 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     }
   }
 
-  function getDirection(val){
-    if(val.state == "Driver Memory"){
-        if(selectedDriverName == val.leftCondition){
-            isPersonal = true;
-            return "left";
-        }else if(selectedDriverName == val.middleCondition){
-            isPersonal = true;
-            return "middle";
-        }
-        isPersonal = false;
-        return "right";
-    }else if (val.state == "temp < 9"){
-        if(OutsideTemperature < 9){
-          return "left";
-        }else{
-          return "middle";
-        }
-    }else if (val.state == "temp > 25"){
-        if (OutsideTemperature > 25){
-          return "left";
-        }else{
-          return "middle";
-        }
+  function getDirection(val) {
+    if (val.state == "Driver Memory") {
+      if (selectedDriverName == val.leftCondition) {
+        isPersonal = true;
+        return "left";
+      } else if (selectedDriverName == val.middleCondition) {
+        isPersonal = true;
+        return "middle";
+      }
+      isPersonal = false;
+      return "right";
+    } else if (val.state == "temp < 9") {
+      if (OutsideTemperature < 9) {
+        return "left";
+      } else {
+        return "middle";
+      }
+    } else if (val.state == "temp > 25") {
+      if (OutsideTemperature > 25) {
+        return "left";
+      } else {
+        return "middle";
+      }
     }
     return null;
   }
@@ -1255,7 +1258,8 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   // widget for externalSetting
   const bigBoxModule = document.createElement("div");
   bigBoxModule.setAttribute("style", `height: 100%; width: 100%;`);
-  bigBoxModule.innerHTML = `
+  bigBoxModule.innerHTML =
+    `
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1332,8 +1336,17 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                     </div>
                   </div>
                 
+                  <div id="displayVideo" style="width:100%;height:100%;border:1px solid black;display:block;"> 
+                    <video class="bigBoxVideo" id="doorClose" autoplay playsinline muted src='https://digitalauto-media-data.netlify.app/DoorClose720x360.mp4' style = "display:block;height:100%;width:100%;object-fit:contain;">
+                    </video>
+                    <video class="bigBoxVideo" id="doorOpen" preload playsinline muted src='https://digitalauto-media-data.netlify.app/DoorOpen720x360.mp4' style = "display:none;height:100%;width:100%;object-fit:contain;">
+                    </video>
+                    <video class="bigBoxVideo" id="seatAdjust" preload playsinline muted src='https://digitalauto-media-data.netlify.app/SeatGoUp720x360.mp4' style = "display:none;height:100%;width:100%;object-fit:contain;">
+                    </video>
                     
-                  <div style="width:100%;height:100%;border:1px solid black;">
+                  </div>
+                  <div id="displayCockpit" style="width:100%;height:100%;border:1px solid black;display:none;">
+                    
                     <div id="welcomeWord">
 
                     </div>
@@ -1343,7 +1356,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
                     </div>
                     <div id="music">
-
+                      <audio src = "" controls>
                     </div>
                     <div id="units">
 
@@ -1441,11 +1454,15 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                             Seat Position:&nbsp;
                                         </span>
                                         <span id="seatPositionRangeDisplay" style="text-decoration:underline;">
-                                            ` + systemDictionary["seatPosition"].val + `
+                                            ` +
+    systemDictionary["seatPosition"].val +
+    `
                                         </span> mm
                                     </div>
                                     <div class="col-5">
-                                        <input type="range" class="form-range float-end driver-input-child" min="0" max="500" id="SeatPositionRange" value="`+ systemDictionary["seatPosition"].val +`">
+                                        <input type="range" class="form-range float-end driver-input-child" min="0" max="500" id="SeatPositionRange" value="` +
+    systemDictionary["seatPosition"].val +
+    `">
                                     </div>
                                     
                                 </div>
@@ -1461,14 +1478,18 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                                 AC temperature if cold:&nbsp;
                                             </span>
                                             <span id="ACTemperatureIfColdRangeDisplay" style="text-decoration:underline;" class="temperatureValue">
-                                                `+ systemDictionary.ACTemperatureIfCold.val +`
+                                                ` +
+    systemDictionary.ACTemperatureIfCold.val +
+    `
                                             </span>
                                             <span class="temperatureUnit">
                                               °C
                                             </span>
                                         </div>
                                         <div class="col-5">
-                                            <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.ACTemperatureIfCold.val +`" id="ACTemperatureIfColdRange">
+                                            <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="` +
+    systemDictionary.ACTemperatureIfCold.val +
+    `" id="ACTemperatureIfColdRange">
                                         </div>
                                     </div>
                             </td>
@@ -1482,14 +1503,18 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                                 AC temperature if hot:&nbsp;
                                             </span>
                                             <span id="ACTemperatureIfHotRangeDisplay" style="text-decoration:underline;"  class="temperatureValue">
-                                                `+ systemDictionary.ACTemperatureIfHot.val +`
+                                                ` +
+    systemDictionary.ACTemperatureIfHot.val +
+    `
                                             </span>
                                             <span class="temperatureUnit">
                                               °C
                                             </span>
                                         </div>
                                         <div class="col-5">
-                                            <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.ACTemperatureIfHot.val +`" id="ACTemperatureIfHotRange">
+                                            <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="` +
+    systemDictionary.ACTemperatureIfHot.val +
+    `" id="ACTemperatureIfHotRange">
                                         </div>
                                     </div>
                             </td>
@@ -1504,11 +1529,15 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                             AC Air Flow Level:&nbsp;
                                         </span>
                                         <span id="ACAirFlowLevelRangeDisplay" style="text-decoration:underline;">
-                                            `+ systemDictionary.ACAirFlowLevel.val +`
+                                            ` +
+    systemDictionary.ACAirFlowLevel.val +
+    `
                                         </span>
                                     </div>
                                     <div class="col-5">
-                                        <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.ACAirFlowLevel.val +`" id="ACAirFlowLevelRange">
+                                        <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="` +
+    systemDictionary.ACAirFlowLevel.val +
+    `" id="ACAirFlowLevelRange">
                                     </div>
                                 </div>
                                    
@@ -1523,11 +1552,15 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                         Steering Wheel Warm:&nbsp;
                                     </span>
                                     <span id="SteeringWheelWarmRangeDisplay" style="text-decoration:underline;">
-                                      `+ systemDictionary.SteeringWheelWarm.val +`
+                                      ` +
+    systemDictionary.SteeringWheelWarm.val +
+    `
                                     </span>
                                 </div>
                                 <div class="col-5">
-                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.SteeringWheelWarm.val +`" id="SteeringWheelWarmRange">
+                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="` +
+    systemDictionary.SteeringWheelWarm.val +
+    `" id="SteeringWheelWarmRange">
                                 </div>
                             </div>
                             
@@ -1542,11 +1575,15 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                             Seat Heat Level:&nbsp;
                                         </span>
                                         <span id="SeatHeatLevelRangeDisplay" style="text-decoration:underline;">
-                                            `+ systemDictionary.SeatHeatLevel.val +`
+                                            ` +
+    systemDictionary.SeatHeatLevel.val +
+    `
                                         </span>
                                     </div>
                                     <div class="col-5">
-                                        <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.SeatHeatLevel.val +`" id="SeatHeatLevelRange">
+                                        <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="` +
+    systemDictionary.SeatHeatLevel.val +
+    `" id="SeatHeatLevelRange">
                                     </div>
                                 </div>
                         </td>
@@ -1560,11 +1597,15 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                         Seat Ventilation:&nbsp;
                                     </span>
                                     <span id="SeatVentilationRangeDisplay" style="text-decoration:underline;">
-                                    `+ systemDictionary.SeatVentilation.val +`
+                                    ` +
+    systemDictionary.SeatVentilation.val +
+    `
                                     </span>
                                 </div>
                                 <div class="col-5">
-                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.SeatVentilation.val +`" id="SeatVentilationRange">
+                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="` +
+    systemDictionary.SeatVentilation.val +
+    `" id="SeatVentilationRange">
                                 </div>
                             </div>
                         </td>
@@ -1589,11 +1630,15 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                         mirrorLeftTilt:&nbsp;
                                       </span>
                                       <span id="mirrorLeftTiltRangeDisplay" style="text-decoration:underline;">
-                                          `+  systemDictionary.mirrorLeftTilt.val +`
+                                          ` +
+    systemDictionary.mirrorLeftTilt.val +
+    `
                                       </span>
                                   </div>
                                   <div class="col-5">
-                                      <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.mirrorLeftTilt.val +`" id="mirrorLeftTiltRange">
+                                      <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="` +
+    systemDictionary.mirrorLeftTilt.val +
+    `" id="mirrorLeftTiltRange">
                                   </div>
                               </div>
                               </td>
@@ -1607,11 +1652,15 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                       mirrorLeftPan:&nbsp;
                                     </span>
                                     <span id="mirrorLeftPanRangeDisplay" style="text-decoration:underline;">
-                                    `+  systemDictionary.mirrorLeftPan.val +`
+                                    ` +
+    systemDictionary.mirrorLeftPan.val +
+    `
                                     </span>
                                 </div>
                                 <div class="col-5">
-                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.mirrorLeftPan.val +`" id="mirrorLeftPanRange">
+                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="` +
+    systemDictionary.mirrorLeftPan.val +
+    `" id="mirrorLeftPanRange">
                                 </div>
                             </div>
                             </td>
@@ -1625,11 +1674,15 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                         mirrorRightTilt:&nbsp;
                                     </span>
                                     <span id="mirrorRightTiltRangeDisplay" style="text-decoration:underline;">
-                                      `+ systemDictionary.mirrorRightTilt.val +`
+                                      ` +
+    systemDictionary.mirrorRightTilt.val +
+    `
                                     </span>
                                 </div>
                                 <div class="col-5">
-                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.mirrorRightTilt.val +`" id="mirrorRightTiltRange">
+                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="` +
+    systemDictionary.mirrorRightTilt.val +
+    `" id="mirrorRightTiltRange">
                                 </div>
                             </div>
                             </td>
@@ -1643,11 +1696,15 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                     mirrorRightPan:&nbsp;
                                     </span>
                                     <span id="mirrorRightPanRangeDisplay" style="text-decoration:underline;">
-                                      `+ systemDictionary.mirrorRightPan.val +`
+                                      ` +
+    systemDictionary.mirrorRightPan.val +
+    `
                                     </span>
                                 </div>
                                 <div class="col-5">
-                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="`+ systemDictionary.mirrorRightPan.val +`" id="mirrorRightPanRange">
+                                    <input type="range" class="form-range driver-input-child float-end" min="-50" max="50" value="` +
+    systemDictionary.mirrorRightPan.val +
+    `" id="mirrorRightPanRange">
                                 </div>
                             </div>
                          </td>
@@ -1693,6 +1750,23 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   // var RainIntensityRange = bigBoxModule.querySelector('#rainRange');
   // RainIntensityRange.addEventListener('click',function(event){})
+
+  SignalWithMedia(
+    bigBoxModule.querySelector("#displayVideo"),
+    "Vehicle.Cabin.Door.Row1.Left.IsOpen",
+    {
+      [true]: {
+        type: "video",
+        url: "https://digitalauto-media-data.netlify.app/DoorOpen720x360.mp4",
+      },
+      [false]: {
+        type: "video",
+        url: "https://digitalauto-media-data.netlify.app/DoorClose720x360.mp4",
+      },
+    },
+    vehicle
+  );
+
   var RainIntensityRange2 = bigBoxModule.querySelector("#rainRange");
   RainIntensityRange2.addEventListener("click", function (event) {
     rainIntensity = event.target.value;
@@ -1704,12 +1778,12 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   temperatureRange2.addEventListener("click", function (event) {
     OutsideTemperature = event.target.value;
     console.log("OutsideTemperature:", OutsideTemperature);
-    if(systemDictionary.USMetricUnit.val == "US"){
+    if (systemDictionary.USMetricUnit.val == "US") {
       bigBoxModule.querySelector("#temperatureRangeDisplay").innerHTML =
-      toFahrenheit(OutsideTemperature);
-    }else if(systemDictionary.USMetricUnit.val == "Metric"){
+        toFahrenheit(OutsideTemperature);
+    } else if (systemDictionary.USMetricUnit.val == "Metric") {
       bigBoxModule.querySelector("#temperatureRangeDisplay").innerHTML =
-      OutsideTemperature;
+        OutsideTemperature;
     }
   });
 
@@ -1718,48 +1792,60 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     systemDictionary.seatPosition.val = event.target.value;
     console.log("Seat Position:", systemDictionary.seatPosition.val);
     bigBoxModule.querySelector("#seatPositionRangeDisplay").innerHTML =
-    systemDictionary.seatPosition.val;
+      systemDictionary.seatPosition.val;
   });
 
-  var ACTemperatureIfHotRange = bigBoxModule.querySelector("#ACTemperatureIfHotRange");
+  var ACTemperatureIfHotRange = bigBoxModule.querySelector(
+    "#ACTemperatureIfHotRange"
+  );
   ACTemperatureIfHotRange.addEventListener("click", function (event) {
     systemDictionary.ACTemperatureIfHot.val = event.target.value;
-    console.log("AC Temperature IfHot:", systemDictionary.ACTemperatureIfHot.val);   
-    if(systemDictionary.USMetricUnit.val == "US"){
+    console.log(
+      "AC Temperature IfHot:",
+      systemDictionary.ACTemperatureIfHot.val
+    );
+    if (systemDictionary.USMetricUnit.val == "US") {
       bigBoxModule.querySelector("#ACTemperatureIfHotRangeDisplay").innerHTML =
-      toFahrenheit(event.target.value);
-    }else if(systemDictionary.USMetricUnit.val == "Metric"){
+        toFahrenheit(event.target.value);
+    } else if (systemDictionary.USMetricUnit.val == "Metric") {
       bigBoxModule.querySelector("#ACTemperatureIfHotRangeDisplay").innerHTML =
-      event.target.value;
+        event.target.value;
     }
   });
 
-  var ACTemperatureIfColdRange = bigBoxModule.querySelector("#ACTemperatureIfColdRange");
+  var ACTemperatureIfColdRange = bigBoxModule.querySelector(
+    "#ACTemperatureIfColdRange"
+  );
   ACTemperatureIfColdRange.addEventListener("click", function (event) {
     systemDictionary.ACTemperatureIfCold.val = event.target.value;
-    console.log("AC Temperature IfCold:", systemDictionary.ACTemperatureIfCold.val);
-    if(systemDictionary.USMetricUnit.val == "US"){
+    console.log(
+      "AC Temperature IfCold:",
+      systemDictionary.ACTemperatureIfCold.val
+    );
+    if (systemDictionary.USMetricUnit.val == "US") {
       bigBoxModule.querySelector("#ACTemperatureIfColdRangeDisplay").innerHTML =
-      toFahrenheit(event.target.value);
-    }else if(systemDictionary.USMetricUnit.val == "Metric"){
+        toFahrenheit(event.target.value);
+    } else if (systemDictionary.USMetricUnit.val == "Metric") {
       bigBoxModule.querySelector("#ACTemperatureIfColdRangeDisplay").innerHTML =
-      event.target.value;
+        event.target.value;
     }
   });
 
   var ACAirFlowLevelRange = bigBoxModule.querySelector("#ACAirFlowLevelRange");
   ACAirFlowLevelRange.addEventListener("click", function (event) {
     systemDictionary.ACAirFlowLevel.val = event.target.value;
-    console.log("AC Air Flow Level:",systemDictionary.ACAirFlowLevel.val);
+    console.log("AC Air Flow Level:", systemDictionary.ACAirFlowLevel.val);
     bigBoxModule.querySelector("#ACAirFlowLevelRangeDisplay").innerHTML =
       systemDictionary.ACAirFlowLevel.val;
   });
-  var SteeringWheelWarmRange = bigBoxModule.querySelector("#SteeringWheelWarmRange");
+  var SteeringWheelWarmRange = bigBoxModule.querySelector(
+    "#SteeringWheelWarmRange"
+  );
   SteeringWheelWarmRange.addEventListener("click", function (event) {
     systemDictionary.SteeringWheelWarm.val = event.target.value;
     console.log("Steering Wheel Warm:", systemDictionary.SteeringWheelWarm.val);
     bigBoxModule.querySelector("#SteeringWheelWarmRangeDisplay").innerHTML =
-        systemDictionary.SteeringWheelWarm.val;
+      systemDictionary.SteeringWheelWarm.val;
   });
 
   var SeatHeatLevelRange = bigBoxModule.querySelector("#SeatHeatLevelRange");
@@ -1770,7 +1856,9 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       systemDictionary.SeatHeatLevel.val;
   });
 
-  var SeatVentilationRange = bigBoxModule.querySelector("#SeatVentilationRange");
+  var SeatVentilationRange = bigBoxModule.querySelector(
+    "#SeatVentilationRange"
+  );
   SeatVentilationRange.addEventListener("click", function (event) {
     systemDictionary.SeatVentilation.val = event.target.value;
     console.log("Seat Ventilation:", systemDictionary.SeatVentilation.val);
@@ -1783,7 +1871,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     systemDictionary.mirrorLeftTilt.val = event.target.value;
     console.log("mirrorLeftTilt:", systemDictionary.mirrorLeftTilt.val);
     bigBoxModule.querySelector("#mirrorLeftTiltRangeDisplay").innerHTML =
-    systemDictionary.mirrorLeftTilt.val;
+      systemDictionary.mirrorLeftTilt.val;
   });
 
   var mirrorLeftPanRange = bigBoxModule.querySelector("#mirrorLeftPanRange");
@@ -1791,15 +1879,17 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     systemDictionary.mirrorLeftPan.val = event.target.value;
     console.log("mirrorLeftPan:", systemDictionary.mirrorLeftPan.val);
     bigBoxModule.querySelector("#mirrorLeftPanRangeDisplay").innerHTML =
-    systemDictionary.mirrorLeftPan.val;
+      systemDictionary.mirrorLeftPan.val;
   });
 
-  var mirrorRightTiltRange = bigBoxModule.querySelector("#mirrorRightTiltRange");
+  var mirrorRightTiltRange = bigBoxModule.querySelector(
+    "#mirrorRightTiltRange"
+  );
   mirrorRightTiltRange.addEventListener("click", function (event) {
     systemDictionary.mirrorRightTilt.val = event.target.value;
     console.log("mirrorRightTilt:", systemDictionary.mirrorRightTilt.val);
     bigBoxModule.querySelector("#mirrorRightTiltRangeDisplay").innerHTML =
-    systemDictionary.mirrorRightTilt.val;
+      systemDictionary.mirrorRightTilt.val;
   });
 
   var mirrorRightPanRange = bigBoxModule.querySelector("#mirrorRightPanRange");
@@ -1807,26 +1897,18 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     systemDictionary.mirrorRightPan.val = event.target.value;
     console.log("mirrorRightPan:", systemDictionary.mirrorRightPan.val);
     bigBoxModule.querySelector("#mirrorRightPanRangeDisplay").innerHTML =
-    systemDictionary.mirrorRightPan.val;
+      systemDictionary.mirrorRightPan.val;
   });
 
-
-
-
-
-
-
-
   var AutoHoldControl = bigBoxModule.querySelector("#AutoHoldControl");
-  
+
   var DriveModeControl = bigBoxModule.querySelector("#DriveModeControl");
 
   var closeAlert = bigBoxModule.querySelector("#closeAlert");
   var alertDiv = bigBoxModule.querySelector("#liveToast");
   closeAlert.addEventListener("click", function (event) {
-    alertDiv.setAttribute("class","toast");
+    alertDiv.setAttribute("class", "toast");
   });
-
 
   AutoHoldControl.addEventListener("click", function (event) {
     AutoHoldIsOn = event.target.checked;
@@ -1837,8 +1919,6 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     systemDictionary.driveMode.val = event.target.checked;
     console.log("On/Off:", systemDictionary.driveMode.val);
   });
-
-
 
   var personDic = {
     Person1: ["custom", "Customize your own"],
@@ -1894,12 +1974,16 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var previousTab = null;
   var previousContent = null;
   for (var key in personDic) {
-    bigBoxModule.querySelector("#" + key).addEventListener("click", function (event) {
+    bigBoxModule
+      .querySelector("#" + key)
+      .addEventListener("click", function (event) {
         selectedDriverName = personDic[this.id][0];
         console.log(this.id);
-        bigBoxModule.querySelector("#pickDriver").style.border="1px solid #CCCCCC";
-        bigBoxModule.querySelector("#pickDriver").style.boxShadow = "0px 0px 0px 0px";
-        alertDiv.setAttribute("class","toast");
+        bigBoxModule.querySelector("#pickDriver").style.border =
+          "1px solid #CCCCCC";
+        bigBoxModule.querySelector("#pickDriver").style.boxShadow =
+          "0px 0px 0px 0px";
+        alertDiv.setAttribute("class", "toast");
         switchSystemDictionary(personDic[this.id][0]);
         if (previousTab != null) {
           previousTab.setAttribute(
@@ -1917,15 +2001,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         previousContent.setAttribute("class", "tab-pane fade show active");
         driverName.innerHTML = personDic[this.id][0];
         driverWelcome.innerHTML = personDic[this.id][1];
-        
-
 
         let inputList = personalSettingModule.querySelectorAll(
           ".driver-input-child"
         );
-        let inputList2 = bigBoxModule.querySelectorAll(
-          ".driver-input-child"
-        );
+        let inputList2 = bigBoxModule.querySelectorAll(".driver-input-child");
         if (personDic[this.id][0] == "custom") {
           for (let item of inputList) {
             if (item.getAttribute("disabled")) {
@@ -1952,266 +2032,347 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   }
 
   var dividing = false;
-  function nextStep(){
-      if(!dividing){
-        if(curTree.type == "activity"){
-            drawTree(curTree);
-            curTree = curTree.middle;
-        }else if (curTree.type == "judge"){
-            moveDirection = getDirection(curTree.val);
-            dividing = true;
-            drawTree(curTree);
-            
-        }
-    }else{
-        dividing = false;
-        if(moveDirection == "left"){ 
-          curTree = curTree.left;
-          drawTree(curTree);
-        }else if(moveDirection == "middle"){
-          curTree = curTree.middle;
-            drawTree(curTree);
-        }else if(moveDirection == "right"){
-          curTree = curTree.right;
-            drawTree(curTree);
-        }
+  function nextStep() {
+    if (!dividing) {
+      if (curTree.type == "activity") {
+        drawTree(curTree);
+        curTree = curTree.middle;
+      } else if (curTree.type == "judge") {
+        moveDirection = getDirection(curTree.val);
+        dividing = true;
+        drawTree(curTree);
+      }
+    } else {
+      dividing = false;
+      if (moveDirection == "left") {
+        curTree = curTree.left;
+        drawTree(curTree);
+      } else if (moveDirection == "middle") {
+        curTree = curTree.middle;
+        drawTree(curTree);
+      } else if (moveDirection == "right") {
+        curTree = curTree.right;
+        drawTree(curTree);
+      }
 
-        if(curTree.type == "judge"){
-          moveDirection = getDirection(curTree.val);
-          dividing = true;
-          console.log(moveDirection)
-        }else{
-          curTree = curTree.middle;
-        }
-        
+      if (curTree.type == "judge") {
+        moveDirection = getDirection(curTree.val);
+        dividing = true;
+        console.log(moveDirection);
+      } else {
+        curTree = curTree.middle;
+      }
+    }
+  }
+  var videoDiv = bigBoxModule.querySelector("#displayVideo");
+  var cockpitDiv = bigBoxModule.querySelector("#displayCockpit");
+
+  var did = setInterval(catchDoorSignal, 500);
+  async function catchDoorSignal() {
+    console.log("catch door signal")
+    var doorSignal = await vehicle["Cabin.Door.Row1.Left.IsOpen"].get();
+    if (doorSignal == true) {
+      console.log("door true")
+      playVideo(
+        "doorOpen",
+        "https://digitalauto-media-data.netlify.app/DoorOpen720x360.mp4"
+      );
+  
+      clearInterval(did);
     }
   }
 
+  var sid = setInterval(catchSeatSignal, 500);
 
+  async function catchSeatSignal() {
+    console.log("catch seat signal")
+    var seatSignal = await vehicle["Cabin.Seat.Row1.Pos1.Height"].get();
+    if (seatSignal == "100" || seatSignal == 100) {
+      console.log("seat true")
+      playVideo(
+        "seatAdjust",
+        "https://digitalauto-media-data.netlify.app/SeatGoUp720x360.mp4"
+      );
+  
+      clearInterval(sid);
+    }
+  }
 
-  function updateWebpage(pickedDriverName){
-    
+  function displayVideo(){
 
-    if(pickedDriverName == "Default_Driver" || pickedDriverName == "Kyrie_Irving"){
+    cockpitDiv.style.display = "none";
+    videoDiv.style.display = "block";
+  }
+
+  function displayCockpit(){
+
+    cockpitDiv.style.display = "block";
+    videoDiv.style.display = "none";
+  }
+  function playVideo(target, url) {
+    console.log("play")
+
+    let videoList = bigBoxModule.querySelectorAll(".bigBoxVideo");
+    for(let videoItem of videoList){
+      videoItem.style.display = "none";
+    }
+    let targetVideo = bigBoxModule.querySelector("#"+target);
+    targetVideo.style.display = "block";
+    targetVideo.play();
+    // videoDiv.innerHTML =
+    //   `
+    //     <video id='` +
+    //   target +
+    //   `'
+    //     playsinline autoplay muted
+    //     src='` +
+    //   url +
+    //   `'
+    //     style="display:block;height: 100%; width: 100%; object-fit: contain;"
+    //     ></video>
+    //   `;
+    displayVideo();
+  }
+  
+
+  // clearInterval(catchSignal)
+
+  function updateWebpage(pickedDriverName) {
+    if (
+      pickedDriverName == "Default_Driver" ||
+      pickedDriverName == "Kyrie_Irving"
+    ) {
       updateWebpageContent(allDriverDictionary[pickedDriverName]);
-    }else{
+    } else {
       updateWebpageContent(customizedDictionary);
-
     }
-
   }
-  function updateWebpageContent(dictionary){
+  function updateWebpageContent(dictionary) {
     console.log("update webpage");
     console.log(dictionary["seatPosition"].val);
     changeTemperatureUnit(dictionary["USMetricUnit"].val);
-    personalSettingModule.querySelector("#"+dictionary["language"].val).selected = true;
+    personalSettingModule.querySelector(
+      "#" + dictionary["language"].val
+    ).selected = true;
 
-    personalSettingModule.querySelector("#"+dictionary["UIInterface"].val).selected = true;
+    personalSettingModule.querySelector(
+      "#" + dictionary["UIInterface"].val
+    ).selected = true;
 
-    personalSettingModule.querySelector("#"+dictionary["USMetricUnit"].val).selected = true;
+    personalSettingModule.querySelector(
+      "#" + dictionary["USMetricUnit"].val
+    ).selected = true;
 
-    personalSettingModule.querySelector("#optionParking"+dictionary["parkingBeepLevel"].val).selected = true;
+    personalSettingModule.querySelector(
+      "#optionParking" + dictionary["parkingBeepLevel"].val
+    ).selected = true;
 
-    personalSettingModule.querySelector("#optionADAS"+dictionary["ADASBeepLevel"].val).selected = true;
+    personalSettingModule.querySelector(
+      "#optionADAS" + dictionary["ADASBeepLevel"].val
+    ).selected = true;
 
-    personalSettingModule.querySelector("#option"+dictionary["musicURI"].val).selected = true;
+    personalSettingModule.querySelector(
+      "#option" + dictionary["musicURI"].val
+    ).selected = true;
 
-    personalSettingModule.querySelector("#InteriorLightColor").value = "#" + dictionary["InteriorLight"].val;
+    personalSettingModule.querySelector("#InteriorLightColor").value =
+      "#" + dictionary["InteriorLight"].val;
 
-    personalSettingModule.querySelector("#SeatPositionCheck").checked = dictionary["seatPosition"].onOff;
-    
-    personalSettingModule.querySelector("#ACTemperatureCheck").checked = dictionary["ACTemperatureIfCold"].onOff;
-    
-    personalSettingModule.querySelector("#ACAirFlowLevelCheck").checked = dictionary["ACAirFlowLevel"].onOff;
-    
-    personalSettingModule.querySelector("#SteeringWheelWarmCheck").checked = dictionary["SteeringWheelWarm"].onOff;
-    
-    personalSettingModule.querySelector("#SeatHeatLevelCheck").checked = dictionary["SeatHeatLevel"].onOff;
-    
-    personalSettingModule.querySelector("#SeatVentilationCheck").checked = dictionary["SeatVentilation"].onOff;
-    
-    personalSettingModule.querySelector("#AutoHoldCheck").checked = dictionary["AutoHold"].onOff;
-    
-    personalSettingModule.querySelector("#MirrorStatusCheck").checked = dictionary["mirrorLeftTilt"].onOff;
-    
-    personalSettingModule.querySelector("#DriveModeCheck").checked = dictionary["driveMode"].onOff;
-  
+    personalSettingModule.querySelector("#SeatPositionCheck").checked =
+      dictionary["seatPosition"].onOff;
 
+    personalSettingModule.querySelector("#ACTemperatureCheck").checked =
+      dictionary["ACTemperatureIfCold"].onOff;
 
-    bigBoxModule.querySelector("#seatPositionRangeDisplay").innerHTML = dictionary["seatPosition"].val;
-    bigBoxModule.querySelector("#SeatPositionRange").value = dictionary["seatPosition"].val;
+    personalSettingModule.querySelector("#ACAirFlowLevelCheck").checked =
+      dictionary["ACAirFlowLevel"].onOff;
 
-    bigBoxModule.querySelector("#ACTemperatureIfColdRangeDisplay").innerHTML = dictionary["ACTemperatureIfCold"].val;
-    bigBoxModule.querySelector("#ACTemperatureIfColdRange").value = dictionary["ACTemperatureIfCold"].val;
+    personalSettingModule.querySelector("#SteeringWheelWarmCheck").checked =
+      dictionary["SteeringWheelWarm"].onOff;
 
-    bigBoxModule.querySelector("#ACTemperatureIfHotRangeDisplay").innerHTML = dictionary["ACTemperatureIfHot"].val;
-    bigBoxModule.querySelector("#ACTemperatureIfHotRange").value = dictionary["ACTemperatureIfHot"].val;
+    personalSettingModule.querySelector("#SeatHeatLevelCheck").checked =
+      dictionary["SeatHeatLevel"].onOff;
 
-    bigBoxModule.querySelector("#ACAirFlowLevelRangeDisplay").innerHTML = dictionary["ACAirFlowLevel"].val;
-    bigBoxModule.querySelector("#ACAirFlowLevelRange").value = dictionary["ACAirFlowLevel"].val;
+    personalSettingModule.querySelector("#SeatVentilationCheck").checked =
+      dictionary["SeatVentilation"].onOff;
 
-    bigBoxModule.querySelector("#SteeringWheelWarmRangeDisplay").innerHTML = dictionary["SteeringWheelWarm"].val;
-    bigBoxModule.querySelector("#SteeringWheelWarmRange").value = dictionary["SteeringWheelWarm"].val;
+    personalSettingModule.querySelector("#AutoHoldCheck").checked =
+      dictionary["AutoHold"].onOff;
 
-    bigBoxModule.querySelector("#SeatHeatLevelRangeDisplay").innerHTML = dictionary["SeatHeatLevel"].val;
-    bigBoxModule.querySelector("#SeatHeatLevelRange").value = dictionary["SeatHeatLevel"].val;
+    personalSettingModule.querySelector("#MirrorStatusCheck").checked =
+      dictionary["mirrorLeftTilt"].onOff;
 
-    bigBoxModule.querySelector("#SeatVentilationRangeDisplay").innerHTML = dictionary["SeatVentilation"].val;
-    bigBoxModule.querySelector("#SeatVentilationRange").value = dictionary["SeatVentilation"].val;
+    personalSettingModule.querySelector("#DriveModeCheck").checked =
+      dictionary["driveMode"].onOff;
+
+    bigBoxModule.querySelector("#seatPositionRangeDisplay").innerHTML =
+      dictionary["seatPosition"].val;
+    bigBoxModule.querySelector("#SeatPositionRange").value =
+      dictionary["seatPosition"].val;
+
+    bigBoxModule.querySelector("#ACTemperatureIfColdRangeDisplay").innerHTML =
+      dictionary["ACTemperatureIfCold"].val;
+    bigBoxModule.querySelector("#ACTemperatureIfColdRange").value =
+      dictionary["ACTemperatureIfCold"].val;
+
+    bigBoxModule.querySelector("#ACTemperatureIfHotRangeDisplay").innerHTML =
+      dictionary["ACTemperatureIfHot"].val;
+    bigBoxModule.querySelector("#ACTemperatureIfHotRange").value =
+      dictionary["ACTemperatureIfHot"].val;
+
+    bigBoxModule.querySelector("#ACAirFlowLevelRangeDisplay").innerHTML =
+      dictionary["ACAirFlowLevel"].val;
+    bigBoxModule.querySelector("#ACAirFlowLevelRange").value =
+      dictionary["ACAirFlowLevel"].val;
+
+    bigBoxModule.querySelector("#SteeringWheelWarmRangeDisplay").innerHTML =
+      dictionary["SteeringWheelWarm"].val;
+    bigBoxModule.querySelector("#SteeringWheelWarmRange").value =
+      dictionary["SteeringWheelWarm"].val;
+
+    bigBoxModule.querySelector("#SeatHeatLevelRangeDisplay").innerHTML =
+      dictionary["SeatHeatLevel"].val;
+    bigBoxModule.querySelector("#SeatHeatLevelRange").value =
+      dictionary["SeatHeatLevel"].val;
+
+    bigBoxModule.querySelector("#SeatVentilationRangeDisplay").innerHTML =
+      dictionary["SeatVentilation"].val;
+    bigBoxModule.querySelector("#SeatVentilationRange").value =
+      dictionary["SeatVentilation"].val;
 
     // autohold
 
-    bigBoxModule.querySelector("#mirrorLeftTiltRangeDisplay").innerHTML = dictionary["mirrorLeftTilt"].val;
-    bigBoxModule.querySelector("#mirrorLeftTiltRange").value = dictionary["mirrorLeftTilt"].val;
+    bigBoxModule.querySelector("#mirrorLeftTiltRangeDisplay").innerHTML =
+      dictionary["mirrorLeftTilt"].val;
+    bigBoxModule.querySelector("#mirrorLeftTiltRange").value =
+      dictionary["mirrorLeftTilt"].val;
 
-    bigBoxModule.querySelector("#mirrorLeftPanRangeDisplay").innerHTML = dictionary["mirrorLeftPan"].val;
-    bigBoxModule.querySelector("#mirrorLeftPanRange").value = dictionary["mirrorLeftPan"].val;
+    bigBoxModule.querySelector("#mirrorLeftPanRangeDisplay").innerHTML =
+      dictionary["mirrorLeftPan"].val;
+    bigBoxModule.querySelector("#mirrorLeftPanRange").value =
+      dictionary["mirrorLeftPan"].val;
 
-    bigBoxModule.querySelector("#mirrorRightTiltRangeDisplay").innerHTML = dictionary["mirrorRightTilt"].val;
-    bigBoxModule.querySelector("#mirrorRightTiltRange").value = dictionary["mirrorRightTilt"].val;
+    bigBoxModule.querySelector("#mirrorRightTiltRangeDisplay").innerHTML =
+      dictionary["mirrorRightTilt"].val;
+    bigBoxModule.querySelector("#mirrorRightTiltRange").value =
+      dictionary["mirrorRightTilt"].val;
 
-    bigBoxModule.querySelector("#mirrorRightPanRangeDisplay").innerHTML = dictionary["mirrorRightPan"].val;
-    bigBoxModule.querySelector("#mirrorRightPanRange").value = dictionary["mirrorRightPan"].val;
+    bigBoxModule.querySelector("#mirrorRightPanRangeDisplay").innerHTML =
+      dictionary["mirrorRightPan"].val;
+    bigBoxModule.querySelector("#mirrorRightPanRange").value =
+      dictionary["mirrorRightPan"].val;
 
-   // drive mode
-
+    // drive mode
   }
 
-
-  function switchSystemDictionary(pickedDriverName){
-    if(previousSelectedDriverName == "custom"){
+  function switchSystemDictionary(pickedDriverName) {
+    if (previousSelectedDriverName == "custom") {
       console.log(originalCustomDictionary);
       customizedDictionary = systemDictionary;
-      Object.entries(customizedDictionary).forEach(([key,value])=>{
-        if(value.onOff == false){
+      Object.entries(customizedDictionary).forEach(([key, value]) => {
+        if (value.onOff == false) {
           customizedDictionary[key].val = originalCustomDictionary[key].val;
         }
       });
       console.log(originalCustomDictionary);
     }
 
-    if(pickedDriverName == "Kyrie_Irving" || pickedDriverName == "Default_Driver"){
+    if (
+      pickedDriverName == "Kyrie_Irving" ||
+      pickedDriverName == "Default_Driver"
+    ) {
       systemDictionary = allDriverDictionary[pickedDriverName];
-    }else{
+    } else {
       systemDictionary = customizedDictionary;
     }
-
   }
 
-  function pasteToNewDictionary(oldDictionary){
+  function pasteToNewDictionary(oldDictionary) {
     let newDictionary = {};
     let tempValue = {};
-    Object.entries(oldDictionary).forEach(([key,value])=>{
+    Object.entries(oldDictionary).forEach(([key, value]) => {
       tempValue = {
-        val:value.val,
-        onOff:value.onOff
-      }
+        val: value.val,
+        onOff: value.onOff,
+      };
       newDictionary[key] = tempValue;
       tempValue = {};
     });
 
     return newDictionary;
   }
-  
-  function changeTemperatureUnit(targetUnit){
-    if(targetUnit == "US"){
-      bigBoxModule.querySelector("#temperatureRangeLabel").innerHTML = "-58°F ~ +122°F";
-      bigBoxModule.querySelector("#temperatureRangeDisplay").innerHTML = toFahrenheit(OutsideTemperature);
-      for(let item of bigBoxModule.querySelectorAll(".temperatureValue")){
-        let name = item.id.replace("RangeDisplay","");
+
+  function changeTemperatureUnit(targetUnit) {
+    if (targetUnit == "US") {
+      bigBoxModule.querySelector("#temperatureRangeLabel").innerHTML =
+        "-58°F ~ +122°F";
+      bigBoxModule.querySelector("#temperatureRangeDisplay").innerHTML =
+        toFahrenheit(OutsideTemperature);
+      for (let item of bigBoxModule.querySelectorAll(".temperatureValue")) {
+        let name = item.id.replace("RangeDisplay", "");
         item.innerHTML = toFahrenheit(systemDictionary[name].val);
       }
-      for(let item of bigBoxModule.querySelectorAll(".temperatureUnit")){
+      for (let item of bigBoxModule.querySelectorAll(".temperatureUnit")) {
         item.innerHTML = "°F";
       }
-    }else if(targetUnit == "Metric"){
-      bigBoxModule.querySelector("#temperatureRangeLabel").innerHTML = "-50°C ~ +50°C";
-      bigBoxModule.querySelector("#temperatureRangeDisplay").innerHTML = OutsideTemperature;
-     for(let item of bigBoxModule.querySelectorAll(".temperatureValue")){
-        let name = item.id.replace("RangeDisplay","");
+    } else if (targetUnit == "Metric") {
+      bigBoxModule.querySelector("#temperatureRangeLabel").innerHTML =
+        "-50°C ~ +50°C";
+      bigBoxModule.querySelector("#temperatureRangeDisplay").innerHTML =
+        OutsideTemperature;
+      for (let item of bigBoxModule.querySelectorAll(".temperatureValue")) {
+        let name = item.id.replace("RangeDisplay", "");
         item.innerHTML = systemDictionary[name].val;
       }
-      for(let item of bigBoxModule.querySelectorAll(".temperatureUnit")){
+      for (let item of bigBoxModule.querySelectorAll(".temperatureUnit")) {
         item.innerHTML = "°C";
       }
     }
   }
 
-  function toFahrenheit(value){
-    return Math.floor( (parseInt(value)*1.8 + 32) * 100 )/100
+  function toFahrenheit(value) {
+    return Math.floor((parseInt(value) * 1.8 + 32) * 100) / 100;
   }
 
   // function toCelsius(value){
   //   return (parseInt(value) - 32)/1.8;
   // }
 
+  simulator("Vehicle.Cabin.Seat.Row1.Pos1.Position", "get", async () => {
+    return systemDictionary.seatPosition.val;
+  });
+  simulator("Vehicle.Cabin.Lights.Spotlight.Row1.IsLeftOn", "get", async () => {
+    return interiorLight;
+  });
+  simulator("Vehicle.Cabin.Infotainment.Media.Played.URI", "get", async () => {
+    return systemDictionary.musicURI.val;
+  });
+  simulator("Vehicle.Body.Mirrors.Left.Tilt", "get", async () => {
+    return systemDictionary.mirrorLeftTilt.val;
+  });
+  simulator("Vehicle.Body.Mirrors.Left.Pan", "get", async () => {
+    return systemDictionary.mirrorLeftPan.val;
+  });
+  simulator("Vehicle.Body.Mirrors.Right.Tilt", "get", async () => {
+    return systemDictionary.mirrorRightTilt.val;
+  });
+  simulator("Vehicle.Body.Mirrors.Right.Pan", "get", async () => {
+    return systemDictionary.mirrorRightPan.val;
+  });
 
-  simulator(
-    "Vehicle.Cabin.Seat.Row1.Pos1.Position",
-    "get",
-    async () => {
-      return systemDictionary.seatPosition.val;
-    }
-  );
-  simulator(
-    "Vehicle.Cabin.Lights.Spotlight.Row1.IsLeftOn",
-    "get",
-    async () => {
-      return interiorLight;
-    }
-  );
-  simulator(
-    "Vehicle.Cabin.Infotainment.Media.Played.URI",
-    "get",
-    async () => {
-      return systemDictionary.musicURI.val;
-    }
-  );
-  simulator(
-    "Vehicle.Body.Mirrors.Left.Tilt",
-    "get",
-    async () => {
-      return systemDictionary.mirrorLeftTilt.val;
-    }
-  );
-  simulator(
-    "Vehicle.Body.Mirrors.Left.Pan",
-    "get",
-    async () => {
-      return systemDictionary.mirrorLeftPan.val;
-    }
-  );
-  simulator(
-    "Vehicle.Body.Mirrors.Right.Tilt",
-    "get",
-    async () => {
-      return systemDictionary.mirrorRightTilt.val;
-    }
-  );
-  simulator(
-    "Vehicle.Body.Mirrors.Right.Pan",
-    "get",
-    async () => {
-      return systemDictionary.mirrorRightPan.val;
-    }
-  );
-
-
-    
   widgets.register("BigBox", (box) => {
     box.injectNode(bigBoxModule);
   });
 
-  return{
-    nextStepPY : function(){
-        nextStep();
-        return "return";
+  return {
+    nextStepPY: function () {
+      nextStep();
+      return "return";
     },
-    isPersonalPY : function(){
-        return isPersonal;
+    isPersonalPY: function () {
+      return isPersonal;
     },
-    selectDriver:function(){
-
+    selectDriver: function () {
       nextStep();
       setTimeout(function () {
         nextStep();
@@ -2223,133 +2384,133 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         nextStep();
       }, 6000);
       setTimeout(function () {
-        nextStep(); 
+        nextStep();
       }, 8000);
-      
- 
-      if (isPersonal == false){
+
+      if (isPersonal == false) {
         setTimeout(function () {
           nextStep();
         }, 10000);
       }
-      return [true,isPersonal];
+      return [true, isPersonal];
     },
-    setWelcome:function(){
-      if(systemDictionary.welcomeWord.val != null){
-        bigBoxModule.querySelector("#welcomeWord").innerHTML = systemDictionary.welcomeWord.val;
+    setWelcome: function () {
+      if (systemDictionary.welcomeWord.val != null) {
+        bigBoxModule.querySelector("#welcomeWord").innerHTML =
+          systemDictionary.welcomeWord.val;
       }
     },
-    setPersonalizedWelcomeWord:function(){
-      if(systemDictionary.welcomeWord.val != null){
-        bigBoxModule.querySelector("#welcomeWord").innerHTML = systemDictionary.welcomeWord.val;
+    setPersonalizedWelcomeWord: function () {
+      if (systemDictionary.welcomeWord.val != null) {
+        bigBoxModule.querySelector("#welcomeWord").innerHTML =
+          systemDictionary.welcomeWord.val;
       }
     },
-    setPersonalizedUIInterface:function(){
-      if(systemDictionary.UIInterface.val != null){
-        bigBoxModule.querySelector("#UI").style.background = systemDictionary.UIInterface.val;
+    setPersonalizedUIInterface: function () {
+      if (systemDictionary.UIInterface.val != null) {
+        bigBoxModule.querySelector("#UI").style.background =
+          systemDictionary.UIInterface.val;
       }
     },
-    setPreferLanguage:function(){
-      if(systemDictionary.language.val != null){
-        bigBoxModule.querySelector("#language").innerHTML = systemDictionary.language.val;
+    setPreferLanguage: function () {
+      if (systemDictionary.language.val != null) {
+        bigBoxModule.querySelector("#language").innerHTML =
+          systemDictionary.language.val;
       }
     },
-    setUSMetricUnits:function(){
-      if(systemDictionary.USMetricUnit.val != null){
-        bigBoxModule.querySelector("#units").innerHTML = systemDictionary.USMetricUnit.val;
+    setUSMetricUnits: function () {
+      if (systemDictionary.USMetricUnit.val != null) {
+        bigBoxModule.querySelector("#units").innerHTML =
+          systemDictionary.USMetricUnit.val;
       }
     },
-    setInteriorLight:function(){
-        return interiorLight;
+    setInteriorLight: function () {
+      return interiorLight;
     },
-    setParkingWarningBeepLevel:function(){
-
-    },
-    turnOnPreferredMusic:function(){
-      if(systemDictionary.musicURI.val!= null){
-        bigBoxModule.querySelector("#music").innerHTML = systemDictionary.musicURI.val;
+    setParkingWarningBeepLevel: function () {},
+    turnOnPreferredMusic: function () {
+      if (systemDictionary.musicURI.val != null) {
+        bigBoxModule.querySelector("#music").innerHTML =
+          systemDictionary.musicURI.val;
       }
-        return systemDictionary.musicURI.val;
+      return systemDictionary.musicURI.val;
     },
-    setSeatPosition:function(){
-        return systemDictionary.seatPosition.val;
+    setSeatPosition: function () {
+      return systemDictionary.seatPosition.val;
     },
-    setAutoHold:function(){
-        if(AutoHoldIsOn){
-          bigBoxModule.querySelector("#autoHoldImage").style.display = "block";
-        }
+    setAutoHold: function () {
+      if (AutoHoldIsOn) {
+        bigBoxModule.querySelector("#autoHoldImage").style.display = "block";
+      }
     },
-    setMirrorStatus:function(){
-
-    },
-    setSteeringMode:function(){
-      if(SteeringMode){
+    setMirrorStatus: function () {},
+    setSteeringMode: function () {
+      if (SteeringMode) {
         bigBoxModule.querySelector("#steeringImage").style.display = "block";
       }
     },
-    setBrakingMode:function(){
-      if(BrakingMode){
+    setBrakingMode: function () {
+      if (BrakingMode) {
         bigBoxModule.querySelector("#brakingImage").style.display = "block";
       }
     },
-    setPowerMode:function(){
-      if(PowerMode){
+    setPowerMode: function () {
+      if (PowerMode) {
         bigBoxModule.querySelector("#powerImage").style.display = "block";
       }
     },
-    setDriveMode:function(){
-      if(systemDictionary.driveMode.val){
+    setDriveMode: function () {
+      if (systemDictionary.driveMode.val) {
         bigBoxModule.querySelector("#powerImage").style.display = "block";
       }
     },
-    getOutsideTemperature:function(){
+    getOutsideTemperature: function () {
       return OutsideTemperature;
     },
-    turnOnSetAC:function(ACMode){
-      if(ACMode == "warm AC"){
+    turnOnSetAC: function (ACMode) {
+      if (ACMode == "warm AC") {
         bigBoxModule.querySelector("#warmACImage").style.display = "block";
-      }else if(ACMode = "cool AC"){
+      } else if ((ACMode = "cool AC")) {
         bigBoxModule.querySelector("#coolACImage").style.display = "block";
       }
       console.log(ACMode);
     },
-    turnOnSeatHeat:function(){
-      if(systemDictionary.SeatHeatLevel.val > 0){
+    turnOnSeatHeat: function () {
+      if (systemDictionary.SeatHeatLevel.val > 0) {
         bigBoxModule.querySelector("#SeatHeatImage").style.display = "block";
       }
     },
-    turnSteeringWheelWarm:function(){
-      if(systemDictionary.SteeringWheelWarm.val > 0){
-        bigBoxModule.querySelector("#SteeringWheelWarmImage").style.display = "block";
+    turnSteeringWheelWarm: function () {
+      if (systemDictionary.SteeringWheelWarm.val > 0) {
+        bigBoxModule.querySelector("#SteeringWheelWarmImage").style.display =
+          "block";
       }
     },
-    turnOnSeatVentilation:function(){
-      if(systemDictionary.SeatVentilation.val> 0){
-        bigBoxModule.querySelector("#SeatVentilationImage").style.display = "block";
+    turnOnSeatVentilation: function () {
+      if (systemDictionary.SeatVentilation.val > 0) {
+        bigBoxModule.querySelector("#SeatVentilationImage").style.display =
+          "block";
       }
     },
-    setACAirFlow:function(){
+    setACAirFlow: function () {},
+    setADASWarningBeepLevel: function () {},
+    displayCockpitPY: function(){
+      displayCockpit();
+    },
+    displayVideoPY: function(){
 
     },
-    setADASWarningBeepLevel:function(){
-
+    refresh: function () {
+      selectedDriverName = "";
+      curTree = flowChartTree;
+      drawFlag = true;
+      dividing = false;
+      previousVal = null;
+      previousType = null;
+      moveDirection = null;
+      isPersonal = false;
     },
-
-
-    refresh:function(){
-        selectedDriverName = "";
-        curTree = flowChartTree;
-        drawFlag = true;
-        dividing = false;
-        previousVal = null;
-        previousType = null;
-        moveDirection = null;
-        isPersonal = false;
-    }
-
-  }
-
-  
+  };
 };
 
 function readTextFile(fileName) {
@@ -2369,27 +2530,27 @@ function readTextFile(fileName) {
   return infoList;
 }
 
-function analysisTxt(txt){
-  console.log("analysis")
+function analysisTxt(txt) {
+  console.log("analysis");
 
   let dictionaryInfo = {};
-  let dictionaryDriver = {}
+  let dictionaryDriver = {};
   let identInfo = null;
   let identName = null;
   let key;
   let value;
 
-  for (var i=0; i < txt.length; i++){
+  for (var i = 0; i < txt.length; i++) {
     identInfo = txt[i].split("#");
-    identName = identInfo.shift().split(":")[1]
-    var innerTuple = {}
-    for(var j=0; j<identInfo.length;j++){
+    identName = identInfo.shift().split(":")[1];
+    var innerTuple = {};
+    for (var j = 0; j < identInfo.length; j++) {
       key = identInfo[j].split(":")[0];
       value = identInfo[j].split(":")[1];
       innerTuple = {
-        val:value,
-        onOff:false
-      }
+        val: value,
+        onOff: false,
+      };
       dictionaryInfo[key] = innerTuple;
     }
     dictionaryDriver[identName] = dictionaryInfo;
@@ -2400,6 +2561,5 @@ function analysisTxt(txt){
   console.log(dictionaryDriver);
   return dictionaryDriver;
 }
-
 
 export default plugin;
