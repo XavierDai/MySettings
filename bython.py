@@ -12,7 +12,7 @@ plugins.Terminal.reset()
 driverPickFlag = False
 
 
-interval = 0.5
+interval = 2
 
 print("hello passenger!")
 
@@ -28,6 +28,7 @@ await aio.sleep(interval)
 
 # Check Memory Data
 await Welcome_plugin.nextStepPY()
+await vehicle.Cabin.Door.Row1.Left.IsOpen.set(True)
 await aio.sleep(interval)
 
 # Judge
@@ -41,8 +42,14 @@ Welcome_plugin.nextStepPY()
 await aio.sleep(interval)
 
 if(isPersonal == True or isPersonal == "true"):
+    await Welcome_plugin.nextStepPY()
+    await vehicle.Cabin.Seat.Row1.Pos1.Height.set(100)
+    await Welcome_plugin.setSeatPosition()
+    await aio.sleep(3)
+
     ### Welcome
     await Welcome_plugin.nextStepPY()
+    await Welcome_plugin.displayCockpitPY()
     await Welcome_plugin.setPersonalizedWelcomeWord()
     await aio.sleep(interval)
 
@@ -71,9 +78,6 @@ if(isPersonal == True or isPersonal == "true"):
     await Welcome_plugin.turnOnPreferredMusic()
     await aio.sleep(interval)
 
-    await Welcome_plugin.nextStepPY()
-    await Welcome_plugin.setSeatPosition()
-    await aio.sleep(interval)
 
     await Welcome_plugin.nextStepPY()
     await Welcome_plugin.setAutoHold()
