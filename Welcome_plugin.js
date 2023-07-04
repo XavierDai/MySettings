@@ -52,6 +52,154 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     "Vehicle.Cabin.Seat.Row1.Pos1.Height",
   ];
 
+  var languageDictionary = {
+    "Settings":{
+      "German":"Einstellungen:",
+      "Chinese":"设置",
+      "English":"Settings:",
+      Spanish:"",
+    },
+    "Welcome":{
+      "German":"Willkommen",
+      "Chinese":"欢迎您",
+      "English":"",
+      Spanish:"",
+    },
+    "Enable-MySettings":{
+      "German":"Meine Einstellungen aktivieren:",
+      "Chinese":"开启 MySettings:",
+      "English":"Enable MySettings:",
+      Spanish:"",
+    },
+    "Alter-your-Screen":{
+      "German":"Ändern Sie Ihren Bildschirm",
+      "Chinese":"调整你的屏幕",
+      "English":"Alter your Screen",
+      Spanish:"",
+    },
+    "Welcome-Word":{
+      "German":"Willkommenswort",
+      "Chinese":"欢迎语",
+      "English":"Welcome Word",
+      Spanish:"",
+    },
+    "Language":{
+      "German":"Sprache",
+      "Chinese":"语言",
+      "English":"Language",
+      Spanish:"",
+    },
+    "UI-Interface":{
+      "German":"Benutzeroberfläche",
+      "Chinese":"UI 界面",
+      "English":"UI Interface",
+      Spanish:"",
+    },
+    "Alter-your-Environment":{
+      "German":"Ändern Sie Ihre Umgebung",
+      "Chinese":"",
+      "English":"Alter your Environment",
+      Spanish:"",
+    },
+    "US-Metric-Units":{
+      "German":"US/metrische Einheiten",
+      "Chinese":"美/英制单位",
+      "English":"US/Metric Units",
+      Spanish:"",
+    },
+    "Interior-Light":{
+      "German":"Innenbeleuchtung",
+      "Chinese":"内部灯光",
+      "English":"Interior Light",
+      Spanish:"",
+    },
+    "Parking-Beep-Level":{
+      "German":"Parking Piep Level",
+      "Chinese":"停车警示音量",
+      "English":"Parking Beep Level",
+      Spanish:"",
+    },
+    "Preferred-Music":{
+      "German":"Bevorzugte Musik",
+      "Chinese":"喜欢的音乐",
+      "English":"Preferred Music",
+      Spanish:"",
+    },
+    "ADAS-Beep-Level":{
+      "German":"ADAS Signalpegel",
+      "Chinese":"ADAS警示音量",
+      "English":"ADAS Beep Level",
+      Spanish:"",
+    },
+    "Save-changes-listed-below":{
+      "German":"Die unten aufgeführten Änderungen speichern?",
+      "Chinese":"是否要保存以下的变更？",
+      "English":"Save changes listed below?",
+      Spanish:"",
+    },
+    "Seat-Position":{
+      "German":"Sitzposition",
+      "Chinese":"座椅位置",
+      "English":"Seat Position",
+      Spanish:"",
+    },
+    "AC-temperature":{
+      "German":"Wechselstromtemperatur",
+      "Chinese":"空调温度",
+      "English":"AC temperature",
+      Spanish:"",
+    },
+    "AC-Air-Flow-Level":{
+      "German":"Luftstrompegel",
+      "Chinese":"空调风速等级",
+      "English":"AC Air Flow Level",
+      Spanish:"",
+    },
+    "Steering-Wheel-Warm":{
+      "German":"Lenkrad warm",
+      "Chinese":"方向盘加热程度",
+      "English":"Steering Wheel Warm",
+      Spanish:"",
+    },
+    "Seat-Heat-Level":{
+      "German":"Sitzheizung",
+      "Chinese":"座椅加热程度",
+      "English":"Seat Heat Level",
+      Spanish:"",
+    },
+    "Seat-Ventilation":{
+      "German":"Sitzbelüftung",
+      "Chinese":"座椅透气",
+      "English":"Seat Ventilation",
+      Spanish:"",
+    },
+    "Driving":{
+      "German":"Autofahren",
+      "Chinese":"驾驶",
+      "English":"Driving",
+      Spanish:"",
+    },
+    "AutoHold":{
+      "German":"Handbremse",
+      "Chinese":"手刹",
+      "English":"AutoHold",
+      Spanish:"",
+    },
+    "Mirror-Status":{
+      "German":"Rückspiegelstatus",
+      "Chinese":"后视镜状态",
+      "English":"Mirror Status",
+      Spanish:"",
+    },
+    "Drive-Mode":{
+      "German":"Fahrmodus",
+      "Chinese":"驾驶模式",
+      "English":"Drive Mode",
+      Spanish:"",
+    },
+
+  };
+
   var afterTempJudge = {
     val: "Set AC Air Flow",
     type: "activity",
@@ -317,7 +465,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         <body>
         <div style="background-color:#F1F1F1;border:8px solid black;border-radius:35px;height:100%;overflow-y:hidden">
         <div id="top-phone-box"style="height：15%">
-            <h1 class="setting-h1" style="margin-left:20px;margin-top:5px;">
+            <h1 class="setting-h1 language-switch" id="Settings" style="margin-left:20px;margin-top:5px;">
                 Settings:
             </h1>
             <div style="background-color:white;border-radius:20px;margin-left:10px;margin-right:15px;margin-top:5px">
@@ -340,7 +488,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                             Driver!
                                         </span>
                                         </br>
-                                        <span id="driver-name-bottom-span" style="font-size:4vw">
+                                        <span class="language-switch" id="Welcome" style="font-size:4vw">
                                             welcome
                                         </span>
                                     </div>
@@ -351,7 +499,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                 </tr>
                 <tr>
                     <td>
-                            <span class="float-start" style="margin-left:8px">
+                            <span class="float-start language-switch" id="Enable-MySettings" style="margin-left:8px">
                                 Enable MySettings:
                             </span>
                             <div class="form-switch clearfix">
@@ -371,14 +519,14 @@ const plugin = ({ widgets, simulator, vehicle }) => {
             
 
 
-            <h3 class="setting-h3" style="margin-left:20px;">Alter your Screen</h3>
+            <h3 class="setting-h3" id="Alter-your-Screen" style="margin-left:20px;">Alter your Screen</h3>
             <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
             <table class = "table setting-table">
                 <tbody>
                     <tr>
       
                         <td>
-                                <span class="float-start" style="margin-left:8px">
+                                <span class="float-start language-switch" id="Welcome-Word" style="margin-left:8px">
                                     Welcome Word
                                 </span>
                                 <div class="form-switch clearfix">
@@ -391,7 +539,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                         <td>
                         <div class="row g-3 align-items-center">
                                 <div class="col-7">
-                                    <span class="float-start" style="margin-left:8px">
+                                    <span class="float-start language-switch" id="Language" style="margin-left:8px">
                                       Language
                                     </span>
                                 </div>
@@ -414,7 +562,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                         <td>
                         <div class="row g-3 align-items-center">
                             <div class="col-7">
-                                <span class="float-start" style="margin-left:8px">
+                                <span class="float-start language-switch" id="UI-Interface" style="margin-left:8px">
                                     UI Interface
                                 </span>
                                
@@ -436,7 +584,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                         <td>
                             <div class="row g-3 align-items-center">
                                     <div class="col-7">
-                                        <span class="float-start" style="margin-left:8px">
+                                        <span class="float-start language-switch" id="US-Metric-Units" style="margin-left:8px">
                                         US/Metric Units
                                         </span>
                                     </div>
@@ -460,7 +608,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
 
 
-            <h3 class="setting-h3"  style="margin-left:20px;">Alter your Environment</h3>
+            <h3 class="setting-h3" id="Alter-your-Environment" style="margin-left:20px;">Alter your Environment</h3>
             <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
             <table class = "table setting-table">
                 <tbody>
@@ -469,7 +617,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                         <td>
                             <div class="row g-3 align-items-center">
                                 <div class="col-7">
-                                    <span class="float-start" style="margin-left:8px">
+                                    <span class="float-start language-switch" id="Interior-Light" style="margin-left:8px">
                                         Interior Light
                                     </span>
                                 </div>
@@ -487,7 +635,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                         <td>
                             <div class="row g-3 align-items-center">
                                 <div class="col-8">
-                                    <span class="float-start" style="margin-left:8px">
+                                    <span class="float-start language-switch" id="Parking-Beep-Level" style="margin-left:8px">
                                         Parking Beep Level
                                     </span>
                                 </div>
@@ -507,7 +655,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                         <td>
                             <div class="row g-3 align-items-center">
                                 <div class="col-6">
-                                    <span class="float-start" style="margin-left:8px">
+                                    <span class="float-start language-switch" id="Preferred-Music" style="margin-left:8px">
                                         Preferred Music
                                     </span>
                                 </div>
@@ -531,7 +679,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                     <td>
                         <div class="row g-3 align-items-center">
                             <div class="col-8">
-                                <span class="float-start" style="margin-left:8px">
+                                <span class="float-start language-switch" id="ADAS-Beep-Level" style="margin-left:8px">
                                     ADAS Beep level
                                 </span>
                             </div>
@@ -554,14 +702,14 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
 
 
-            <h3 class="setting-h3" style="margin-left:20px;">Save changes listed below?</h3>
+            <h3 class="setting-h3 language-switch" id="Save-changes-listed-below" style="margin-left:20px;">Save changes listed below?</h3>
             <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
             <table class = "table setting-table">
                 <tbody>
                     <tr>
       
                         <td>
-                                <span class="float-start" style="margin-left:8px">
+                                <span class="float-start language-switch" id="Seat-Position" style="margin-left:8px">
                                 Seat Position
                                 </span>
                                 <div class="form-switch clearfix">
@@ -572,7 +720,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                     <tr>
               
                         <td>
-                                <span class="float-start" style="margin-left:8px">
+                                <span class="float-start language-switch" id="AC-temperature" style="margin-left:8px">
                                 AC temperature
                                 </span>
                                 <div class="form-switch clearfix">
@@ -584,7 +732,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
              
                         <td>
 
-                                <span class="float-start" style="margin-left:8px">
+                                <span class="float-start language-switch" id="AC-Air-Flow-Level" style="margin-left:8px">
                                 AC Air Flow Level 
                                     </span>
                                     <div class="form-switch clearfix">
@@ -596,7 +744,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
              
                     <td>
 
-                            <span class="float-start" style="margin-left:8px">
+                            <span class="float-start language-switch" id="Steering-Wheel-Warm" style="margin-left:8px">
                             Steering Wheel Warm
                                 </span>
                                 <div class="form-switch clearfix">
@@ -608,7 +756,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
              
                     <td>
 
-                            <span class="float-start" style="margin-left:8px">
+                            <span class="float-start language-switch" id="Seat-Heat-Level" style="margin-left:8px">
                             Seat Heat Level
                                 </span>
                                 <div class="form-switch clearfix">
@@ -620,7 +768,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
              
                     <td>
 
-                            <span class="float-start" style="margin-left:8px">
+                            <span class="float-start language-switch" id="Seat-Ventilation" style="margin-left:8px">
                             Seat Ventilation
                                 </span>
                                 <div class="form-switch clearfix">
@@ -635,14 +783,14 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
 
 
-            <h3 class="setting-h3" style="margin-left:20px;">Driving</h3>
+            <h3 class="setting-h3 language-switch" id="Driving" style="margin-left:20px;">Driving</h3>
             <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
             <table class = "table setting-table">
                 <tbody>
                     <tr>
       
                         <td>
-                                <span class="float-start" style="margin-left:8px">
+                                <span class="float-start language-switch" id="AutoHold" style="margin-left:8px">
                                     AutoHold
                                 </span>
                                 <div class="form-switch clearfix">
@@ -653,7 +801,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                     <tr>
               
                         <td>
-                                <span class="float-start" style="margin-left:8px">
+                                <span class="float-start language-switch" id="Mirror-Status" style="margin-left:8px">
                                     Mirror Status
                                 </span>
                                 <div class="form-switch clearfix">
@@ -665,7 +813,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
              
                         <td>
 
-                                <span class="float-start" style="margin-left:8px">
+                                <span class="float-start language-switch" id="Drive-Mode" style="margin-left:8px">
                                   Drive Mode
                                     </span>
                                     <div class="form-switch clearfix">
@@ -786,6 +934,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   welcomeWordCheck.addEventListener("click", function (event) {
     var isOn = event.target.checked;
+    systemDictionary.welcomeWord.onOff = event.target.checked;
     console.log("On/Off:", isOn);
   });
 
@@ -833,37 +982,45 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   LanguageSelect.onchange = function () {
     systemDictionary.language.val = this.value;
+    systemDictionary.language.onOff = true;
     console.log("language：", this.value);
+    switchLanguage(this.value);
   };
 
   UIStyleSelect.onchange = function () {
     systemDictionary.UIInterface.val = this.value;
+    systemDictionary.UIInterface.onOff = true;
     console.log("Selected UI style：", this.value);
   };
 
   UnitSelect.onchange = function () {
     systemDictionary.USMetricUnit.val = this.value;
+    systemDictionary.USMetricUnit.onOff = true;
     console.log("Selected Unit:", this.value);
     changeTemperatureUnit(this.value);
   };
 
   PreferredMusicSelect.onchange = function () {
     systemDictionary.musicURI.val = this.value;
+    systemDictionary.musicURI.onOff = true;
     console.log("Selected Unit:", this.value);
   };
 
   InteriorLightColor.onchange = function () {
     console.log("color：", this.value);
-    systemDictionary.InteriorLight.val = this.value.replace("#", "");
+    systemDictionary.USMetricUnit.onOff = true;
+    systemDictionary.USMetricUnit.val = this.value.replace("#", "");
   };
 
   ParkingBeepLevelSelect.onchange = function () {
     systemDictionary.parkingBeepLevel.val = this.value;
+    systemDictionary.parkingBeepLevel.onOff = true;
     console.log("Parking Beep Level：", this.value);
   };
 
   ADASBeepLevelSelect.onchange = function () {
     systemDictionary.ADASBeepLevel.val = this.value;
+    systemDictionary.ADASBeepLevel.onOff = true;
     console.log("ADAS Beep Level：", this.value);
   };
 
@@ -1313,6 +1470,22 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                 -webkit-box-shadow: 0 -1px 1px black inset;
 
             }
+            .bottomLight {
+              height:0px;
+              width:64.7%;
+                position:absolute;
+                left: calc(50% - 32.35%);
+                top:calc(43.4vw);
+                background-color: transparent;
+                display:flex;
+                
+                box-shadow:0px 0px 20px 10px #65E6D1;
+                
+            }
+            .upperImg{
+              position:relative;
+              z-index:2;
+            }
             </style>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         </head>
@@ -1321,7 +1494,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
             <div>
                 
 
-                <div style="height:63.5%;">   
+                <div style="width:100%;height:47vw;">   
                
                   <div class="toast-container position-fixed bottom-50 end-50 p-3">
                     <div id="liveToast" class="toast show fade" role="alert" aria-live="assertive" aria-atomic="true">
@@ -1336,7 +1509,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                     </div>
                   </div>
                 
-                  <div id="displayVideo" style="width:100%;height:100%;border:1px solid black;display:block;"> 
+                  <div id="displayVideo" style="width:100%;border:1px solid black;display:block;"> 
                     <video class="bigBoxVideo" id="doorClose" autoplay playsinline muted src='https://digitalauto-media-data.netlify.app/DoorClose720x360.mp4' style = "display:block;height:100%;width:100%;object-fit:contain;">
                     </video>
                     <video class="bigBoxVideo" id="doorOpen" preload playsinline muted src='https://digitalauto-media-data.netlify.app/DoorOpen720x360.mp4' style = "display:none;height:100%;width:100%;object-fit:contain;">
@@ -1345,50 +1518,53 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                     </video>
                     
                   </div>
-                  <div id="displayCockpit" style="width:100%;height:100%;border:1px solid black;display:none;">
+                  <div id="displayCockpit" style="width:100%;height:100%;display:none;background-image:url(http://127.0.0.1:5500/origin.jpg);background-repeat:no-repeat;background-size:100%;">
+                    <img src="http://127.0.0.1:5500/vehicle.png" style="width:100%;position:absolute;top:0;left:0;z-index:1;">
                     
-                    <div id="welcomeWord">
+                    <div class= "bottomLight">
+                    </div>
+                    <div class="upperImg" id="welcomeWord">
 
                     </div>
-                    <div id="UI" style ="width:40px;height:40px;border:1px solid black">
+                    <div class="upperImg" id="UI" style ="width:40px;height:40px;border:1px solid black">
                     </div>
-                    <div id="language">
+                    <div class="upperImg" id="language">
 
                     </div>
-                    <div id="music">
+                    <div class="upperImg" id="music">
                       <audio src = "" controls>
                     </div>
-                    <div id="units">
+                    <div class="upperImg" id="units">
 
                     </div>
-                    <div id="steeringWheelWarmImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fsteer_warm.png?alt=media&token=6fc318d0-c9c4-4c77-8f5a-daf7ae6fe84c);">
+                    <div class="upperImg" id="steeringWheelWarmImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fsteer_warm.png?alt=media&token=6fc318d0-c9c4-4c77-8f5a-daf7ae6fe84c);">
 
                     </div>
-                    <div id="powerImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fpower.png?alt=media&token=71d28680-67c3-480d-8576-38081e688b03);">
-
-                    </div>
-
-                    <div id="autoHoldImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fautohold2.png?alt=media&token=fb01db01-c525-4af8-9440-f3a330994d04);">
-
-                    </div>
-                    <div id="steeringImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2FESP.png?alt=media&token=34c1f5fb-9132-46e7-abb7-3898f507b923);">
-
-                    </div>
-                    <div id="brakingImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fautohold.png?alt=media&token=b3905c3c-089a-44fe-b3b7-b609f827785a);">
+                    <div class="upperImg" id="powerImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fpower.png?alt=media&token=71d28680-67c3-480d-8576-38081e688b03);">
 
                     </div>
 
-                    <div id="SeatHeatImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fseat_heat.png?alt=media&token=8ce653bc-23d9-4840-8bd6-f785de555dac);">
+                    <div class="upperImg" id="autoHoldImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fautohold2.png?alt=media&token=fb01db01-c525-4af8-9440-f3a330994d04);">
+
+                    </div>
+                    <div class="upperImg" id="steeringImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2FESP.png?alt=media&token=34c1f5fb-9132-46e7-abb7-3898f507b923);">
+
+                    </div>
+                    <div class="upperImg" id="brakingImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fautohold.png?alt=media&token=b3905c3c-089a-44fe-b3b7-b609f827785a);">
+
+                    </div>
+
+                    <div class="upperImg" id="SeatHeatImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fseat_heat.png?alt=media&token=8ce653bc-23d9-4840-8bd6-f785de555dac);">
 
                     </div>
                     
-                    <div id="SeatVentilationImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fseat_ventilation.png?alt=media&token=1ae63e59-21af-48aa-a2c1-f398dfcac9a2);">
+                    <div class="upperImg" id="SeatVentilationImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fseat_ventilation.png?alt=media&token=1ae63e59-21af-48aa-a2c1-f398dfcac9a2);">
 
                     </div>
-                    <div id="warmACImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fheat.png?alt=media&token=e7a4c8df-df29-4146-b7ca-cf178e56691a);">
+                    <div class="upperImg" id="warmACImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fheat.png?alt=media&token=e7a4c8df-df29-4146-b7ca-cf178e56691a);">
 
                     </div>
-                    <div id="coolACImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fcold2.png?alt=media&token=c33bb747-e29f-423b-9624-d536a0998ba4);">
+                    <div class="upperImg" id="coolACImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fcold2.png?alt=media&token=c33bb747-e29f-423b-9624-d536a0998ba4);">
 
                     </div>
 
@@ -1396,7 +1572,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                   </div>
 
                 </div>
-                <div class="row" style="height:35%;width:100%;overflow-y:auto;margin-top:1%;">
+                <div class="row" style="width:100%;overflow-y:auto;margin-top:1%;">
                     <div class="col" >
                         <div class="card" style="margin-left:10px;margin-right:10px;margin-top:5px;">
                             <h5 class="card-header">External Setting</h5>
@@ -1931,7 +2107,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var driverName = personalSettingModule.querySelector("#driver-name-span");
 
   var driverWelcome = personalSettingModule.querySelector(
-    "#driver-name-bottom-span"
+    "#Welcome"
   );
 
   var html = "";
@@ -2069,7 +2245,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   var did = setInterval(catchDoorSignal, 500);
   async function catchDoorSignal() {
-    console.log("catch door signal")
+    // console.log("catch door signal")
     var doorSignal = await vehicle["Cabin.Door.Row1.Left.IsOpen"].get();
     if (doorSignal == true) {
       console.log("door true")
@@ -2085,7 +2261,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var sid = setInterval(catchSeatSignal, 500);
 
   async function catchSeatSignal() {
-    console.log("catch seat signal")
+    // console.log("catch seat signal")
     var seatSignal = await vehicle["Cabin.Seat.Row1.Pos1.Height"].get();
     if (seatSignal == "100" || seatSignal == 100) {
       console.log("seat true")
@@ -2147,6 +2323,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       updateWebpageContent(customizedDictionary);
     }
   }
+
   function updateWebpageContent(dictionary) {
     console.log("update webpage");
     console.log(dictionary["seatPosition"].val);
@@ -2210,16 +2387,25 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     bigBoxModule.querySelector("#SeatPositionRange").value =
       dictionary["seatPosition"].val;
 
-    bigBoxModule.querySelector("#ACTemperatureIfColdRangeDisplay").innerHTML =
-      dictionary["ACTemperatureIfCold"].val;
     bigBoxModule.querySelector("#ACTemperatureIfColdRange").value =
       dictionary["ACTemperatureIfCold"].val;
 
-    bigBoxModule.querySelector("#ACTemperatureIfHotRangeDisplay").innerHTML =
-      dictionary["ACTemperatureIfHot"].val;
     bigBoxModule.querySelector("#ACTemperatureIfHotRange").value =
       dictionary["ACTemperatureIfHot"].val;
 
+    if(dictionary["USMetricUnit"].val == "US"){
+      bigBoxModule.querySelector("#ACTemperatureIfColdRangeDisplay").innerHTML =
+        toFahrenheit(dictionary["ACTemperatureIfCold"].val);
+      
+      bigBoxModule.querySelector("#ACTemperatureIfHotRangeDisplay").innerHTML =
+        toFahrenheit(dictionary["ACTemperatureIfHot"].val);
+    }else if(dictionary["USMetricUnit"].val == "Metric"){
+      bigBoxModule.querySelector("#ACTemperatureIfColdRangeDisplay").innerHTML =
+        dictionary["ACTemperatureIfCold"].val;
+
+      bigBoxModule.querySelector("#ACTemperatureIfHotRangeDisplay").innerHTML =
+        dictionary["ACTemperatureIfHot"].val;
+    }
     bigBoxModule.querySelector("#ACAirFlowLevelRangeDisplay").innerHTML =
       dictionary["ACAirFlowLevel"].val;
     bigBoxModule.querySelector("#ACAirFlowLevelRange").value =
@@ -2262,7 +2448,15 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     bigBoxModule.querySelector("#mirrorRightPanRange").value =
       dictionary["mirrorRightPan"].val;
 
+    switchLanguage(dictionary["language"].val);
     // drive mode
+  }
+
+  function switchLanguage(targetLanguage){
+    for(var key in languageDictionary){
+      // console.log(personalSettingModule.querySelector("#"+key));
+      personalSettingModule.querySelector("#"+key).innerHTML = languageDictionary[key][targetLanguage];
+    }
   }
 
   function switchSystemDictionary(pickedDriverName) {

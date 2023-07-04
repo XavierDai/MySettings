@@ -1,0 +1,601 @@
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .phone-container::-webkit-scrollbar{
+            width:8px;
+            height:40px;
+        }
+    
+        .phone-container::-webkit-scrollbar-thumb{
+            -webkit-box-shadow:inset 0 0 5px rgba(0,0,0,0.1);
+            border-radius:15px;
+            background:rgba(0,0,0,0.1);
+        }
+        .phone-container::-webkit-scrollbar-thumb:hover{
+            background:rgba(0,0,0,0.2);
+        }
+        .phone-container::-webkit-scrollbar-track{
+            -webkit-box-shadow:inset 0 0 0px rgba(0,0,0,0.0);
+            border-radius:5px;
+            background:rgba(0,0,0,0.0);
+        }
+        .phone-container::-webkit-scrollbar-track:hover{
+
+            background:rgba(0,0,0,0.1);
+        }
+        .form-check-input:hover{
+            cursor:pointer;
+        }
+        .top-phone-box:after{
+            content: "";
+            display: block;
+            clear:both;
+
+        }
+        .setting-table{
+            font-size:5vw;
+        }
+        .setting-h1{
+            font-size:8vw
+        }
+        .setting-h3{
+            font-size:6vw
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+</head>
+
+<body>
+<div style="background-color:#F1F1F1;border:8px solid black;border-radius:35px;height:100%;overflow-y:hidden">
+<div id="top-phone-box"style="height：15%">
+    <h1 class="setting-h1" style="margin-left:20px;margin-top:5px;">
+        Settings:
+    </h1>
+    <div style="background-color:white;border-radius:20px;margin-left:10px;margin-right:15px;margin-top:5px">
+    <table class = "table setting-table">
+    <tbody>
+        <tr>
+
+            <td>
+                    <div class="container">
+                        <div class="row row-cols-auto">
+                            <div class="col">
+                                <div id="avatar" style="margin-top:5px;width:7vh;height:7vh;border-radius:3.5vh 3.5vh 3.5vh 3.5vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2FDrowsiness_2.png?alt=media&token=c085c451-ec32-4579-b3bf-1b77108f1c81);">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <span style="font-size:6vw">
+                                    Hi,
+                                </span>
+                                <span id="driver-name-span" style="font-size:6vw">
+                                    Driver!
+                                </span>
+                                </br>
+                                <span id="driver-name-bottom-span" style="font-size:4vw">
+                                    welcome
+                                </span>
+                            </div>
+                            
+                        </div>
+                    </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                    <span class="float-start" style="margin-left:8px">
+                        Enable MySettings:
+                    </span>
+                    <div class="form-switch clearfix">
+                    <input class="form-check-input float-end driver-input-child" type="checkbox" role="switch"  id="on-off-button" checked>
+            </td>
+        </tr>
+     
+        
+
+    </tbody>
+</table>
+</div>
+</div>
+
+
+<div class="phone-container" style="height:calc(78% - 25px);overflow-y:auto;margin-top:5px;margin-bottom:15px;">
+    
+
+
+    <h3 class="setting-h3" style="margin-left:20px;">Alter your Screen</h3>
+    <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
+    <table class = "table setting-table">
+        <tbody>
+            <tr>
+
+                <td>
+                        <span class="float-start" style="margin-left:8px">
+                            Welcome Word
+                        </span>
+                        <div class="form-switch clearfix">
+                            <input class="form-check-input driver-input-child float-end setting-checkbox-child" type="checkbox" role="switch" id="welcomeWordCheck">
+                        </div>
+                </td>
+            </tr>
+            <tr>
+      
+                <td>
+                <div class="row g-3 align-items-center">
+                        <div class="col-7">
+                            <span class="float-start" style="margin-left:8px">
+                              Language
+                            </span>
+                        </div>
+                        <div class="col-5">
+                            <select class="form-select float-end setting-checkbox-child driver-input-child" id="LanguageSelect">
+                                <option id="Chinese" value="Chinese">Chinese</option>
+                                <option id="English" value="English">English</option>
+                                <option id="German" value="German">German</option>
+                                <option id="Spanish" value="Spanish">Spanish</option>
+                            </select>
+                        </div>
+                        
+                </div>
+                        
+                       
+                </td>
+            </tr>
+            <tr>
+     
+                <td>
+                <div class="row g-3 align-items-center">
+                    <div class="col-7">
+                        <span class="float-start" style="margin-left:8px">
+                            UI Interface
+                        </span>
+                       
+                    </div>
+                    <div class="col-5">
+                        <select class="form-select float-end setting-checkbox-child driver-input-child" id="UIStyleSelect">
+                            <option id="grey" value="Grey">grey</option>
+                            <option id="pink" value="Pink">pink</option>
+                            <option id="blue" value="Blue">blue</option>
+                            <option id="green" value="Green">green</option>
+                            <option id="black" value="Black">black</option>
+                        </select>
+                    </div>
+                </div>
+                </td>
+            </tr>
+            <tr>
+     
+                <td>
+                    <div class="row g-3 align-items-center">
+                            <div class="col-7">
+                                <span class="float-start" style="margin-left:8px">
+                                US/Metric Units
+                                </span>
+                            </div>
+                            <div class="col-5">
+                                <select class="form-select float-end setting-checkbox-child driver-input-child" id="UnitSelect">
+                                  <option id="Metric" value="Metric">Metric</option>
+                                    <option id="US" value="US">US</option>
+                                    
+                                    
+                                </select>
+                            </div>
+                            
+                    </div>
+                    
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    </div>
+
+
+
+    <h3 class="setting-h3"  style="margin-left:20px;">Alter your Environment</h3>
+    <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
+    <table class = "table setting-table">
+        <tbody>
+            <tr>
+
+                <td>
+                    <div class="row g-3 align-items-center">
+                        <div class="col-7">
+                            <span class="float-start" style="margin-left:8px">
+                                Interior Light
+                            </span>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-switch clearfix">
+                        
+                                <input type="color" class="form-control form-control-color float-end setting-checkbox-child driver-input-child" id="InteriorLightColor" value="#563d7c" title="Choose your color">
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+      
+                <td>
+                    <div class="row g-3 align-items-center">
+                        <div class="col-8">
+                            <span class="float-start" style="margin-left:8px">
+                                Parking Beep Level
+                            </span>
+                        </div>
+                        <div class="col-4">
+                            <select class="form-select float-end setting-checkbox-child driver-input-child" id="ParkingBeepLevelSelect">
+                                <option id="optionParkingLow" value="Low">Low</option>
+                                <option id="optionParkingMedium" value="Medium">Medium</option>
+                                <option id="optionParkingHigh" value="High">High</option>
+                            </select>
+                        </div>
+                    
+                    </div>
+                </td>
+            </tr>
+            <tr>
+     
+                <td>
+                    <div class="row g-3 align-items-center">
+                        <div class="col-6">
+                            <span class="float-start" style="margin-left:8px">
+                                Preferred Music
+                            </span>
+                        </div>
+                        <div class="col-6">
+                            <select class="form-select float-end setting-checkbox-child driver-input-child" id="PreferredMusicSelect">
+                                <option id="optionClosedOnSunday" value="ClosedOnSunday">Closed on Sunday</option>
+                                <option id="optionYikes" value="Yikes">Yikes</option>
+                                <option id="optionGhostTown" value="GhostTown">Ghost Town</option>
+                                <option id="optionRidiculous" value="Ridiculous">Ridiculous</option>
+                                <option id="optionWithoutYou" value="WithoutYou">WithoutYou</option>
+                            </select>
+                        </div>
+                    
+                    </div>
+                       
+                            
+                </td>
+            </tr>
+            <tr>
+     
+            <td>
+                <div class="row g-3 align-items-center">
+                    <div class="col-8">
+                        <span class="float-start" style="margin-left:8px">
+                            ADAS Beep level
+                        </span>
+                    </div>
+                    <div class="col-4">
+                        <select class="form-select float-end setting-checkbox-child driver-input-child" id="ADASBeepLevelSelect">
+                            <option id="optionADASLow" value="Low">Low</option>
+                            <option id="optionADASMedium" value="Medium">Medium</option>
+                            <option id="optionADASHigh" value="High">High</option>
+                        </select>
+                    </div>
+                
+                </div>
+                   
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+
+
+
+
+    <h3 class="setting-h3" style="margin-left:20px;">Save changes listed below?</h3>
+    <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
+    <table class = "table setting-table">
+        <tbody>
+            <tr>
+
+                <td>
+                        <span class="float-start" style="margin-left:8px">
+                        Seat Position
+                        </span>
+                        <div class="form-switch clearfix">
+                            <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="SeatPositionCheck">
+                        </div>
+                </td>
+            </tr>
+            <tr>
+      
+                <td>
+                        <span class="float-start" style="margin-left:8px">
+                        AC temperature
+                        </span>
+                        <div class="form-switch clearfix">
+                            <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="ACTemperatureCheck">
+                        </div>
+                </td>
+            </tr>
+            <tr>
+     
+                <td>
+
+                        <span class="float-start" style="margin-left:8px">
+                        AC Air Flow Level 
+                            </span>
+                            <div class="form-switch clearfix">
+                                <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="ACAirFlowLevelCheck">
+                            </div>
+                </td>
+            </tr>
+            <tr>
+     
+            <td>
+
+                    <span class="float-start" style="margin-left:8px">
+                    Steering Wheel Warm
+                        </span>
+                        <div class="form-switch clearfix">
+                            <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="SteeringWheelWarmCheck">
+                        </div>
+            </td>
+             </tr>
+             <tr>
+     
+            <td>
+
+                    <span class="float-start" style="margin-left:8px">
+                    Seat Heat Level
+                        </span>
+                        <div class="form-switch clearfix">
+                            <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="SeatHeatLevelCheck">
+                        </div>
+            </td>
+             </tr>
+             <tr>
+     
+            <td>
+
+                    <span class="float-start" style="margin-left:8px">
+                    Seat Ventilation
+                        </span>
+                        <div class="form-switch clearfix">
+                            <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="SeatVentilationCheck">
+                        </div>
+            </td>
+             </tr>
+        </tbody>
+    </table>
+    </div>
+
+
+
+
+    <h3 class="setting-h3" style="margin-left:20px;">Driving</h3>
+    <div style="background-color:white;border-radius:10px;margin-left:10px;margin-right:10px;margin-top:5px">
+    <table class = "table setting-table">
+        <tbody>
+            <tr>
+
+                <td>
+                        <span class="float-start" style="margin-left:8px">
+                            AutoHold
+                        </span>
+                        <div class="form-switch clearfix">
+                            <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="AutoHoldCheck">
+                        </div>
+                </td>
+            </tr>
+            <tr>
+      
+                <td>
+                        <span class="float-start" style="margin-left:8px">
+                            Mirror Status
+                        </span>
+                        <div class="form-switch clearfix">
+                            <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="MirrorStatusCheck">
+                        </div>
+                </td>
+            </tr>
+            <tr>
+     
+                <td>
+
+                        <span class="float-start" style="margin-left:8px">
+                          Drive Mode
+                            </span>
+                            <div class="form-switch clearfix">
+                                <input class="form-check-input float-end setting-checkbox-child driver-input-child" type="checkbox" role="switch" id="DriveModeCheck">
+                            </div>
+                </td>
+            </tr>
+            
+        </tbody>
+    </table>
+    </div>
+
+
+
+
+
+</div>
+</div>
+
+
+    <script src=https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script>
+        var onOffButton = personalSettingModule.querySelector("#on-off-button");
+
+var welcomeWordCheck =
+  personalSettingModule.querySelector("#welcomeWordCheck");
+
+var ParkingWarningBeepLevelCheck = personalSettingModule.querySelector(
+  "#ParkingWarningBeepLevelCheck"
+);
+var PreferredMusicCheck = personalSettingModule.querySelector(
+  "#PreferredMusicCheck"
+);
+var SeatPositionCheck =
+  personalSettingModule.querySelector("#SeatPositionCheck");
+var AutoHoldCheck = personalSettingModule.querySelector("#AutoHoldCheck");
+var MirrorStatusCheck =
+  personalSettingModule.querySelector("#MirrorStatusCheck");
+var DriveModeCheck = personalSettingModule.querySelector("#DriveModeCheck");
+
+var ACTemperatureCheck = personalSettingModule.querySelector(
+  "#ACTemperatureCheck"
+);
+var ACAirFlowLevelCheck = personalSettingModule.querySelector(
+  "#ACAirFlowLevelCheck"
+);
+var SteeringWheelWarmCheck = personalSettingModule.querySelector(
+  "#SteeringWheelWarmCheck"
+);
+var SeatHeatLevelCheck = personalSettingModule.querySelector(
+  "#SeatHeatLevelCheck"
+);
+var SeatVentilationCheck = personalSettingModule.querySelector(
+  "#SeatVentilationCheck"
+);
+var LanguageSelect = personalSettingModule.querySelector("#LanguageSelect");
+var UnitSelect = personalSettingModule.querySelector("#UnitSelect");
+
+var UIStyleSelect = personalSettingModule.querySelector("#UIStyleSelect");
+var InteriorLightColor = personalSettingModule.querySelector(
+  "#InteriorLightColor"
+);
+var PreferredMusicSelect = personalSettingModule.querySelector(
+  "#PreferredMusicSelect"
+);
+var ParkingBeepLevelSelect = personalSettingModule.querySelector(
+  "#ParkingBeepLevelSelect"
+);
+var ADASBeepLevelSelect = personalSettingModule.querySelector(
+  "#ADASBeepLevelSelect"
+);
+// Event listener for the on/off button click
+onOffButton.addEventListener("click", function (event) {
+  var isOn = event.target.checked;
+  console.log("On/Off:", isOn);
+  let childrenList = personalSettingModule.querySelectorAll(
+    ".setting-checkbox-child"
+  );
+  if (isOn == true) {
+    for (let item of childrenList) {
+      if (item.getAttribute("disabled")) {
+        item.removeAttribute("disabled");
+      }
+    }
+  } else {
+    for (let item of childrenList) {
+      item.setAttribute("disabled", "disabled");
+    }
+    Object.entries(systemDictionary).forEach(([key, value]) => {
+      value.onOff = false;
+    });
+    personalSettingModule.querySelector("#SeatPositionCheck").checked = false;
+    personalSettingModule.querySelector(
+      "#ACTemperatureCheck"
+    ).checked = false;
+    personalSettingModule.querySelector(
+      "#ACAirFlowLevelCheck"
+    ).checked = false;
+    personalSettingModule.querySelector(
+      "#SteeringWheelWarmCheck"
+    ).checked = false;
+    personalSettingModule.querySelector(
+      "#SeatHeatLevelCheck"
+    ).checked = false;
+    personalSettingModule.querySelector(
+      "#SeatVentilationCheck"
+    ).checked = false;
+    personalSettingModule.querySelector("#AutoHoldCheck").checked = false;
+    personalSettingModule.querySelector("#MirrorStatusCheck").checked = false;
+    personalSettingModule.querySelector("#DriveModeCheck").checked = false;
+  }
+});
+
+welcomeWordCheck.addEventListener("click", function (event) {
+  var isOn = event.target.checked;
+  console.log("On/Off:", isOn);
+});
+
+SeatPositionCheck.addEventListener("click", function (event) {
+  systemDictionary["seatPosition"].onOff = event.target.checked;
+  console.log("On/Off:", systemDictionary["seatPosition"].onOff);
+});
+AutoHoldCheck.addEventListener("click", function (event) {
+  var isOn = event.target.checked;
+  console.log("On/Off:", isOn);
+});
+MirrorStatusCheck.addEventListener("click", function (event) {
+  systemDictionary.mirrorLeftTilt.onOff = event.target.checked;
+  systemDictionary.mirrorLeftPan.onOff = event.target.checked;
+  systemDictionary.mirrorRightTilt.onOff = event.target.checked;
+  systemDictionary.mirrorRightPan.onOff = event.target.checked;
+  console.log("On/Off:", systemDictionary.mirrorLeftTilt.onOff);
+});
+DriveModeCheck.addEventListener("click", function (event) {
+  systemDictionary.driveMode.onOff = event.target.checked;
+  console.log("On/Off:", systemDictionary.driveMode.onOff);
+});
+ACAirFlowLevelCheck.addEventListener("click", function (event) {
+  systemDictionary.ACAirFlowLevel.onOff = event.target.checked;
+  console.log("On/Off:", systemDictionary.ACAirFlowLevel.onOff);
+});
+ACTemperatureCheck.addEventListener("click", function (event) {
+  systemDictionary.ACTemperatureIfCold.onOff = event.target.checked;
+  systemDictionary.ACTemperatureIfHot.onOff = event.target.checked;
+  console.log("On/Off:", event.target.checked);
+});
+SteeringWheelWarmCheck.addEventListener("click", function (event) {
+  systemDictionary.SteeringWheelWarm.onOff = event.target.checked;
+  console.log("On/Off:", systemDictionary.SteeringWheelWarm.onOff);
+});
+SeatHeatLevelCheck.addEventListener("click", function (event) {
+  systemDictionary.SeatHeatLevel.onOff = event.target.checked;
+  console.log("On/Off:", systemDictionary.SeatHeatLevel.onOff);
+});
+
+SeatVentilationCheck.addEventListener("click", function (event) {
+  systemDictionary.SeatVentilation.onOff = event.target.checked;
+  console.log("On/Off:", systemDictionary.SeatVentilation.onOff);
+});
+
+LanguageSelect.onchange = function () {
+  systemDictionary.language.val = this.value;
+  console.log("language：", this.value);
+};
+
+UIStyleSelect.onchange = function () {
+  systemDictionary.UIInterface.val = this.value;
+  console.log("Selected UI style：", this.value);
+};
+
+UnitSelect.onchange = function () {
+  systemDictionary.USMetricUnit.val = this.value;
+  console.log("Selected Unit:", this.value);
+  changeTemperatureUnit(this.value);
+};
+
+PreferredMusicSelect.onchange = function () {
+  systemDictionary.musicURI.val = this.value;
+  console.log("Selected Unit:", this.value);
+};
+
+InteriorLightColor.onchange = function () {
+  console.log("color：", this.value);
+  systemDictionary.InteriorLight.val = this.value.replace("#", "");
+};
+
+ParkingBeepLevelSelect.onchange = function () {
+  systemDictionary.parkingBeepLevel.val = this.value;
+  console.log("Parking Beep Level：", this.value);
+};
+
+ADASBeepLevelSelect.onchange = function () {
+  systemDictionary.ADASBeepLevel.val = this.value;
+  console.log("ADAS Beep Level：", this.value);
+};
+
+    </script>
+</body>    
