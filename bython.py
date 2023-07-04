@@ -12,7 +12,7 @@ plugins.Terminal.reset()
 driverPickFlag = False
 
 
-interval = 2
+interval = 0.1
 
 print("hello passenger!")
 
