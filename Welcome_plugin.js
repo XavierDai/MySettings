@@ -1518,8 +1518,8 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                     </video>
                     
                   </div>
-                  <div id="displayCockpit" style="width:100%;height:100%;display:none;background-image:url(http://127.0.0.1:5500/origin.jpg);background-repeat:no-repeat;background-size:100%;">
-                    <img src="http://127.0.0.1:5500/vehicle.png" style="width:100%;position:absolute;top:0;left:0;z-index:1;">
+                  <div id="displayCockpit" style="width:100%;height:100%;display:none;background-image:url(http://127.0.0.1:5500/img/origin.jpg);background-repeat:no-repeat;background-size:100%;">
+                    <img src="http://127.0.0.1:5500/img/vehicle.png" style="width:100%;position:absolute;top:0;left:0;z-index:1;">
                     
                     <div class= "bottomLight">
                     </div>
