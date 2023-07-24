@@ -1,4 +1,3 @@
-import SignalWithMedia from "http://127.0.0.1:5500/SignalWithMedia.js";
 const plugin = ({ widgets, simulator, vehicle }) => {
   var txt = readTextFile("http://127.0.0.1:5500/ident.txt");
   var allDriverDictionary = analysisTxt(txt);
@@ -70,7 +69,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       German: "Meine Einstellungen aktivieren:",
       Chinese: "开启 MySettings:",
       English: "Enable MySettings:",
-      Spanish: "Abre mi configuración",
+      Spanish: "Habilitar mi configuración",
     },
     "Alter-your-Screen": {
       German: "Ändern Sie Ihren Bildschirm",
@@ -81,13 +80,13 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     "Welcome-Word": {
       German: "Willkommenswort",
       Chinese: "欢迎语",
-      English: "Welcome Word",
+      English: "Welcome Words",
       Spanish: "Palabras de bienvenida",
     },
     Language: {
       German: "Sprache",
       Chinese: "语言",
-      English: "Language",
+      English: "Languages",
       Spanish: "Idiomas",
     },
     "UI-Interface": {
@@ -106,7 +105,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       German: "US/metrische Einheiten",
       Chinese: "美/英制单位",
       English: "US/Metric Units",
-      Spanish: "Estados Unidos/Unidades británicas",
+      Spanish: "Unidades imperials tradicionales de Estados Unidos",
     },
     "Interior-Light": {
       German: "Innenbeleuchtung",
@@ -118,25 +117,25 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       German: "Parking Piep",
       Chinese: "停车警示音量",
       English: "Parking Beep",
-      Spanish: "Volumen de la alarma de estacionamiento",
+      Spanish: "Volumen de los pitidos de aparcamiento",
     },
     "Preferred-Music": {
       German: "Musik",
       Chinese: "喜欢的音乐",
       English: "Music",
-      Spanish: "Música",
-    },
+      Spanish: "Música preferida",
+    }, 
     "ADAS-Beep-Level": {
       German: "ADAS Signalpegel",
       Chinese: "ADAS警示音量",
       English: "ADAS Beep",
-      Spanish: "Volumen de alerta ADAS",
+      Spanish: "Volumen de los pitidos ADAS",
     },
     "Save-changes-listed-below": {
       German: "Die unten aufgeführten Änderungen speichern?",
       Chinese: "是否要保存以下的变更？",
       English: "Save changes listed below?",
-      Spanish: "¿¿ desea guardar los siguientes cambios?",
+      Spanish: "¿ Guardar los cambios que se indican a continuación?",
     },
     "Seat-Position": {
       German: "Sitzposition",
@@ -154,19 +153,19 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       German: "Luftstrompegel",
       Chinese: "空调风速等级",
       English: "AC Air Flow Level",
-      Spanish: "Nivel de velocidad del aire acondicionado",
+      Spanish: "AC velocidad del aire",
     },
     "Steering-Wheel-Warm": {
       German: "Lenkrad warm",
       Chinese: "方向盘加热程度",
       English: "Steering Wheel Warm",
-      Spanish: "Calentamiento del volante",
+      Spanish: "nivel de calefacción del volante",
     },
     "Seat-Heat-Level": {
       German: "Sitzheizung",
       Chinese: "座椅加热程度",
       English: "Seat Heat Level",
-      Spanish: "Calentamiento del asiento",
+      Spanish: "nivel de calefacción del asiento",
     },
     "Seat-Ventilation": {
       German: "Sitzbelüftung",
@@ -190,7 +189,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       German: "Rückspiegelstatus",
       Chinese: "后视镜状态",
       English: "Mirror Status",
-      Spanish: "Estado del espejo retrovisor",
+      Spanish: "estado del espejo retrovisor",
     },
     "Drive-Mode": {
       German: "Fahrmodus",
@@ -1771,22 +1770,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                             </h5>
 
     
-                   
-                            <div class="row"  style="margin-top:0.5vw;">
-                                <label class="col-sm-5 col-form-label col-form-label" style="text-align:center;">Rain Intensity</label>
-                                <div class="col-sm-6" style="background-color:#CAECF4;border-radius:5px;">
-                                    <label for="rainRange" class="form-label" style="margin-bottom:0px;">0% ~ 100%</label>
-                                    </br>
-                                    Current:<span id="rainRangeDisplay" style="text-decoration:underline;">
-                                        50
-                                    </span>%
-                                    </br>
-                                    <input type="range" class="form-range" min="0" max="100" id="rainRange">
-                           
-                                  </div>
-                            </div>
-                   
-                            
+
                             <div class="row" style="margin-top:0.5vw;">
                                 <label class="col-sm-5 col-form-label col-form-label" style="text-align:center;">Outside Temperature</label>
                                 <div class="col-sm-6" style="background-color:#FFBE7D;border-radius:5px;">
@@ -1805,6 +1789,24 @@ const plugin = ({ widgets, simulator, vehicle }) => {
               
                                   </div>
                             </div>
+
+                   
+                            <div class="row"  style="margin-top:0.5vw;">
+                                <label class="col-sm-5 col-form-label col-form-label" style="text-align:center;">Rain Intensity</label>
+                                <div class="col-sm-6" style="background-color:#CAECF4;border-radius:5px;">
+                                    <label for="rainRange" class="form-label" style="margin-bottom:0px;">0% ~ 100%</label>
+                                    </br>
+                                    Current:<span id="rainRangeDisplay" style="text-decoration:underline;">
+                                        50
+                                    </span>%
+                                    </br>
+                                    <input type="range" class="form-range" min="0" max="100" id="rainRange">
+                           
+                                  </div>
+                            </div>
+                   
+                            
+                            
                   
 
                         </div>
@@ -2121,21 +2123,6 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   // var RainIntensityRange = bigBoxModule.querySelector('#rainRange');
   // RainIntensityRange.addEventListener('click',function(event){})
 
-  SignalWithMedia(
-    bigBoxModule.querySelector("#displayVideo"),
-    "Vehicle.Cabin.Door.Row1.Left.IsOpen",
-    {
-      [true]: {
-        type: "video",
-        url: "https://digitalauto-media-data.netlify.app/DoorOpen720x360.mp4",
-      },
-      [false]: {
-        type: "video",
-        url: "https://digitalauto-media-data.netlify.app/DoorClose720x360.mp4",
-      },
-    },
-    vehicle
-  );
 
 
   var musicControl = bigBoxModule.querySelector("#albumImage");
@@ -2307,6 +2294,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   });
 
   DriveModeControl.addEventListener("click", function (event) {
+    if(event.target.checked){
+      systemDictionary.driveMode.val = "SPO";
+    }else{
+      systemDictionary.driveMode.val = "ECO";
+    }
     // systemDictionary.driveMode.val = event.target.checked;
     console.log("On/Off:", systemDictionary.driveMode.val);
   });
@@ -2660,6 +2652,14 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
     switchLanguage(dictionary["language"].val);
     // drive mode
+    if(dictionary["driveMode"].val == "ECO"){
+      bigBoxModule.querySelector("#DriveModeControl").checked = false;
+    }else if(dictionary["driveMode"].val == "SPO"){
+      bigBoxModule.querySelector("#DriveModeControl").checked = true;
+    }
+
+
+    
   }
 
   function switchLanguage(targetLanguage) {
@@ -2893,12 +2893,10 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       }
     },
     setDriveMode: function () {
-      if (systemDictionary.driveMode.val) {
-        
-
+      
         let targetDiv = bigBoxModule.querySelector("#driveModeSpan");
         targetDiv.innerHTML = systemDictionary.driveMode.val;
-      }
+      
     },
     getOutsideTemperature: function () {
       return OutsideTemperature;
