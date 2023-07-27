@@ -1,15 +1,16 @@
 const plugin = ({ widgets, simulator, vehicle }) => {
+  var firstRunFlag = true;
   var txt = readTextFile("http://127.0.0.1:5500/ident.txt");
   var allDriverDictionary = analysisTxt(txt);
   var defaultDriverDictionary = pasteToNewDictionary(
-    allDriverDictionary["Default_Driver"]
+    allDriverDictionary["NBAPlayer"]
   );
   var originalCustomDictionary = pasteToNewDictionary(
-    allDriverDictionary["custom"]
+    allDriverDictionary["Custom"]
   );
   var customizedDictionary = pasteToNewDictionary(originalCustomDictionary);
   var systemDictionary = pasteToNewDictionary(defaultDriverDictionary);
-  console.log(originalCustomDictionary);
+  // console.log(originalCustomDictionary);
   // live args
   var selectedDriverName = null;
   var isPersonal = false;
@@ -269,28 +270,51 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                     left: null,
                     right: null,
                     middle: {
-                      val: "Set Steering Mode",
+                      val: "Set One Puddle Drive",
                       type: "activity",
                       left: null,
                       right: null,
                       middle: {
-                        val: "Set Braking Mode",
+                        val: "Set Drive Mode",
                         type: "activity",
                         left: null,
                         right: null,
                         middle: {
-                          val: "Set Power Mode",
+                          val: "Get Outside Temperature",
                           type: "activity",
                           left: null,
                           right: null,
                           middle: {
-                            val: "Get Outside Temperature",
-                            type: "activity",
-                            left: null,
+                            val: {
+                              state: "temp < 9",
+                              leftCondition: "Yes",
+                              middleCondition: "No",
+                              rightCondition: null,
+                            },
+                            type: "judge",
+                            left: {
+                              val: "Turn on & Set AC",
+                              type: "activity",
+                              left: null,
+                              right: null,
+                              middle: {
+                                val: "Turn on Seat Heat",
+                                type: "activity",
+                                left: null,
+                                right: null,
+                                middle: {
+                                  val: "Turn Steering Wheel Warm",
+                                  type: "activity",
+                                  left: null,
+                                  right: null,
+                                  middle: afterTempJudge,
+                                },
+                              },
+                            },
                             right: null,
                             middle: {
                               val: {
-                                state: "temp < 9",
+                                state: "temp > 25",
                                 leftCondition: "Yes",
                                 middleCondition: "No",
                                 rightCondition: null,
@@ -302,44 +326,15 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                                 left: null,
                                 right: null,
                                 middle: {
-                                  val: "Turn on Seat Heat",
+                                  val: "Turn On Seat Ventilation",
                                   type: "activity",
                                   left: null,
                                   right: null,
-                                  middle: {
-                                    val: "Turn Steering Wheel Warm",
-                                    type: "activity",
-                                    left: null,
-                                    right: null,
-                                    middle: afterTempJudge,
-                                  },
+                                  middle: afterTempJudge,
                                 },
                               },
                               right: null,
-                              middle: {
-                                val: {
-                                  state: "temp > 25",
-                                  leftCondition: "Yes",
-                                  middleCondition: "No",
-                                  rightCondition: null,
-                                },
-                                type: "judge",
-                                left: {
-                                  val: "Turn on & Set AC",
-                                  type: "activity",
-                                  left: null,
-                                  right: null,
-                                  middle: {
-                                    val: "Turn On Seat Ventilation",
-                                    type: "activity",
-                                    left: null,
-                                    right: null,
-                                    middle: afterTempJudge,
-                                  },
-                                },
-                                right: null,
-                                middle: afterTempJudge,
-                              },
+                              middle: afterTempJudge,
                             },
                           },
                         },
@@ -372,9 +367,9 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         middle: {
           val: {
             state: "Driver Memory",
-            leftCondition: "custom",
-            middleCondition: "Kyrie_Irving",
-            rightCondition: "Default_Driver",
+            leftCondition: "Custom",
+            middleCondition: "NBAPlayer",
+            rightCondition: "Wife",
           },
           type: "judge",
           left: {
@@ -385,20 +380,14 @@ const plugin = ({ widgets, simulator, vehicle }) => {
             middle: personalTree,
           },
           right: {
-            val: "Default Driver",
+            val: "Pull Driver Wife",
             type: "activity",
             left: null,
             right: null,
-            middle: {
-              val: "Default Setting",
-              type: "activity",
-              left: null,
-              right: null,
-              middle: null,
-            },
+            middle: personalTree,
           },
           middle: {
-            val: "Pull Driver Kyrie Irving",
+            val: "Pull Driver NBA Player",
             type: "activity",
             left: null,
             right: null,
@@ -893,7 +882,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   // Event listener for the on/off button click
   onOffButton.addEventListener("click", function (event) {
     var isOn = event.target.checked;
-    console.log("On/Off:", isOn);
+    // console.log("On/Off:", isOn);
     let childrenList = personalSettingModule.querySelectorAll(
       ".setting-checkbox-child"
     );
@@ -936,79 +925,83 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   welcomeWordCheck.addEventListener("click", function (event) {
     var isOn = event.target.checked;
     systemDictionary.welcomeWord.onOff = event.target.checked;
-    console.log("On/Off:", isOn);
+    // console.log("On/Off:", isOn);
   });
 
   SeatPositionCheck.addEventListener("click", function (event) {
     systemDictionary["seatPosition"].onOff = event.target.checked;
-    console.log("On/Off:", systemDictionary["seatPosition"].onOff);
+    // console.log("On/Off:", systemDictionary["seatPosition"].onOff);
   });
   AutoHoldCheck.addEventListener("click", function (event) {
     var isOn = event.target.checked;
     systemDictionary.AutoHold.onOff = event.target.checked;
-    console.log("On/Off:", isOn);
+    // console.log("On/Off:", isOn);
   });
   MirrorStatusCheck.addEventListener("click", function (event) {
     systemDictionary.mirrorLeftTilt.onOff = event.target.checked;
     systemDictionary.mirrorLeftPan.onOff = event.target.checked;
     systemDictionary.mirrorRightTilt.onOff = event.target.checked;
     systemDictionary.mirrorRightPan.onOff = event.target.checked;
-    console.log("On/Off:", systemDictionary.mirrorLeftTilt.onOff);
+    // console.log("On/Off:", systemDictionary.mirrorLeftTilt.onOff);
   });
   DriveModeCheck.addEventListener("click", function (event) {
     systemDictionary.driveMode.onOff = event.target.checked;
-    console.log("On/Off:", systemDictionary.driveMode.onOff);
+    // console.log("On/Off:", systemDictionary.driveMode.onOff);
   });
   OnePuddleCheck.addEventListener("click", function (event) {
     systemDictionary.OnePuddle.onOff = event.target.checked;
-    console.log("On/Off:", systemDictionary.driveMode.onOff);
+    if(event.target.checked){
+      systemDictionary.OnePuddle.val ="On";
+    }else{
+      systemDictionary.OnePuddle.val = "Off";
+    }
+
   });
   ACAirFlowLevelCheck.addEventListener("click", function (event) {
     systemDictionary.ACAirFlowLevel.onOff = event.target.checked;
-    console.log("On/Off:", systemDictionary.ACAirFlowLevel.onOff);
+    // console.log("On/Off:", systemDictionary.ACAirFlowLevel.onOff);
   });
   ACTemperatureCheck.addEventListener("click", function (event) {
     systemDictionary.ACTemperatureIfCold.onOff = event.target.checked;
     systemDictionary.ACTemperatureIfHot.onOff = event.target.checked;
-    console.log("On/Off:", event.target.checked);
+    // console.log("On/Off:", event.target.checked);
   });
   SteeringWheelWarmCheck.addEventListener("click", function (event) {
     systemDictionary.SteeringWheelWarm.onOff = event.target.checked;
-    console.log("On/Off:", systemDictionary.SteeringWheelWarm.onOff);
+    // console.log("On/Off:", systemDictionary.SteeringWheelWarm.onOff);
   });
   SeatHeatLevelCheck.addEventListener("click", function (event) {
     systemDictionary.SeatHeatLevel.onOff = event.target.checked;
-    console.log("On/Off:", systemDictionary.SeatHeatLevel.onOff);
+    // console.log("On/Off:", systemDictionary.SeatHeatLevel.onOff);
   });
 
   SeatVentilationCheck.addEventListener("click", function (event) {
     systemDictionary.SeatVentilation.onOff = event.target.checked;
-    console.log("On/Off:", systemDictionary.SeatVentilation.onOff);
+    // console.log("On/Off:", systemDictionary.SeatVentilation.onOff);
   });
 
   LanguageSelect.onchange = function () {
     systemDictionary.language.val = this.value;
     systemDictionary.language.onOff = true;
-    console.log("language：", this.value);
+    // console.log("language：", this.value);
     switchLanguage(this.value);
   };
-
 
   UnitSelect.onchange = function () {
     systemDictionary.USMetricUnit.val = this.value;
     systemDictionary.USMetricUnit.onOff = true;
-    console.log("Selected Unit:", this.value);
+    // console.log("Selected Unit:", this.value);
     changeTemperatureUnit(this.value);
   };
 
   PreferredMusicSelect.onchange = function () {
     systemDictionary.musicURI.val = this.value;
     systemDictionary.musicURI.onOff = true;
-    console.log("Selected Unit:", this.value);
+    // console.log("Selected Unit:", this.value);
   };
 
   InteriorLightColor.onchange = function () {
-    console.log("color：", this.value);
+    // console.log("color：", this.value);
     systemDictionary.InteriorLight.onOff = true;
     systemDictionary.InteriorLight.val = this.value.replace("#", "");
     bigBoxModule.querySelector("#bottomLightDiv").style.boxShadow =
@@ -1018,13 +1011,13 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   ParkingBeepLevelSelect.onchange = function () {
     systemDictionary.parkingBeepLevel.val = this.value;
     systemDictionary.parkingBeepLevel.onOff = true;
-    console.log("Parking Beep Level：", this.value);
+    // console.log("Parking Beep Level：", this.value);
   };
 
   ADASBeepLevelSelect.onchange = function () {
     systemDictionary.ADASBeepLevel.val = this.value;
     systemDictionary.ADASBeepLevel.onOff = true;
-    console.log("ADAS Beep Level：", this.value);
+    // console.log("ADAS Beep Level：", this.value);
   };
 
   widgets.register("Setting1", (box) => {
@@ -1531,7 +1524,27 @@ const plugin = ({ widgets, simulator, vehicle }) => {
               background-color:transparent;
               display:block;
             }
+
+
+            .topLineTop{
+              width:20%;
+              position:absolute;
+              left:60%;
+              top:10vw;
+              background-color:transparent;
+              display:block;
+            }
             
+            .topLineBottom{
+              width:20%;
+              position:absolute;
+              left:33%;
+              top:18vw;
+              background-color:transparent;
+              display:block;
+            }
+
+
             .bottomLeftCorner{
               position:absolute;
               left:20%;
@@ -1579,53 +1592,71 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                         <button type="button" id="closeAlert" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                       </div>
                       <div class="toast-body" style="font-size:2vw;">
-                        Please select a driver first!
+                        Please select a driver first and then click "Run" on your right.
                       </div>
                     </div>
                   </div>
                 
                   <div id="displayVideo" style="width:100%;display:block;"> 
-                    <video class="bigBoxVideo" id="doorClose" autoplay playsinline muted src='https://digitalauto-media-data.netlify.app/DoorClose720x360.mp4' style = "display:block;height:100%;width:100%;object-fit:contain;">
+                    <img id="coverImg" src="http://127.0.0.1:5500/img/cover.png" style="width:100%;height:47vw;position:absolute;top:0;left:0;z-index:1;">
+                    <video class="bigBoxVideo" id="womanWalk" preload playsinline muted src='http://127.0.0.1:5500/img/Woman2Fast.mp4' style = "display:none;height:100%;width:100%;object-fit:contain;">
                     </video>
-                    <video class="bigBoxVideo" id="doorOpen" preload playsinline muted src='https://digitalauto-media-data.netlify.app/DoorOpen720x360.mp4' style = "display:none;height:100%;width:100%;object-fit:contain;">
+                    <video class="bigBoxVideo" id="manWalk" preload playsinline muted src='http://127.0.0.1:5500/img/ManFast.mp4' style = "display:none;height:100%;width:100%;object-fit:contain;">
                     </video>
-                    <video class="bigBoxVideo" id="seatAdjust" preload playsinline muted src='https://digitalauto-media-data.netlify.app/SeatGoUp720x360.mp4' style = "display:none;height:100%;width:100%;object-fit:contain;">
+                    <video class="bigBoxVideo" id="doorOpen" preload playsinline muted src='http://127.0.0.1:5500/img/openDoor.mp4' style = "display:none;height:100%;width:100%;object-fit:contain;">
+                    </video>
+                    <video class="bigBoxVideo" id="seatAdjustForward" preload playsinline muted src='http://127.0.0.1:5500/img/forward.mp4' style = "display:none;height:100%;width:100%;object-fit:contain;">
+                    </video>
+                    <video class="bigBoxVideo" id="seatAdjustBackward" preload playsinline muted src='http://127.0.0.1:5500/img/backward.mp4' style = "display:none;height:100%;width:100%;object-fit:contain;">
                     </video>
                     
                   </div>
                   <div id="displayCockpit" style="width:100%;height:100%;display:none;background-image:url(http://127.0.0.1:5500/img/origin.jpg);background-repeat:no-repeat;background-size:100%;">
-                    <img src="http://127.0.0.1:5500/img/vehicle.png" style="width:100%;position:absolute;top:0;left:0;z-index:1;">
+                    <img src="http://127.0.0.1:5500/img/vehicleWithoutUnit.png" style="width:100%;position:absolute;top:0;left:0;z-index:1;">
                     
                     <div class= "bottomLight" id="bottomLightDiv">
                     </div>
 
                     <div class="upperImg topLineLeft" id="topLineLeft">
-                      <div class="upperImg" id="driveModeSpan" style="display:inline-block;color:white;font-size:2vw;">
+                      <div class="upperImg textToClear" id="driveModeSpan" style="display:inline-block;color:white;font-size:2vw;">
 
                       </div>
 
                     </div>
 
                     <div class="upperImg topLineRight" id="topLineRight">
-                      <div class="upperImg" id="autoHoldImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/AutoHold.png);">
+                      <div class="upperImg imgToHide" id="autoHoldImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/AutoHold.png);">
                       </div>
                     </div>
+
+                    <div class="upperImg topLineTop" id="topLineTop">
+                      <div class="upperImg imgToHide" id="OnePuddleDriveImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/OnePuddle.png);">
+                      </div>
+                    </div>
+
+                    <div class="upperImg topLineBottom" id="topLineBottom">
+                      <div class="upperImg textToClear" id="unitSpan" style="display:inline-block;font-weight:bold;color:white;font-size:1.3vw;">
+
+                      </div>
+
+                    </div>
+
 
          
 
                     <div class="upperImg bottomIconLine2" id="bottomIconLine2Div">
 
-                        <div class="upperImg" id="welcomeWord" style="display:inline-block;">
+                        <div class="upperImg imgToHide" id="welcomeWord" style="display:inline-block;">
 
                         </div>
                       
                         
-                        <div class="upperImg" id="powerImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fpower.png?alt=media&token=71d28680-67c3-480d-8576-38081e688b03);">
+                        <div class="upperImg imgToHide" id="powerImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fpower.png?alt=media&token=71d28680-67c3-480d-8576-38081e688b03);">
 
                         </div>
 
                         
-                        <div class="upperImg" id="steeringImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2FESP.png?alt=media&token=34c1f5fb-9132-46e7-abb7-3898f507b923);">
+                        <div class="upperImg imgToHide" id="steeringImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2FESP.png?alt=media&token=34c1f5fb-9132-46e7-abb7-3898f507b923);">
 
                         </div>
                         
@@ -1633,24 +1664,24 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                         
                         
                    
-                        <div class="upperImg" id="ACImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/ac.png)">
+                        <div class="upperImg imgToHide" id="ACImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/ac.png)">
 
                         </div>
                         
-                        <span id="AC-temperature" style="font-size:5vh;color:white;">
+                        <span class="textToClear" id="AC-temperature" style="font-size:5vh;color:white;">
                         </span>
-                        <span id="AC-temperature-unit" style="font-size:5vh;color:white;">
+                        <span class="textToClear" id="AC-temperature-unit" style="font-size:5vh;color:white;">
                           
                         </span>
-                        <div class="upperImg ACAirFlowLevelImage"  style="display:none;width:3vh;height:3vh;background-size:3vh 3vh;background-image:url(http://127.0.0.1:5500/img/fan-white.png);">
+                        <div class="upperImg ACAirFlowLevelImage imgToHide"  style="display:none;width:3vh;height:3vh;background-size:3vh 3vh;background-image:url(http://127.0.0.1:5500/img/fan-white.png);">
                         </div>
-                        <div class="upperImg ACAirFlowLevelImage"  style="display:none;width:3vh;height:3vh;background-size:3vh 3vh;background-image:url(http://127.0.0.1:5500/img/fan-white.png);">
+                        <div class="upperImg ACAirFlowLevelImage imgToHide"  style="display:none;width:3vh;height:3vh;background-size:3vh 3vh;background-image:url(http://127.0.0.1:5500/img/fan-white.png);">
                         </div>
-                        <div class="upperImg ACAirFlowLevelImage"  style="display:none;width:3vh;height:3vh;background-size:3vh 3vh;background-image:url(http://127.0.0.1:5500/img/fan-white.png);">
+                        <div class="upperImg ACAirFlowLevelImage imgToHide"  style="display:none;width:3vh;height:3vh;background-size:3vh 3vh;background-image:url(http://127.0.0.1:5500/img/fan-white.png);">
                         </div>
-                        <div class="upperImg ACAirFlowLevelImage"  style="display:none;width:3vh;height:3vh;background-size:3vh 3vh;background-image:url(http://127.0.0.1:5500/img/fan-white.png);">
+                        <div class="upperImg ACAirFlowLevelImage imgToHide"  style="display:none;width:3vh;height:3vh;background-size:3vh 3vh;background-image:url(http://127.0.0.1:5500/img/fan-white.png);">
                         </div>
-                        <div class="upperImg ACAirFlowLevelImage"  style="display:none;width:3vh;height:3vh;background-size:3vh 3vh;background-image:url(http://127.0.0.1:5500/img/fan-white.png);">
+                        <div class="upperImg ACAirFlowLevelImage imgToHide"  style="display:none;width:3vh;height:3vh;background-size:3vh 3vh;background-image:url(http://127.0.0.1:5500/img/fan-white.png);">
                         </div>
 
 
@@ -1659,7 +1690,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
                     </div>
 
-                    <div class="upperImg bottomIconLine1" style="display:none;width:23%;background-color:#DEDEDE;border-radius:4vw;height:8vw;box-shadow:0px 0px 1vw 0px #FFFFFF;" id="bottomIconLine1Div">
+                    <div class="upperImg bottomIconLine1 imgToHide" style="display:none;width:23%;background-color:#DEDEDE;border-radius:4vw;height:8vw;box-shadow:0px 0px 1vw 0px #FFFFFF;" id="bottomIconLine1Div">
                       
                       <div style="width:8vw;display:inline-block;">
                         <div class="upperImg" id="albumImage" style="width:8vw;height:8vw;border-radius:4vw;border:solid 1px white;background-size:8vw 8vw;">
@@ -1696,51 +1727,51 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                     </div>
 
                     <div class="upperImg bottomLeftCorner">
-                      <div class="upperImg" id="SeatHeatImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fseat_heat.png?alt=media&token=8ce653bc-23d9-4840-8bd6-f785de555dac);">
+                      <div class="upperImg imgToHide" id="SeatHeatImage" style="display:none;width:7vh;height:7vh;background-size:7vh 7vh;background-image:url(https://firebasestorage.googleapis.com/v0/b/digital-auto.appspot.com/o/media%2Fseat_heat.png?alt=media&token=8ce653bc-23d9-4840-8bd6-f785de555dac);">
 
                       </div>
-                      <div class="upperImg" id="SeatVentilationImage" style="display:none;width:6vh;height:6vh;background-size:6vh 6vh;background-image:url(http://127.0.0.1:5500/img/seat-ventilation2.png);">
+                      <div class="upperImg imgToHide" id="SeatVentilationImage" style="display:none;width:6vh;height:6vh;background-size:6vh 6vh;background-image:url(http://127.0.0.1:5500/img/seat-ventilation2.png);">
 
                       </div>
-                      <div class="upperImg" id="steeringWheelWarmImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;margin-bottom:1vh;background-image:url(http://127.0.0.1:5500/img/steer-wheel-heat.png);">
+                      <div class="upperImg imgToHide" id="steeringWheelWarmImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;margin-bottom:1vh;background-image:url(http://127.0.0.1:5500/img/steer-wheel-heat.png);">
                       </div>
                     </div>
 
                     <div class="upperImg bottomRightCorner1">
-                      <div class="upperImg" id="volumeDisableParkingImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/volumeDisable.png);margin-left:1vw;">
+                      <div class="upperImg imgToHide" id="volumeDisableParkingImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/volumeDisable.png);margin-left:1vw;">
 
                       </div>
-                      <div class="upperImg" id="volumeLowParkingImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/volumeLow.png);margin-left:1vw;">
+                      <div class="upperImg imgToHide" id="volumeLowParkingImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/volumeLow.png);margin-left:1vw;">
 
                       </div>
 
-                      <div class="upperImg" id="volumeMediumParkingImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/volumeMiddle.png);margin-left:1vw;">
+                      <div class="upperImg imgToHide" id="volumeMediumParkingImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/volumeMiddle.png);margin-left:1vw;">
                       </div>
 
-                      <div class="upperImg" id="volumeHighParkingImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/volumeHigh.png);margin-left:1vw;">
+                      <div class="upperImg imgToHide" id="volumeHighParkingImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/volumeHigh.png);margin-left:1vw;">
                       </div>
                       </br>
-                      <span class="upperImg" id="ParkingBeepSpan" style="color:white;font-size:1.5vh;">
+                      <span class="upperImg textToClear" id="ParkingBeepSpan" style="color:white;font-size:1.5vh;">
                       
                       </span>
                     </div>
 
 
                     <div class="upperImg bottomRightCorner2">
-                      <div class="upperImg" id="volumeDisableImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/volumeDisable.png);margin-left:1vw;">
+                      <div class="upperImg imgToHide" id="volumeDisableImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/volumeDisable.png);margin-left:1vw;">
 
                       </div>
-                      <div class="upperImg" id="volumeLowImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/volumeLow.png);margin-left:1vw;">
+                      <div class="upperImg imgToHide" id="volumeLowImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;background-image:url(http://127.0.0.1:5500/img/volumeLow.png);margin-left:1vw;">
 
                       </div>
 
-                      <div class="upperImg" id="volumeMediumImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;;background-image:url(http://127.0.0.1:5500/img/volumeMiddle.png);margin-left:1vw;">
+                      <div class="upperImg imgToHide" id="volumeMediumImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;;background-image:url(http://127.0.0.1:5500/img/volumeMiddle.png);margin-left:1vw;">
                       </div>
 
-                      <div class="upperImg" id="volumeHighImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;;background-image:url(http://127.0.0.1:5500/img/volumeHigh.png);margin-left:1vw;">
+                      <div class="upperImg imgToHide" id="volumeHighImage" style="display:none;width:5vh;height:5vh;background-size:5vh 5vh;;background-image:url(http://127.0.0.1:5500/img/volumeHigh.png);margin-left:1vw;">
                       </div>
                       </br>
-                      <span class="upperImg" id="ADASBeepSpan" style="color:white;font-size:1.5vh;">
+                      <span class="upperImg textToClear" id="ADASBeepSpan" style="color:white;font-size:1.5vh;">
                       
                       </span>
                     </div>
@@ -2071,18 +2102,21 @@ const plugin = ({ widgets, simulator, vehicle }) => {
                      <tr>
               
                          <td>
- 
+                          <div class="row g-3 align-items-center">
+                          <div class="col-7">
                                  <span class="float-start" style="margin-left:8px">
                                      Drive Mode
                                      </span>
-                                     <div class="form-switch clearfix">
-                                      <select class="form-select form-select-sm float-end setting-checkbox-child driver-input-child" id="DriveModeSelect" style="font-size:4vw;background-size:3vw;padding:.375rem 1rem .375rem .75rem;background-position:right 0.25rem center;">
+                             </div>
+                            <div class="col-5">
+                                      <select class="form-select form-select-sm float-end setting-checkbox-child driver-input-child" id="DriveModeSelect" style="font-size:1.5vw;background-size:1.5vw;padding:.375rem 1rem .375rem .75rem;background-position:right 0.25rem center;">
                                         <option id="OptionECO" value="ECO">ECO</option>    
                                         <option id="OptionSPO" value="SPO">SPO</option>
                                         <option id="OptionCOM" value="COM">COM</option>
                                         
                                       </select>
                                      </div>
+                                </div>
                          </td>
                      </tr>
 
@@ -2135,14 +2169,14 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var RainIntensityRange2 = bigBoxModule.querySelector("#rainRange");
   RainIntensityRange2.addEventListener("click", function (event) {
     rainIntensity = event.target.value;
-    console.log("rainIntensity:", rainIntensity);
+    // console.log("rainIntensity:", rainIntensity);
     bigBoxModule.querySelector("#rainRangeDisplay").innerHTML = rainIntensity;
   });
 
   var temperatureRange2 = bigBoxModule.querySelector("#temperatureRange");
   temperatureRange2.addEventListener("click", function (event) {
     OutsideTemperature = event.target.value;
-    console.log("OutsideTemperature:", OutsideTemperature);
+    // console.log("OutsideTemperature:", OutsideTemperature);
     if (systemDictionary.USMetricUnit.val == "US") {
       bigBoxModule.querySelector("#temperatureRangeDisplay").innerHTML =
         toFahrenheit(OutsideTemperature);
@@ -2155,7 +2189,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var SeatPositionRange = bigBoxModule.querySelector("#SeatPositionRange");
   SeatPositionRange.addEventListener("click", function (event) {
     systemDictionary.seatPosition.val = event.target.value;
-    console.log("Seat Position:", systemDictionary.seatPosition.val);
+    // console.log("Seat Position:", systemDictionary.seatPosition.val);
     bigBoxModule.querySelector("#seatPositionRangeDisplay").innerHTML =
       systemDictionary.seatPosition.val;
   });
@@ -2165,10 +2199,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   );
   ACTemperatureIfHotRange.addEventListener("click", function (event) {
     systemDictionary.ACTemperatureIfHot.val = event.target.value;
-    console.log(
-      "AC Temperature IfHot:",
-      systemDictionary.ACTemperatureIfHot.val
-    );
+
     if (systemDictionary.USMetricUnit.val == "US") {
       bigBoxModule.querySelector("#ACTemperatureIfHotRangeDisplay").innerHTML =
         toFahrenheit(event.target.value);
@@ -2183,10 +2214,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   );
   ACTemperatureIfColdRange.addEventListener("click", function (event) {
     systemDictionary.ACTemperatureIfCold.val = event.target.value;
-    console.log(
-      "AC Temperature IfCold:",
-      systemDictionary.ACTemperatureIfCold.val
-    );
+
     if (systemDictionary.USMetricUnit.val == "US") {
       bigBoxModule.querySelector("#ACTemperatureIfColdRangeDisplay").innerHTML =
         toFahrenheit(event.target.value);
@@ -2199,7 +2227,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var ACAirFlowLevelRange = bigBoxModule.querySelector("#ACAirFlowLevelRange");
   ACAirFlowLevelRange.addEventListener("click", function (event) {
     systemDictionary.ACAirFlowLevel.val = event.target.value;
-    console.log("AC Air Flow Level:", systemDictionary.ACAirFlowLevel.val);
+    // console.log("AC Air Flow Level:", systemDictionary.ACAirFlowLevel.val);
     bigBoxModule.querySelector("#ACAirFlowLevelRangeDisplay").innerHTML =
       systemDictionary.ACAirFlowLevel.val;
   });
@@ -2208,7 +2236,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   );
   SteeringWheelWarmRange.addEventListener("click", function (event) {
     systemDictionary.SteeringWheelWarm.val = event.target.value;
-    console.log("Steering Wheel Warm:", systemDictionary.SteeringWheelWarm.val);
+    // console.log("Steering Wheel Warm:", systemDictionary.SteeringWheelWarm.val);
     bigBoxModule.querySelector("#SteeringWheelWarmRangeDisplay").innerHTML =
       systemDictionary.SteeringWheelWarm.val;
   });
@@ -2216,7 +2244,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var SeatHeatLevelRange = bigBoxModule.querySelector("#SeatHeatLevelRange");
   SeatHeatLevelRange.addEventListener("click", function (event) {
     systemDictionary.SeatHeatLevel.val = event.target.value;
-    console.log("Seat Heat Level:", systemDictionary.SeatHeatLevel.val);
+    // console.log("Seat Heat Level:", systemDictionary.SeatHeatLevel.val);
     bigBoxModule.querySelector("#SeatHeatLevelRangeDisplay").innerHTML =
       systemDictionary.SeatHeatLevel.val;
   });
@@ -2226,7 +2254,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   );
   SeatVentilationRange.addEventListener("click", function (event) {
     systemDictionary.SeatVentilation.val = event.target.value;
-    console.log("Seat Ventilation:", systemDictionary.SeatVentilation.val);
+    // console.log("Seat Ventilation:", systemDictionary.SeatVentilation.val);
     bigBoxModule.querySelector("#SeatVentilationRangeDisplay").innerHTML =
       systemDictionary.SeatVentilation.val;
   });
@@ -2234,7 +2262,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var mirrorLeftTiltRange = bigBoxModule.querySelector("#mirrorLeftTiltRange");
   mirrorLeftTiltRange.addEventListener("click", function (event) {
     systemDictionary.mirrorLeftTilt.val = event.target.value;
-    console.log("mirrorLeftTilt:", systemDictionary.mirrorLeftTilt.val);
+    // console.log("mirrorLeftTilt:", systemDictionary.mirrorLeftTilt.val);
     bigBoxModule.querySelector("#mirrorLeftTiltRangeDisplay").innerHTML =
       systemDictionary.mirrorLeftTilt.val;
   });
@@ -2242,7 +2270,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var mirrorLeftPanRange = bigBoxModule.querySelector("#mirrorLeftPanRange");
   mirrorLeftPanRange.addEventListener("click", function (event) {
     systemDictionary.mirrorLeftPan.val = event.target.value;
-    console.log("mirrorLeftPan:", systemDictionary.mirrorLeftPan.val);
+    // console.log("mirrorLeftPan:", systemDictionary.mirrorLeftPan.val);
     bigBoxModule.querySelector("#mirrorLeftPanRangeDisplay").innerHTML =
       systemDictionary.mirrorLeftPan.val;
   });
@@ -2252,7 +2280,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   );
   mirrorRightTiltRange.addEventListener("click", function (event) {
     systemDictionary.mirrorRightTilt.val = event.target.value;
-    console.log("mirrorRightTilt:", systemDictionary.mirrorRightTilt.val);
+    // console.log("mirrorRightTilt:", systemDictionary.mirrorRightTilt.val);
     bigBoxModule.querySelector("#mirrorRightTiltRangeDisplay").innerHTML =
       systemDictionary.mirrorRightTilt.val;
   });
@@ -2260,7 +2288,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var mirrorRightPanRange = bigBoxModule.querySelector("#mirrorRightPanRange");
   mirrorRightPanRange.addEventListener("click", function (event) {
     systemDictionary.mirrorRightPan.val = event.target.value;
-    console.log("mirrorRightPan:", systemDictionary.mirrorRightPan.val);
+    // console.log("mirrorRightPan:", systemDictionary.mirrorRightPan.val);
     bigBoxModule.querySelector("#mirrorRightPanRangeDisplay").innerHTML =
       systemDictionary.mirrorRightPan.val;
   });
@@ -2277,13 +2305,13 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   AutoHoldControl.addEventListener("click", function (event) {
     AutoHoldIsOn = event.target.checked;
-    if(event.target.checked){
+    if (event.target.checked) {
       systemDictionary.AutoHold.val = "On";
-    }else{
+    } else {
       systemDictionary.AutoHold.val = "Off";
     }
-   
-    console.log("On/Off:", AutoHoldIsOn);
+
+    // console.log("On/Off:", AutoHoldIsOn);
   });
 
   DriveModeSelect.onchange = function () {
@@ -2291,9 +2319,9 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   };
 
   var personDic = {
-    Person1: ["custom", "Customize your own"],
-    Person2: ["Kyrie_Irving", "NBA all star"],
-    Person3: ["Default_Driver", "Pre-set driver"],
+    Person2: ["NBAPlayer", "NBA all star"],
+    Person3: ["Wife", "NBA Player's wife"],
+    Person1: ["Custom", "Customize your own"],
   };
 
   var usrAvatar = personalSettingModule.querySelector("#avatar");
@@ -2346,7 +2374,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       .querySelector("#" + key)
       .addEventListener("click", function (event) {
         selectedDriverName = personDic[this.id][0];
-        console.log(this.id);
+        // console.log(this.id);
         bigBoxModule.querySelector("#pickDriver").style.border =
           "1px solid #CCCCCC";
         bigBoxModule.querySelector("#pickDriver").style.boxShadow =
@@ -2374,7 +2402,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
           ".driver-input-child"
         );
         let inputList2 = bigBoxModule.querySelectorAll(".driver-input-child");
-        if (personDic[this.id][0] == "custom") {
+        if (personDic[this.id][0] == "Custom") {
           for (let item of inputList) {
             if (item.getAttribute("disabled")) {
               item.removeAttribute("disabled");
@@ -2426,7 +2454,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       if (curTree.type == "judge") {
         moveDirection = getDirection(curTree.val);
         dividing = true;
-        console.log(moveDirection);
+        // console.log(moveDirection);
       } else {
         curTree = curTree.middle;
       }
@@ -2437,10 +2465,10 @@ const plugin = ({ widgets, simulator, vehicle }) => {
 
   var did = setInterval(catchDoorSignal, 500);
   async function catchDoorSignal() {
-    // console.log("catch door signal")
+    // // console.log("catch door signal")
     var doorSignal = await vehicle["Cabin.Door.Row1.Left.IsOpen"].get();
     if (doorSignal == true) {
-      console.log("door true");
+      // console.log("door true");
       playVideo(
         "doorOpen",
         "https://digitalauto-media-data.netlify.app/DoorOpen720x360.mp4"
@@ -2453,14 +2481,37 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   var sid = setInterval(catchSeatSignal, 500);
 
   async function catchSeatSignal() {
-    // console.log("catch seat signal")
+    // // console.log("catch seat signal")
     var seatSignal = await vehicle["Cabin.Seat.Row1.Pos1.Height"].get();
     if (seatSignal == "100" || seatSignal == 100) {
-      console.log("seat true");
-      playVideo(
-        "seatAdjust",
-        "https://digitalauto-media-data.netlify.app/SeatGoUp720x360.mp4"
-      );
+      // console.log("seat true");
+      if(selectedDriverName == "Wife"){
+        playVideo(
+          "seatAdjustForward",
+          ""
+        );
+      }else{
+        if(selectedDriverName == "Custom"){
+          if(systemDictionary.seatPosition.val <= 250){
+            playVideo(
+              "seatAdjustBackWard",
+              ""
+            );
+          }else{
+            playVideo(
+              "seatAdjustForward",
+              ""
+            );
+          }
+        }else{
+          playVideo(
+            "seatAdjustBackWard",
+            ""
+          );
+        }
+        
+      }
+      
 
       clearInterval(sid);
     }
@@ -2476,15 +2527,21 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     videoDiv.style.display = "none";
   }
   function playVideo(target, url) {
-    console.log("play");
+    // console.log("play");
+    
 
+    let targetVideo = bigBoxModule.querySelector("#" + target);
+    targetVideo.play();
+  
     let videoList = bigBoxModule.querySelectorAll(".bigBoxVideo");
     for (let videoItem of videoList) {
+
       videoItem.style.display = "none";
     }
-    let targetVideo = bigBoxModule.querySelector("#" + target);
     targetVideo.style.display = "block";
-    targetVideo.play();
+    bigBoxModule.querySelector("#coverImg").style.display ="none";
+    displayVideo();
+    
     // videoDiv.innerHTML =
     //   `
     //     <video id='` +
@@ -2496,16 +2553,15 @@ const plugin = ({ widgets, simulator, vehicle }) => {
     //   `'
     //     style="display:block;height: 100%; width: 100%; object-fit: contain;"
     //     ></video>
-    //   `;
-    displayVideo();
+
   }
 
   // clearInterval(catchSignal)
 
   function updateWebpage(pickedDriverName) {
     if (
-      pickedDriverName == "Default_Driver" ||
-      pickedDriverName == "Kyrie_Irving"
+      pickedDriverName == "NBAPlayer" ||
+      pickedDriverName == "Wife"
     ) {
       updateWebpageContent(allDriverDictionary[pickedDriverName]);
     } else {
@@ -2514,14 +2570,12 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   }
 
   function updateWebpageContent(dictionary) {
-    console.log("update webpage");
-    console.log(dictionary["seatPosition"].val);
+    // console.log("update webpage");
+    // console.log(dictionary["seatPosition"].val);
     changeTemperatureUnit(dictionary["USMetricUnit"].val);
     personalSettingModule.querySelector(
       "#" + dictionary["language"].val
     ).selected = true;
-
-  
 
     personalSettingModule.querySelector(
       "#" + dictionary["USMetricUnit"].val
@@ -2617,12 +2671,11 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       dictionary["SeatVentilation"].val;
 
     // autohold
-    if(dictionary["AutoHold"].val == "On"){
+    if (dictionary["AutoHold"].val == "On") {
       bigBoxModule.querySelector("#AutoHoldControl").checked = true;
-    }else{
+    } else {
       bigBoxModule.querySelector("#AutoHoldControl").checked = false;
     }
-    
 
     bigBoxModule.querySelector("#mirrorLeftTiltRangeDisplay").innerHTML =
       dictionary["mirrorLeftTilt"].val;
@@ -2645,37 +2698,36 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       dictionary["mirrorRightPan"].val;
 
     bigBoxModule.querySelector(
-        "#Option" + dictionary["driveMode"].val
-      ).selected = true;
+      "#Option" + dictionary["driveMode"].val
+    ).selected = true;
 
     switchLanguage(dictionary["language"].val);
     // drive mode
-  
   }
 
   function switchLanguage(targetLanguage) {
     for (var key in languageDictionary) {
-      // console.log(personalSettingModule.querySelector("#"+key));
+      // // console.log(personalSettingModule.querySelector("#"+key));
       personalSettingModule.querySelector("#" + key).innerHTML =
         languageDictionary[key][targetLanguage];
     }
   }
 
   function switchSystemDictionary(pickedDriverName) {
-    if (previousSelectedDriverName == "custom") {
-      console.log(originalCustomDictionary);
+    if (previousSelectedDriverName == "Custom") {
+      // console.log(originalCustomDictionary);
       customizedDictionary = systemDictionary;
       Object.entries(customizedDictionary).forEach(([key, value]) => {
         if (value.onOff == false) {
           customizedDictionary[key].val = originalCustomDictionary[key].val;
         }
       });
-      console.log(originalCustomDictionary);
+      // console.log(originalCustomDictionary);
     }
 
     if (
-      pickedDriverName == "Kyrie_Irving" ||
-      pickedDriverName == "Default_Driver"
+      pickedDriverName == "NBAPlayer" ||
+      pickedDriverName == "Wife"
     ) {
       systemDictionary = allDriverDictionary[pickedDriverName];
     } else {
@@ -2761,6 +2813,48 @@ const plugin = ({ widgets, simulator, vehicle }) => {
   });
 
   return {
+    start: function () {
+      firstRunFlag = false;
+      
+      if(selectedDriverName == "NBAPlayer"){
+        playVideo("manWalk","");
+      }else if(selectedDriverName == "Wife"){
+        playVideo("womanWalk","");
+      }else{
+        bigBoxModule.querySelector("#displayVideo").style.display = "block";
+      }
+    },
+    refresh: function () {
+      if(firstRunFlag == false){
+        bigBoxModule.querySelector("#displayCockpit").style.display = "none";
+        bigBoxModule.querySelector("#coverImg").style.display ="inline-block";
+
+        curTree = flowChartTree;
+        drawFlag = true;
+        dividing = false;
+        previousVal = null;
+        previousType = null;
+        moveDirection = null;
+        isPersonal = false;
+        did = setInterval(catchDoorSignal, 500);
+        sid = setInterval(catchSeatSignal, 500);
+        let videoList = bigBoxModule.querySelectorAll(".bigBoxVideo");
+        for (let videoItem of videoList) {
+          videoItem.style.display = "none";
+          videoItem.currentTime=0;
+        }
+        bigBoxModule.querySelector("#bottomLightDiv").style.boxShadow = "0px 0px 0px 0px #000000";
+        let hideList = bigBoxModule.querySelectorAll(".imgToHide");
+        for (let hideItem of hideList) {
+          hideItem.style.display = "none";
+        }
+        let clearList = bigBoxModule.querySelectorAll(".textToClear");
+        for (let clearItem of clearList) {
+          clearItem.innerHTML = "";
+        }
+      }
+      
+    },
     nextStepPY: function () {
       nextStep();
       return "return";
@@ -2815,17 +2909,20 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       // }
     },
     setUSMetricUnits: function () {
-      // if (systemDictionary.USMetricUnit.val != null) {
-      //   bigBoxModule.querySelector("#units").innerHTML =
-      //     systemDictionary.USMetricUnit.val;
-      // }you 275 325
+      let targetDiv = bigBoxModule.querySelector("#unitSpan");
+      if(systemDictionary.USMetricUnit.val == "Metric"){
+        targetDiv.innerHTML = "km/h";
+      }else if (systemDictionary.USMetricUnit.val == "US"){
+        targetDiv.innerHTML = "mile/h"
+      }
+      
     },
     setInteriorLight: function () {
-      console.log("set interior light");
+      // console.log("set interior light");
       let colorDiv = bigBoxModule.querySelector("#bottomLightDiv");
       colorDiv.style.boxShadow =
         "0px 0px 20px 10px #" + systemDictionary["InteriorLight"].val;
-      console.log("#" + systemDictionary["InteriorLight"].val);
+      // console.log("#" + systemDictionary["InteriorLight"].val);
     },
     setParkingWarningBeepLevel: function () {
       bigBoxModule.querySelector("#ParkingBeepSpan").innerHTML = "Parking beep";
@@ -2852,11 +2949,12 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         audioHere.play();
         bigBoxModule.querySelector("#albumImage").style.backgroundImage =
           "url('" + musicDictionary[musicNameHere].imageURL + "')";
-        bigBoxModule.querySelector("#bottomIconLine1Div").style.display =
-          "inline-block";
+        
         bigBoxModule.querySelector("#musicName").innerHTML = musicNameHere;
         bigBoxModule.querySelector("#musicAuthor").innerHTML =
           musicDictionary[musicNameHere].author;
+        bigBoxModule.querySelector("#bottomIconLine1Div").style.display =
+          "inline-block";
       }
       return systemDictionary.musicURI.val;
     },
@@ -2864,28 +2962,21 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       return systemDictionary.seatPosition.val;
     },
     setAutoHold: function () {
-      if (systemDictionary.AutoHold.val) {
+      if (systemDictionary.AutoHold.val == "On") {
         bigBoxModule.querySelector("#autoHoldImage").style.display =
           "inline-block";
       }
     },
     setMirrorStatus: function () {},
-    setSteeringMode: function () {
-      let targetDiv = bigBoxModule.querySelector("#driveModeSpan");
-      targetDiv.innerHTML = systemDictionary.driveMode.val;
-    },
-    setBrakingMode: function () {
-      if (BrakingMode) {
-        bigBoxModule.querySelector("#brakingImage").style.display =
-          "inline-block";
+
+    setOnePuddleDrive: function(){
+
+      if(systemDictionary["OnePuddle"].val == "On"){
+        console.log("one puddle");
+        bigBoxModule.querySelector("#OnePuddleDriveImage").style.display = "inline-block";
       }
     },
-    setPowerMode: function () {
-      if (PowerMode) {
-        bigBoxModule.querySelector("#powerImage").style.display =
-          "inline-block";
-      }
-    },
+
     setDriveMode: function () {
       let targetDiv = bigBoxModule.querySelector("#driveModeSpan");
       targetDiv.innerHTML = systemDictionary.driveMode.val;
@@ -2920,7 +3011,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         }
       }
 
-      console.log(ACMode);
+      // console.log(ACMode);
     },
     turnOnSeatHeat: function () {
       if (systemDictionary.SeatHeatLevel.val > 0) {
@@ -2929,7 +3020,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       }
     },
     turnSteeringWheelWarm: function () {
-      console.log("steering warm :" + systemDictionary.SteeringWheelWarm.val);
+      // console.log("steering warm :" + systemDictionary.SteeringWheelWarm.val);
       if (systemDictionary.SteeringWheelWarm.val > 0) {
         bigBoxModule.querySelector("#SteeringWheelWarmImage").style.display =
           "inline-block";
@@ -2937,7 +3028,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
         // for(let i = 0;i<systemDictionary.SteeringWheelWarm.val;i++){
         //   tempList[i].style.display = "inline-block";
         // }
-        // console.log("here");
+        // // console.log("here");
       }
     },
     turnOnSeatVentilation: function () {
@@ -2974,16 +3065,7 @@ const plugin = ({ widgets, simulator, vehicle }) => {
       displayCockpit();
     },
     displayVideoPY: function () {},
-    refresh: function () {
-      selectedDriverName = "";
-      curTree = flowChartTree;
-      drawFlag = true;
-      dividing = false;
-      previousVal = null;
-      previousType = null;
-      moveDirection = null;
-      isPersonal = false;
-    },
+    
   };
 };
 
@@ -3005,7 +3087,7 @@ function readTextFile(fileName) {
 }
 
 function analysisTxt(txt) {
-  console.log("analysis");
+  // console.log("analysis");
 
   let dictionaryInfo = {};
   let dictionaryDriver = {};
@@ -3032,7 +3114,7 @@ function analysisTxt(txt) {
     innerTuple = {};
   }
 
-  console.log(dictionaryDriver);
+  // console.log(dictionaryDriver);
   return dictionaryDriver;
 }
 
